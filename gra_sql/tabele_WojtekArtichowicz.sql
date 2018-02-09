@@ -18,8 +18,6 @@ CREATE TABLE sesje_gry(
   ReleaseID INTEGER,
   LiczbaPunktowZabranychPrzezWrogaID INTEGER,
   FOREIGN KEY (GraczID) REFERENCES gracze
-  FOREIGN KEY (ReleaseID) REFERENCES release
-  FOREIGN KEY (LiczbaPunktowZabranychPrzezWrogaID) REFERENCES punkty_zabrane_przez_wroga
 );
 
 INSERT INTO gracze(Login, LevelGracza, LokalizacjaGry,DataUrodzenia,Ekwipunek)
