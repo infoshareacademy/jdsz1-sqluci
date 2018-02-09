@@ -1052,6 +1052,8 @@ INSERT INTO gracze(Login, LevelGracza, LokalizacjaGry,DataUrodzenia,Ekwipunek)
     VALUES ('Gandalf', 1,'EU','2001-03-12',1 );
 INSERT INTO gracze(Login, LevelGracza, LokalizacjaGry,DataUrodzenia,Ekwipunek)
     VALUES ('Pippin', 2,'NZ','1985-03-12',3 );
+
 INSERT INTO gracze(Login, LevelGracza, LokalizacjaGry,DataUrodzenia,Ekwipunek)
     VALUES ('Frodo Baggins', 2,'NZ','1985-03-12',3 );
+
 
