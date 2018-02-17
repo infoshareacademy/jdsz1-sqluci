@@ -1,7 +1,7 @@
-### Czêœæ 1
-#### 1.1. Z którego kraju mamy najwiêcej wniosków?
-* W przypadku najwiêkszej iloœci wniosków (67584) nie okreœlono kraju 
-* Z wniosków w których okreœlono kraj, najwiêcej wniosków (47737) pochodzi z Irlandii
+### CzÄ™Å›Ä‡ 1
+#### 1.1. Z ktÃ³rego kraju mamy najwiÄ™cej wnioskÃ³w?
+* W przypadku najwiÄ™kszej iloÅ›ci wnioskÃ³w (67584) nie okreÅ›lono kraju 
+* Z wnioskÃ³w w ktÃ³rych okreÅ›lono kraj, najwiÄ™cej wnioskÃ³w (47737) pochodzi z Irlandii
 
 ##### listing zad. 1
     SELECT kod_kraju,
@@ -12,8 +12,8 @@
     LIMIT 2
 ![Tabela SQL zad 1](https://github.com/WojciechArtichowicz/jdsz1_wojciech_artichowicz/blob/master/SQL_ZADANIA/db_out_img/1.PNG)
 
-#### 1.2. Z którego jêzyka mamy najwiêcej wniosków?
-Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
+#### 1.2. Z ktÃ³rego jÄ™zyka mamy najwiÄ™cej wnioskÃ³w?
+NajwiÄ™cej wnioskÃ³w zostaÅ‚o zÅ‚oÅ¼onych w jÄ™zyku angielskim.
 ##### listing zad. 2
     SELECT jezyk, count(*)
     FROM wnioski
@@ -22,10 +22,10 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
     LIMIT 1
 ![Tabela SQL zad 2](https://github.com/WojciechArtichowicz/jdsz1_wojciech_artichowicz/blob/master/SQL_ZADANIA/db_out_img/2.PNG)
 
-#### 1.3. Ile % procent klientów podró¿owa³o w celach biznesowych a ilu w celach prywatnych?
-* 168876 klientów = 93,4 % procent sk³adaj¹cych wniosek nie poda³o typu podró¿y;
-* 8273 klientów = 4,6 % podró¿owa³o w celach biznesowych
-* 2586 klientów = 1,4 % podró¿owa³o w celach prywatnych
+#### 1.3. Ile % procent klientÃ³w podrÃ³Å¼owaÅ‚o w celach biznesowych a ilu w celach prywatnych?
+* 168876 klientÃ³w = 93,4 % procent skÅ‚adajÄ…cych wniosek nie podaÅ‚o typu podrÃ³Å¼y;
+* 8273 klientÃ³w = 4,6 % podrÃ³Å¼owaÅ‚o w celach biznesowych
+* 2586 klientÃ³w = 1,4 % podrÃ³Å¼owaÅ‚o w celach prywatnych
 ##### listing zad. 3
 
     with tab_typ_podrozy as (
@@ -46,7 +46,7 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
 
 ![Tabela SQL zad 3](https://github.com/WojciechArtichowicz/jdsz1_wojciech_artichowicz/blob/master/SQL_ZADANIA/db_out_img/3.PNG)
 
-#### 1.4. Jak procentowo rozk³adaj¹ siê Ÿród³a polecenia?
+#### 1.4. Jak procentowo rozkÅ‚adajÄ… siÄ™ ÅºrÃ³dÅ‚a polecenia?
 ##### listing zad. 4
     with tab_zp as (
         SELECT CASE
@@ -64,7 +64,10 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
     
 ![Tabela SQL zad 4](https://github.com/WojciechArtichowicz/jdsz1_wojciech_artichowicz/blob/master/SQL_ZADANIA/db_out_img/4.PNG)
 
-#### 1.5. Ile podró¿y to trasy z³o¿one z jednego / dwóch / trzech / wiêcej tras?
+#### 1.5. Ile podrÃ³Å¼y to trasy zÅ‚oÅ¼one z jednego / dwÃ³ch / trzech / wiÄ™cej tras?
+
+##### Bug sortowanie to_char na linux
+
 ##### listing zad. 5
     -- utworz pomocnicza tabele zawierajaca zliczone pod-trasy w rozwazanej podrozy
     -- sp.id_podrozy, p.id sa wypisane w celu kontroli poprawnosci zapytania
@@ -99,7 +102,7 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
 
 ![Tabela SQL zad 5](https://github.com/WojciechArtichowicz/jdsz1_wojciech_artichowicz/blob/master/SQL_ZADANIA/db_out_img/5.PNG)
 
-#### 1.6. Ile podró¿y to trasy z³o¿one z jednego / dwóch / trzech / wiêcej tras?
+#### 1.6. Rekompensaty
 ##### listing zad. 6
 
     with tab_kwota_rekompensat as(
@@ -119,7 +122,7 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
     limit 1) ;
 ![Tabela SQL zad 6](https://github.com/WojciechArtichowicz/jdsz1_wojciech_artichowicz/blob/master/SQL_ZADANIA/db_out_img/6.PNG)
 
-#### 1.7. Który dzieñ jest rekordowym w firmie w kwestii utworzonych wniosków?
+#### 1.7. KtÃ³ry dzieÅ„ jest rekordowym w firmie w kwestii utworzonych wnioskÃ³w?
 ##### listing zad. 7
     SELECT to_char(w.data_utworzenia,'YYYY-MM-DD') dni, count(*)
     from wnioski w
@@ -128,7 +131,7 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
     LIMIT 1
 ![Tabela SQL zad 7](https://github.com/WojciechArtichowicz/jdsz1_wojciech_artichowicz/blob/master/SQL_ZADANIA/db_out_img/7.PNG)
 
-#### 1.8. Który dzieñ jest rekordowym w firmie w kwestii otrzymanych rekompensat?
+#### 1.8. KtÃ³ry dzieÅ„ jest rekordowym w firmie w kwestii otrzymanych rekompensat?
 ##### listing zad. 8
 
     SELECT to_char(r.data_zakonczenia,'YYYY-MM-DD') dni, count(*)
@@ -138,7 +141,7 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
     limit 1
    ![Tabela SQL zad 8](https://github.com/WojciechArtichowicz/jdsz1_wojciech_artichowicz/blob/master/SQL_ZADANIA/db_out_img/8.PNG)
     
-#### 1.9. Jaka jest dystrubucja tygodniowa wniosków wed³ug kana³ów? (liczba wniosków w danym tygodniu w ka¿dym kanale)
+#### 1.9. Jaka jest dystrubucja tygodniowa wnioskÃ³w wedÅ‚ug kanaÅ‚Ã³w? (liczba wnioskÃ³w w danym tygodniu w kaÅ¼dym kanale)
 ##### listing zad. 9
 
     SELECT to_char(data_utworzenia,'WW') tydzien,
@@ -150,7 +153,7 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
    ![Wykres dystrybucji](https://github.com/WojciechArtichowicz/jdsz1_wojciech_artichowicz/blob/master/SQL_ZADANIA/db_out_img/9b.PNG)
    ![Tabela SQL zad 9](https://github.com/WojciechArtichowicz/jdsz1_wojciech_artichowicz/blob/master/SQL_ZADANIA/db_out_img/9a.PNG)
    
-#### 1.10. Lista wniosków przeterminowanych (przeterminowany = utworzony w naszej firmie powy¿ej 3 lat od daty podró¿y)
+#### 1.10. Lista wnioskÃ³w przeterminowanych (przeterminowany = utworzony w naszej firmie powyÅ¼ej 3 lat od daty podrÃ³Å¼y)
 ##### listing zad. 10
 
     SELECT  w.id,
@@ -166,8 +169,8 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
 
 ![Tabela SQL zad 9](https://github.com/WojciechArtichowicz/jdsz1_wojciech_artichowicz/blob/master/SQL_ZADANIA/db_out_img/10.PNG)
 
-### Czêœæ 2
-#### 2.2. Jaka czêœæ naszych klientów to powracaj¹ce osoby?
+### CzÄ™Å›Ä‡ 2
+#### 2.2. Jaka czÄ™Å›Ä‡ naszych klientÃ³w to powracajÄ…ce osoby?
 ##### listing zad. 2.2
     -- wyszukanie klientow powracajacych, tj. takich, ktorzy zlozyli wiecej niz jeden wniosek,
     --czyli wystepuja w tabeli wiecej niz raz
@@ -190,15 +193,15 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
     
     --SELECT * FROM tab_liczba_powracajacych_klientow; --testing
     
-    --obliczenie calkowitej liczby klientów (z odrzuceniem powtarzaj¹cych siê rekordów)
+    --obliczenie calkowitej liczby klientÃ³w (z odrzuceniem powtarzajÄ…cych siÄ™ rekordÃ³w)
     tab_liczba_klientow AS (
     SELECT
         1 col_row_count,
         COUNT(DISTINCT  k.email) col_liczba_klientow
     FROM klienci k)
     
-    -- obliczenie procentu (czêœci) powracaj¹cych klientów tj. jednego klienta
-    -- bez uwzglêdniania osób bed¹cych wspó³pasa¿erami
+    -- obliczenie procentu (czÄ™Å›ci) powracajÄ…cych klientÃ³w tj. jednego klienta
+    -- bez uwzglÄ™dniania osÃ³b bedÄ…cych wspÃ³Å‚pasaÅ¼erami
     SELECT lpk.col_liczba_powracajacych_klientow liczba_powracajacych_klientow,
            lk.col_liczba_klientow liczba_wszystkich_klientow,
            ROUND(lpk.col_liczba_powracajacych_klientow / lk.col_liczba_klientow::NUMERIC,8) procent
@@ -207,7 +210,7 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
 
 ![Tabela SQL zad 2.2](https://github.com/WojciechArtichowicz/jdsz1_wojciech_artichowicz/blob/master/SQL_ZADANIA/db_out_img/2_2.PNG)
 
- Badanie bazy danych pod k¹tem za³o¿enia, ¿e tabela klientów jest unikalna tzn. rekordy klientów siê nie powtarzaj¹  i klienci sa przypisani do wniosków (jeden klient mo¿e mieæ wiele wniosków).
+ Badanie bazy danych pod kÄ…tem zaÅ‚oÅ¼enia, Å¼e tabela klientÃ³w jest unikalna tzn. rekordy klientÃ³w siÄ™ nie powtarzajÄ…  i klienci sa przypisani do wnioskÃ³w (jeden klient moÅ¼e mieÄ‡ wiele wnioskÃ³w).
 ##### listing zad. 2.2a
            SELECT 'liczba klientow = ' nazwa,
                   COUNT(*)
@@ -240,7 +243,7 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
         FROM wnioski w
         JOIN klienci k ON k.id_wniosku = w.id
         GROUP BY k.id
-        HAVING  count(k.id) > 1 OR count(w.id)>1 --z t¹ instrukcj¹ dostaje siê 0 rekordów, tzn k.id i w.id siê nie powtarzaj¹
+        HAVING  count(k.id) > 1 OR count(w.id)>1 --z tÄ… instrukcjÄ… dostaje siÄ™ 0 rekordÃ³w, tzn k.id i w.id siÄ™ nie powtarzajÄ…
             UNION ALL
                 SELECT w.id
                       ,count(k.id)
@@ -248,17 +251,17 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
                 FROM wnioski w
                 JOIN klienci k ON k.id_wniosku = w.id
                 GROUP BY w.id
-                HAVING  count(k.id) > 1 OR count(w.id)>1 --z t¹ instrukcj¹ dostaje siê 0 rekordów, tzn k.id i w.id siê nie powtarzaj¹
+                HAVING  count(k.id) > 1 OR count(w.id)>1 --z tÄ… instrukcjÄ… dostaje siÄ™ 0 rekordÃ³w, tzn k.id i w.id siÄ™ nie powtarzajÄ…
     
-**WYNIK ANALIZY**: To klienci sa przypisani wnioskom. Ponadto liczba wniosków i liczba klientów jest taka sama. Na ka¿dy wniosek przypada   rekord w tabeli klienci. Rekrody klientów s¹ (prawdopodobnie) dodawane razem z rekordami wniosków. W zwi¹zku z tym jeœli jeden klient z³o¿y³ kilka wniosków, to w tabeli klienci bêdzie wystêpowa³ wielokrotnie.
-*    Konieczne jest wyszukiwanie klientów po imionach i nazwiskach. Aby unikn¹æ scalenia klientów o identycznych danych
-* nale¿y dodac jeszcze coœ co ich ró¿ni na pewno. Z braku unikatowego identyfikatora (np. PESEL - tu brak)
-* u¿yty zostanie adres e-mail.
-* zatem pozostaje sprawdziæ klientów po imieniu i nazwisku i ewentualnie adresie e-mail
-* Yay!!! Pewien klient wystêpuje 618 razy. Trzeba sprawdziæ czy to nie b³¹d i czy podpiête sa do niego ró¿ne wnioski
+**WYNIK ANALIZY**: To klienci sa przypisani wnioskom. Ponadto liczba wnioskÃ³w i liczba klientÃ³w jest taka sama. Na kaÅ¼dy wniosek przypada   rekord w tabeli klienci. Rekrody klientÃ³w sÄ… (prawdopodobnie) dodawane razem z rekordami wnioskÃ³w. W zwiÄ…zku z tym jeÅ›li jeden klient zÅ‚oÅ¼yÅ‚ kilka wnioskÃ³w, to w tabeli klienci bÄ™dzie wystÄ™powaÅ‚ wielokrotnie.
+*    Konieczne jest wyszukiwanie klientÃ³w po imionach i nazwiskach. Aby uniknÄ…Ä‡ scalenia klientÃ³w o identycznych danych
+* naleÅ¼y dodac jeszcze coÅ› co ich rÃ³Å¼ni na pewno. Z braku unikatowego identyfikatora (np. PESEL - tu brak)
+* uÅ¼yty zostanie adres e-mail.
+* zatem pozostaje sprawdziÄ‡ klientÃ³w po imieniu i nazwisku i ewentualnie adresie e-mail
+* Yay!!! Pewien klient wystÄ™puje 618 razy. Trzeba sprawdziÄ‡ czy to nie bÅ‚Ä…d i czy podpiÄ™te sa do niego rÃ³Å¼ne wnioski
 
-    -- odkomentowanie k.id_wniosku, spowoduje sprawdzenie czy jakiœ (powracaj¹cy) klient ma    dwa takie same wnioski:
-    -- kwerenda (po odkomentowaniu) zwraca zero rekordów wiêc ka¿dy wniosek klienta jest   unikalny
+    -- odkomentowanie k.id_wniosku, spowoduje sprawdzenie czy jakiÅ› (powracajÄ…cy) klient ma    dwa takie same wnioski:
+    -- kwerenda (po odkomentowaniu) zwraca zero rekordÃ³w wiÄ™c kaÅ¼dy wniosek klienta jest   unikalny
     ##### listing zad. 2.2b
         select k.imie,
             k.nazwisko,
@@ -270,10 +273,10 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
            group by k.imie, k.nazwisko, k.email--, k.id_wniosku
            having count(*) > 1
 
-#### 2.3. Jaka czêœæ naszych wspó³pasa¿erów to osoby, które ju¿ wczeœniej pojawi³y siê na jakimœ wniosku?
+#### 2.3. Jaka czÄ™Å›Ä‡ naszych wspÃ³Å‚pasaÅ¼erÃ³w to osoby, ktÃ³re juÅ¼ wczeÅ›niej pojawiÅ‚y siÄ™ na jakimÅ› wniosku?
 ##### listing zad. 2.3
     
-        -- wspolpasazerowie, którzy pojawili siê na innym wniosku jako wspolpasazerowie
+        -- wspolpasazerowie, ktÃ³rzy pojawili siÄ™ na innym wniosku jako wspolpasazerowie
         WITH tab_all_emails AS (
             WITH tab_multi_wspolpasazerowie AS (
                 SELECT wp.email col_email,
@@ -285,7 +288,7 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
            SELECT col_email
            FROM tab_multi_wspolpasazerowie
            UNION --merge by email
-           -- wspolpasazerowie, którzy pojawili siê na innym wniosku jako klienci
+           -- wspolpasazerowie, ktÃ³rzy pojawili siÄ™ na innym wniosku jako klienci
            SELECT k.email
            FROM klienci k
            JOIN wspolpasazerowie wp ON wp.email = k.email
@@ -312,7 +315,7 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
         JOIN tab_distinct_email_count tdec ON tdec.col_row_number = taec.col_row_number;
         
 ![Tabela SQL zad 2.3](https://github.com/WojciechArtichowicz/jdsz1_wojciech_artichowicz/blob/master/SQL_ZADANIA/db_out_img/2_3.PNG)
-#### 2.4. Jaka czêœæ klientów pojawi³a siê na innych wnioskach jako wspó³pasa¿er?
+#### 2.4. Jaka czÄ™Å›Ä‡ klientÃ³w pojawiÅ‚a siÄ™ na innych wnioskach jako wspÃ³Å‚pasaÅ¼er?
 ##### listing zad. 2.4
 
     --policzenie wszystkich klientow
@@ -342,14 +345,14 @@ Najwiêcej wniosków zosta³o z³o¿onych w jêzyku angielskim.
        JOIN tab_liczba_klientow lk ON jw.col_row_number = lk.col_row_number
 
 ![Tabela SQL zad 2.4](https://github.com/WojciechArtichowicz/jdsz1_wojciech_artichowicz/blob/master/SQL_ZADANIA/db_out_img/2_4.PNG)
-#### 2.5. Czy jako nowy klient maj¹cy kilka zak³óceñ, od razu sk³adasz kilka wniosków? Jaki jest czas od z³o¿enia pierwszego do kolejnego wniosku?
+#### 2.5. Czy jako nowy klient majÄ…cy kilka zakÅ‚Ã³ceÅ„, od razu skÅ‚adasz kilka wnioskÃ³w? Jaki jest czas od zÅ‚oÅ¼enia pierwszego do kolejnego wniosku?
 
-Z danych wynika, ¿e ka¿dy z klientów - oprócz jednego - z³o¿y³ tylko po jednym wniosku. Natomiast rozwa¿any klient sk³ada³ po kilka wniosków tego samego dnia. Przy czym œrednio sk³ada³ wniosek co 10 dni. Najkrótsza przerwa miêdzy z³o¿eniem wniosków wynios³a 1 dzieñ, natomiast najd³u¿sza 338 dni.
+Z danych wynika, Å¼e kaÅ¼dy z klientÃ³w - oprÃ³cz jednego - zÅ‚oÅ¼yÅ‚ tylko po jednym wniosku. Natomiast rozwaÅ¼any klient skÅ‚adaÅ‚ po kilka wnioskÃ³w tego samego dnia. Przy czym Å›rednio skÅ‚adaÅ‚ wniosek co 10 dni. NajkrÃ³tsza przerwa miÄ™dzy zÅ‚oÅ¼eniem wnioskÃ³w wyniosÅ‚a 1 dzieÅ„, natomiast najdÅ‚uÅ¼sza 338 dni.
 
 ##### listing zad. 2.5
-    -- zapytanie czy klienci w ogóle sk³adaj¹ po kilka wniosków jednoczeœnie
-        --zliczenie liczby wniosków sk³adanych jednoczeœnie
-        --posortowanie ich rosn¹co wzglêdem emaili i czasu z³o¿enia wniosku
+    -- zapytanie czy klienci w ogÃ³le skÅ‚adajÄ… po kilka wnioskÃ³w jednoczeÅ›nie
+        --zliczenie liczby wnioskÃ³w skÅ‚adanych jednoczeÅ›nie
+        --posortowanie ich rosnÄ…co wzglÄ™dem emaili i czasu zÅ‚oÅ¼enia wniosku
         WITH tab_liczba_jednoczesnych_wnioskow_per_klient AS (
             SELECT k.email col_email,
                 to_char(w.data_utworzenia,'YYYY-MM-DD') col_day,
