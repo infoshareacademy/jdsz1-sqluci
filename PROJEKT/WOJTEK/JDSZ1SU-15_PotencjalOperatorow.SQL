@@ -104,7 +104,8 @@ GROUP BY kod_polaczenia;
 Tabela, z której usunięto nieprawidłowe dane tzn.:
  - rekordy, w których wylot jest odwołany (CX) a przylot ma inną wartość
  - rekordy, w których przylot jest odwołany (CX) a wylot nie
-Ponadto usunięto rekordy, które nie są unikalne (DISTINCT)
+Ponadto usunięto rekordy, które nie są unikalne (DISTINCT), zarówno pod względem
+kodu podróży jak i rekordów w całości.
  */
 
 WITH tab_o_trasy_clean AS ( --wybranie unikalnych rekordów w ogóle
@@ -120,9 +121,29 @@ WITH tab_o_trasy_clean AS ( --wybranie unikalnych rekordów w ogóle
                 OR (wylot_status != 'CX' AND przylot_status = 'CX')
               )
 )
-
+/*
+-- po aktualizacji tabeli trasy o kod operatora zaczynam operować
+--kodem operatora a nie wyłuskanymi literami z kodu połączenia
 SELECT upper(substring(kod_polaczenia,1,2)),
        przylot_status,
        COUNT(*)
 FROM tab_o_trasy_clean
 GROUP BY 1, 2;
+*/
+
+SELECT o.nazwa,
+       --tc.kod_operatora,
+       CASE
+          WHEN tc.przylot_status IN ('EY','OT','CX','DY','NS') THEN  tc.przylot_status
+          ELSE 'UN'
+        END,
+       COUNT(*) liczba_tras,
+       SUM(tc.rekompensata) suma_rekompensaty,
+       ROUND(AVG(tc.rekompensata),1) sr_rekompensata
+FROM tab_o_trasy_clean tc
+JOIN o_operatorzy o ON o.kod = tc.kod_operatora
+WHERE tc.czy_uprawniony = TRUE
+GROUP BY 1, 2
+ORDER BY 1, 2;
+
+
