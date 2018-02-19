@@ -1,4 +1,4 @@
-# Raport
+# Raport cząstkowy
 ## [JDSZ1SU-15] Potencjał operatorów
 ### 1. Cel analizy
 Celem analizy jest okreslenie potencjału operatorów połączeń kolejowych pod względem możliwości uzyskania rekompensat za połączenia odwołane lub opóźnione.
@@ -70,4 +70,55 @@ GROUP BY 1, 2
 ORDER BY 1, 2;
 ``` 
 
-#### 3.2. Wnioski
+Wynik wykonania zapytania przedstawiono na Rys. 1.
+
+![Tabela]( jdsz1-sqluci/PROJEKT/WOJTEK/potencjalOperatorow.PNG )
+
+Rys. 1. Wynik zapytania z Listingu 3.1.1.
+
+#### 3.2. Wyniki analizy (szczegółowe)
+Tabele oraz odpowiadajace im wykresy przedstawiające dystrybucję liczby tras (Tab. 1, Rys. 3.2.1),
+sumy rekompensaty (Tab. 2, Rys. 3.2.2) oraz średnią rekompensatę względem operatorów (Tab. 3, Rys. 3.2.3) 
+znajdują się poniżej.
+
+# Tab. 1. Liczba tras z podziałem na operatorów i kod przyjazdu
+![Liczba tras z podziałem na operatorów i kod przyjazdu]( jdsz1-sqluci/PROJEKT/WOJTEK/Tab1.PNG )
+
+![Liczba tras opóźnionych / odwołanych względem operatorów]( jdsz1-sqluci/PROJEKT/WOJTEK/Rys1.PNG )
+Rys. 3.2.1.  Liczba tras opóźnionych i odwołanych z podziałem na operatorów i kod przyjazdu
+
+# Tab. 2. Kwota rekompensaty z podziałem na operatorów i kod przyjazdu
+![Kwota rekompensaty z podziałem na operatorów i kod przyjazdu]( jdsz1-sqluci/PROJEKT/WOJTEK/Tab2.PNG )
+
+![Kwota rekompensaty opóźnionych / odwołanych względem operatorów]( jdsz1-sqluci/PROJEKT/WOJTEK/Rys2.PNG )
+Rys. 3.2.2.  Kwota rekompensaty tras opóźnionych i odwołanych z podziałem na operatorów i kod przyjazdu
+
+# Tab. 3. Średnia kwota rekompensaty z podziałem na operatorów i kod przyjazdu
+![śrenia kwota rekompensaty z podziałem na operatorów i kod przyjazdu]( jdsz1-sqluci/PROJEKT/WOJTEK/Tab3.PNG )
+
+![Śrenia kwota rekompensaty opóźnionych / odwołanych względem operatorów]( jdsz1-sqluci/PROJEKT/WOJTEK/Rys3.PNG )
+Rys. 3.2.3.  Średnia kwota rekompensaty tras opóźnionych i odwołanych z podziałem na operatorów i kod przyjazdu
+
+Z przedstawionych danych zagregowanych wynika, że największa liczbe tras z potencjałem rekompensaty zrealizował 
+operator EiC. Trasy:
+ - odwołane  52,1 tys tras z całkowita kwotą rekompensaty 15,41 mln PLN (waluta - założono polskie złote). 
+ - opóźnione 22 tys tras z całkowita kwotą rekompensaty 8,47 mln PLN.
+
+Są to wartości dwukrotnie wyższe w stosunku do odpowiadających wartości innych przewoźników. Średnia liczba tras
+(nie uwzględniająca EiC) 
+ - odwołanych 26 tys (średnia całkowita kwota rekompensaty 7,70 mln PLN).
+ - opóźnioncyh 11 tys (średnia całkowita kwota rekompensaty 4,24 mln PLN).
+ 
+ Poza przewoźnikiem EiC liczba tras odwołanych lub odpowiednio opóźnionych oraz sum wynikających z nich rekompensat 
+ nie różnią się istotne od średniej.
+ 
+ Średnie kwoty rekompensaty wśród tras odwołanych i opóźnionych względem przewoźników nie różnią się istotnie.
+ Średnia rekompensata za kurs opóźniony jest wyższa od rekompensaty za kurs odwołany o 90 PLN.
+ 
+ #### 3.3. Wyniki analizy (podsumowanie)
+ 
+ **Największy potencjał względem rekompensat ma przewoźnik EiC.**
+ * W celu uzyskania pełniejszego obrazu sytuacji należy poddać analizie także
+   - koszt uzyskania rekompensaty
+   - czas oczekiwania na rozstrzygnięcie sprawy
+ 
