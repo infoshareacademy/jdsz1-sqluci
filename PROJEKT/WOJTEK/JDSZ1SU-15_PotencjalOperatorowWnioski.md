@@ -81,7 +81,7 @@ Tabele oraz odpowiadajace im wykresy przedstawiające dystrybucję liczby tras (
 sumy rekompensaty (Tab. 2, Rys. 3.2.2) oraz średnią rekompensatę względem operatorów (Tab. 3, Rys. 3.2.3) 
 znajdują się poniżej.
 
-##### Tab. 1. Liczba tras z podziałem na operatorów i kod przyjazdu
+Tab. 1. Liczba tras z podziałem na operatorów i kod przyjazdu
 
 ![Liczba tras z podziałem na operatorów i kod przyjazdu]( https://github.com/infoshareacademy/jdsz1-sqluci/blob/master/PROJEKT/WOJTEK/Tab1.png )
 
@@ -89,7 +89,7 @@ znajdują się poniżej.
 
 Rys. 3.2.1.  Liczba tras opóźnionych i odwołanych z podziałem na operatorów i kod przyjazdu
 
-##### Tab. 2. Kwota rekompensaty z podziałem na operatorów i kod przyjazdu
+Tab. 2. Kwota rekompensaty z podziałem na operatorów i kod przyjazdu
 
 ![Kwota rekompensaty z podziałem na operatorów i kod przyjazdu]( https://github.com/infoshareacademy/jdsz1-sqluci/blob/master/PROJEKT/WOJTEK/Tab2.png )
 
@@ -97,7 +97,7 @@ Rys. 3.2.1.  Liczba tras opóźnionych i odwołanych z podziałem na operatorów
 
 Rys. 3.2.2.  Kwota rekompensaty tras opóźnionych i odwołanych z podziałem na operatorów i kod przyjazdu
 
-##### Tab. 3. Średnia kwota rekompensaty z podziałem na operatorów i kod przyjazdu
+Tab. 3. Średnia kwota rekompensaty z podziałem na operatorów i kod przyjazdu
 
 ![śrenia kwota rekompensaty z podziałem na operatorów i kod przyjazdu]( https://github.com/infoshareacademy/jdsz1-sqluci/blob/master/PROJEKT/WOJTEK/Tab3.png )
 
