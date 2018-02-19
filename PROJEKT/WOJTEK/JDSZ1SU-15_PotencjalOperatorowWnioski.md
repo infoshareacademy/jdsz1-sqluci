@@ -82,21 +82,27 @@ sumy rekompensaty (Tab. 2, Rys. 3.2.2) oraz średnią rekompensatę względem op
 znajdują się poniżej.
 
 # Tab. 1. Liczba tras z podziałem na operatorów i kod przyjazdu
+
 ![Liczba tras z podziałem na operatorów i kod przyjazdu]( https://github.com/infoshareacademy/jdsz1-sqluci/blob/master/PROJEKT/WOJTEK/Tab1.png )
 
 ![Liczba tras opóźnionych / odwołanych względem operatorów]( https://github.com/infoshareacademy/jdsz1-sqluci/blob/master/PROJEKT/WOJTEK/Rys1.png )
+
 Rys. 3.2.1.  Liczba tras opóźnionych i odwołanych z podziałem na operatorów i kod przyjazdu
 
 # Tab. 2. Kwota rekompensaty z podziałem na operatorów i kod przyjazdu
+
 ![Kwota rekompensaty z podziałem na operatorów i kod przyjazdu]( https://github.com/infoshareacademy/jdsz1-sqluci/blob/master/PROJEKT/WOJTEK/Tab2.png )
 
 ![Kwota rekompensaty opóźnionych / odwołanych względem operatorów]( https://github.com/infoshareacademy/jdsz1-sqluci/blob/master/PROJEKT/WOJTEK/Rys2.png )
+
 Rys. 3.2.2.  Kwota rekompensaty tras opóźnionych i odwołanych z podziałem na operatorów i kod przyjazdu
 
 # Tab. 3. Średnia kwota rekompensaty z podziałem na operatorów i kod przyjazdu
+
 ![śrenia kwota rekompensaty z podziałem na operatorów i kod przyjazdu]( https://github.com/infoshareacademy/jdsz1-sqluci/blob/master/PROJEKT/WOJTEK/Tab3.png )
 
 ![Śrenia kwota rekompensaty opóźnionych / odwołanych względem operatorów]( https://github.com/infoshareacademy/jdsz1-sqluci/blob/master/PROJEKT/WOJTEK/Rys3.png )
+
 Rys. 3.2.3.  Średnia kwota rekompensaty tras opóźnionych i odwołanych z podziałem na operatorów i kod przyjazdu
 
 Z przedstawionych danych zagregowanych wynika, że największa liczbe tras z potencjałem rekompensaty zrealizował 
