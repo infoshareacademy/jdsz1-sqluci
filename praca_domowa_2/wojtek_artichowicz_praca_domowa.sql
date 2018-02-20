@@ -211,7 +211,7 @@ WHERE t.col_czas >  s.Q25;
 
 
 
--- zad 9 z podziałem na zaakceptowane i odrzucone - incomplete
+-- zad 9 z podziałem na zaakceptowane i odrzucone
 WITH tab_czas AS (
     SELECT a.data_utworzenia - w.data_utworzenia col_czas,
            w.stan_wniosku
@@ -220,7 +220,7 @@ WITH tab_czas AS (
     WHERE a.data_utworzenia > w.data_utworzenia --odrzucenie nieprawidlowych danych
           AND w.stan_wniosku IN ('analiza zaakceptowana','odrzucony po analizie')
 ),
-tab_stat AS ( --SPRAWDZIC POPRAWNOSC WYNIKOW!!!!!!!!!!!!
+tab_stat AS (
       SELECT stan_wniosku,
         percentile_cont(0.25)
             WITHIN GROUP (ORDER BY col_czas) Q25,
@@ -236,17 +236,51 @@ tab_stat AS ( --SPRAWDZIC POPRAWNOSC WYNIKOW!!!!!!!!!!!!
     FROM tab_czas
     GROUP BY stan_wniosku
   )
- SELECT * FROM tab_stat; --check
+ --SELECT * FROM tab_stat; --check
 
+    --ile jest wnioskow ponizej p75?
+SELECT t.stan_wniosku, COUNT(t.col_czas)
+FROM tab_czas t
+RIGHT JOIN tab_stat s ON 1=1
+WHERE t.col_czas <  s.Q75
+GROUP BY t.stan_wniosku
+UNION ALL
 
+  --ile jest wnioskow powyżej p25?
+SELECT t.stan_wniosku, COUNT(t.col_czas)
+FROM tab_czas t
+RIGHT JOIN tab_stat s ON 1=1
+WHERE t.col_czas >  s.Q25
+GROUP BY t.stan_wniosku
 
 
 -- 10) Jakich języków używają klienci? (kolumny: jezyk, liczba klientow, % klientow)
-SELECT w.jezyk, COUNT(k.email)
-FROM klienci k
-JOIN wnioski w ON w.id = k.id_wniosku
-GROUP BY w.jezyk
+-- wybranie niepowtarzających się przyporzadkowań język - email
+WITH tab_distinct_email_jezyk AS (
+  SELECT k.email col_email,
+         w.jezyk col_jezyk
+  FROM klienci k
+  JOIN wnioski w ON w.id = k.id_wniosku
+)
+-- SELECT * FROM tab_distinct_email_jezyk; --check
+
+  -- JEDEN KLIENT MOŻE POSŁUGIWAĆ SIĘ KILKOMA JĘZYKAMI
+  -- ŻEBY OSZACOWAĆ PROPORCJE, NALEŻY UŻYĆ OGÓLNEGO WZORU NA PRAWDOPODOBIEŃSTWO SUMY ZDARZEŃ
+
+  /*  WRONG
+SELECT t1.col_jezyk, t2.col_jezyk, COUNT(t2.col_jezyk)
+FROM tab_distinct_email_jezyk t1
+JOIN tab_distinct_email_jezyk t2 ON t1.col_email = t2.col_email
+where t1.col_jezyk != t2.col_jezyk
+GROUP BY t1.col_jezyk, t2.col_jezyk;
+*/
 
 
-SELECT DISTINCT stan_wniosku
-FROM wnioski
+SELECT tdej.col_jezyk,
+       COUNT(tdej.col_email) liczba_klientow,
+       SUM(COUNT(tdej.col_email)) OVER (),
+       SUM(COUNT(DISTINCT tdej.col_email)) OVER ()
+FROM tab_distinct_email_jezyk tdej
+GROUP BY tdej.col_jezyk;
+
+
