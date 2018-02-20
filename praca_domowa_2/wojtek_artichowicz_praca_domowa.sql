@@ -114,7 +114,6 @@ join statystyki_dnia sd on sd.dzien = to_char(lw.wygenerowana_data, 'Day')
 
 -- 8) Ile (liczbowo) wniosków zostało utworzonych poniżej mediany liczonej z czasu między
 -- NALEZY OKREŚLIC CZYM JEST CZAS LOTU
-
 -- sprawdzenie czy daty się zgadzają
 SELECT   sp.data_wyjazdu, ot.real_odjazd, ot.plan_odjazd_data,
          sp.data_wyjazdu = ot.plan_odjazd_data
@@ -154,7 +153,100 @@ SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY col_czas) wartosc
 FROM tab_czasy_do_utworzenia_wniosku
 )
 
- SELECT * FROM tab_mediana_czasu; --check
+SELECT COUNT(*) --liczba wnioskow z czasem od lotu do utworzenia poniżej mediany
+FROM tab_czasy_do_utworzenia_wniosku tw
+RIGHT JOIN tab_mediana_czasu Me ON 1=1
+WHERE tw.col_czas < Me.wartosc;
 
-;
 
+-- 9) Mając czas od utworzenia wniosku do jego analizy rzygotuj statystyke:
+-- do zapytania przyjmuję czas utworzenia analizy
+WITH tab_czas AS (
+    SELECT a.data_utworzenia - w.data_utworzenia col_czas
+    FROM wnioski w
+    JOIN analizy_wnioskow a ON w.id = a.id_wniosku
+    WHERE a.data_utworzenia > w.data_utworzenia --odrzucenie nieprawidlowych danych
+),
+tab_stat AS (
+      SELECT
+        percentile_cont(0.25)
+            WITHIN GROUP (ORDER BY col_czas) Q25,
+        percentile_cont(0.5)
+            WITHIN GROUP (ORDER BY col_czas) mediana,
+        percentile_cont(0.75)
+            WITHIN GROUP (ORDER BY col_czas) Q75,
+        percentile_cont(0.75)
+            WITHIN GROUP (ORDER BY col_czas) -
+         percentile_cont(0.25)
+            WITHIN GROUP (ORDER BY col_czas) QR,
+        AVG(col_czas)  srednia
+    FROM tab_czas
+  )
+-- SELECT * FROM tab_stat; --check
+
+-- WARTOŚCI ODSTAJĄCE
+--jako wartości odstające przyjmuje  mniejsze od  Q25 - 1.5*QR oraz większe Q75 + 1.5*QR
+/*
+SELECT t.col_czas
+FROM tab_czas t
+RIGHT JOIN tab_stat s ON 1=1
+WHERE t.col_czas <  s.Q25 - 1.5*s.QR OR t.col_czas >  s.Q75 + 1.5*s.QR
+ORDER BY 1
+*/
+
+
+  --ile jest wnioskow ponizej p75?
+SELECT COUNT(t.col_czas)
+FROM tab_czas t
+RIGHT JOIN tab_stat s ON 1=1
+WHERE t.col_czas <  s.Q75
+
+UNION ALL
+
+  --ile jest wnioskow powyżej p25?
+SELECT COUNT(t.col_czas)
+FROM tab_czas t
+RIGHT JOIN tab_stat s ON 1=1
+WHERE t.col_czas >  s.Q25;
+
+
+
+-- zad 9 z podziałem na zaakceptowane i odrzucone - incomplete
+WITH tab_czas AS (
+    SELECT a.data_utworzenia - w.data_utworzenia col_czas,
+           w.stan_wniosku
+    FROM wnioski w
+    JOIN analizy_wnioskow a ON w.id = a.id_wniosku
+    WHERE a.data_utworzenia > w.data_utworzenia --odrzucenie nieprawidlowych danych
+          AND w.stan_wniosku IN ('analiza zaakceptowana','odrzucony po analizie')
+),
+tab_stat AS ( --SPRAWDZIC POPRAWNOSC WYNIKOW!!!!!!!!!!!!
+      SELECT stan_wniosku,
+        percentile_cont(0.25)
+            WITHIN GROUP (ORDER BY col_czas) Q25,
+        percentile_cont(0.5)
+            WITHIN GROUP (ORDER BY col_czas) mediana,
+        percentile_cont(0.75)
+            WITHIN GROUP (ORDER BY col_czas) Q75,
+        percentile_cont(0.75)
+            WITHIN GROUP (ORDER BY col_czas) -
+         percentile_cont(0.25)
+            WITHIN GROUP (ORDER BY col_czas) QR,
+        AVG(col_czas)  srednia
+    FROM tab_czas
+    GROUP BY stan_wniosku
+  )
+ SELECT * FROM tab_stat; --check
+
+
+
+
+-- 10) Jakich języków używają klienci? (kolumny: jezyk, liczba klientow, % klientow)
+SELECT w.jezyk, COUNT(k.email)
+FROM klienci k
+JOIN wnioski w ON w.id = k.id_wniosku
+GROUP BY w.jezyk
+
+
+SELECT DISTINCT stan_wniosku
+FROM wnioski
