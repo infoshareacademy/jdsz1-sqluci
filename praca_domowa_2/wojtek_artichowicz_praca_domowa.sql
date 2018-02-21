@@ -265,21 +265,19 @@ WITH tab_distinct_email_jezyk AS (
 -- SELECT * FROM tab_distinct_email_jezyk; --check
 
   -- JEDEN KLIENT MOŻE POSŁUGIWAĆ SIĘ KILKOMA JĘZYKAMI
-  -- ŻEBY OSZACOWAĆ PROPORCJE, NALEŻY UŻYĆ OGÓLNEGO WZORU NA PRAWDOPODOBIEŃSTWO SUMY ZDARZEŃ
 
-  /*  WRONG
-SELECT t1.col_jezyk, t2.col_jezyk, COUNT(t2.col_jezyk)
+/*
+SELECT DISTINCT t1.col_email, t1.col_jezyk, t2.col_jezyk, COUNT(t1.col_email)
 FROM tab_distinct_email_jezyk t1
 JOIN tab_distinct_email_jezyk t2 ON t1.col_email = t2.col_email
 where t1.col_jezyk != t2.col_jezyk
-GROUP BY t1.col_jezyk, t2.col_jezyk;
+GROUP BY t1.col_email, t1.col_jezyk, t2.col_jezyk;
 */
 
-
+-- nie uwzglednia klientow mowiacych kilkoma jezykami
 SELECT tdej.col_jezyk,
-       COUNT(tdej.col_email) liczba_klientow,
-       SUM(COUNT(tdej.col_email)) OVER (),
-       SUM(COUNT(DISTINCT tdej.col_email)) OVER ()
+       COUNT(DISTINCT tdej.col_email) liczba_klientow,
+       ROUND(COUNT(DISTINCT tdej.col_email) / SUM(COUNT(DISTINCT tdej.col_email)) OVER ()::NUMERIC,5) procent_klientow
 FROM tab_distinct_email_jezyk tdej
 GROUP BY tdej.col_jezyk;
 
