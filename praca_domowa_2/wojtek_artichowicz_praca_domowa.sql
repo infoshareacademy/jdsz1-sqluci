@@ -184,7 +184,7 @@ tab_stat AS (
   )
 -- SELECT * FROM tab_stat; --check
 
--- WARTOŚCI ODSTAJĄCE
+-- WARTOŚCI ODSTAJĄCE - należy odkomentować --------------------------------------------BEGIN
 --jako wartości odstające przyjmuje  mniejsze od  Q25 - 1.5*QR oraz większe Q75 + 1.5*QR
 /*
 SELECT t.col_czas
@@ -192,6 +192,7 @@ FROM tab_czas t
 RIGHT JOIN tab_stat s ON 1=1
 WHERE t.col_czas <  s.Q25 - 1.5*s.QR OR t.col_czas >  s.Q75 + 1.5*s.QR
 ORDER BY 1
+-- WARTOŚCI ODSTAJĄCE - należy odkomentować --------------------------------------------END
 */
 
 
@@ -251,34 +252,59 @@ SELECT t.stan_wniosku, COUNT(t.col_czas)
 FROM tab_czas t
 RIGHT JOIN tab_stat s ON 1=1
 WHERE t.col_czas >  s.Q25
-GROUP BY t.stan_wniosku
+GROUP BY t.stan_wniosku;
 
 
 -- 10) Jakich języków używają klienci? (kolumny: jezyk, liczba klientow, % klientow)
 -- wybranie niepowtarzających się przyporzadkowań język - email
 WITH tab_distinct_email_jezyk AS (
-  SELECT k.email col_email,
+  SELECT DISTINCT k.email col_email,
          w.jezyk col_jezyk
   FROM klienci k
   JOIN wnioski w ON w.id = k.id_wniosku
 )
 -- SELECT * FROM tab_distinct_email_jezyk; --check
 
-  -- JEDEN KLIENT MOŻE POSŁUGIWAĆ SIĘ KILKOMA JĘZYKAMI
-
-/*
-SELECT DISTINCT t1.col_email, t1.col_jezyk, t2.col_jezyk, COUNT(t1.col_email)
-FROM tab_distinct_email_jezyk t1
-JOIN tab_distinct_email_jezyk t2 ON t1.col_email = t2.col_email
-where t1.col_jezyk != t2.col_jezyk
-GROUP BY t1.col_email, t1.col_jezyk, t2.col_jezyk;
-*/
-
--- nie uwzglednia klientow mowiacych kilkoma jezykami
+-- nie uwzglednia klientow mowiacych kilkoma jezykami - W ZWIĄZKU Z TYM, ŻE JEST TYLKO JEDEN TAKI KLIENT ZANIEDBUJĘ TO
+-- W INNYM WYPADKU NALEŻAŁOBY SKORZYSTAĆ Z ZALEŻNOŚCI NA SUMĘ PRAWDOPODOBIEŃSTW ZDARZEŃ I WYSZCZEGÓLNIĆ ILU KLIENTÓW
+-- MÓWI POSŁUŻYŁO SIĘ WIECEJ NIŻ JEDNYM JĘZYKIEM, ILE RAZY I JAKIMI JĘZYKAMI
 SELECT tdej.col_jezyk,
        COUNT(DISTINCT tdej.col_email) liczba_klientow,
        ROUND(COUNT(DISTINCT tdej.col_email) / SUM(COUNT(DISTINCT tdej.col_email)) OVER ()::NUMERIC,5) procent_klientow
 FROM tab_distinct_email_jezyk tdej
 GROUP BY tdej.col_jezyk;
 
+/*  ------------------------------------------------------------------ */
+--liczba zmian języka, czy pierwszy język różni się od ostatniego
+WITH tab_email_jezyk_data AS (
+  SELECT DISTINCT k.email col_email, --na wypadek gdyby data się powtarzała
+                  w.jezyk col_jezyk,
+                  w.data_utworzenia col_data
+  FROM klienci k
+  JOIN wnioski w ON w.id = k.id_wniosku
+),
 
+  /*  --klient poliglota - używał 12 różnych języków
+SELECT DISTINCT col_email, count(DISTINCT col_jezyk)
+FROM tab_email_jezyk_data
+GROUP BY col_email
+HAVING count(DISTINCT col_jezyk)>1;
+*/
+tab_pre_processed AS (
+SELECT DISTINCT col_email,
+                col_data,
+                CASE --jesli lag(col_jezyk) jest rowny null lub inny nic col_jezyk to zwroc 0, w przeciwnym wypadku zwroc 1
+                     WHEN lag(col_jezyk) over (PARTITION BY col_email) is NULL OR col_jezyk != lag(col_jezyk) over (PARTITION BY col_email) then 0
+                     ELSE 1
+                END  col_zmiana_jezyka,
+                first_value(col_jezyk) over (PARTITION BY col_email ORDER BY col_data ASC)  = first_value(col_jezyk) over (PARTITION BY col_email ORDER BY col_data DESC) ten_sam_jezyk_pierw_ost
+FROM tab_email_jezyk_data)
+
+-- SELECT * FROM tab_pre_processed; --check
+
+SELECT  col_email,
+        SUM(col_zmiana_jezyka) liczba_zmian_jezyka,
+        first_value(ten_sam_jezyk_pierw_ost) over (PARTITION BY col_email) ten_sam_jezyk_pierw_ost
+FROM tab_pre_processed
+GROUP BY col_email, ten_sam_jezyk_pierw_ost
+-- HAVING SUM(col_zmiana_jezyka)>0 --test --ok
