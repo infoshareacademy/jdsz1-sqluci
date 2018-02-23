@@ -127,8 +127,8 @@ with wnioski2 as (select wnioski.id as id, wnioski.data_utworzenia::date - data_
 
 9) Mając czas od utworzenia wniosku do jego analizy przygotuj statystyke:
 
-with czas as (select wnioski.id as wniosek, wnioski.data_utworzenia as data1, a.data_zakonczenia as data2, a.data_zakonczenia - wnioski.data_utworzenia, extract(hours from a.data_zakonczenia -
-wnioski.data_utworzenia) as roznica
+with czas as (select wnioski.id as wniosek, wnioski.data_utworzenia as data1, a.data_zakonczenia as data2, a.data_zakonczenia - wnioski.data_utworzenia,
+extract(hours from a.data_zakonczenia - wnioski.data_utworzenia) as roznica
  from wnioski
  join analizy_wnioskow a ON wnioski.id = a.id_wniosku
 order by roznica ASC )
@@ -138,8 +138,12 @@ extract(hours from avg(data2 - data1)) as average,
  percentile_cont(0.75) within group(order by roznica asc) as P75,
  percentile_cont(0.25) within group(order by roznica asc) as P25,
   count(distinct case when roznica < 5 then wniosek end) as mniejnizP75,
-  count(distinct case when roznica > -2 then wniosek end) as wiecejnizP25
+  count(distinct case when roznica > -2 then wniosek end) as wiecejnizP25,
+ count(distinct case when roznica != 0 then wniosek end) as rozne_od_mediany
  from czas
+
+
+
 
  --
 
@@ -154,8 +158,10 @@ select percentile_cont(0.5) within group(order by roznica asc) as mediana,
 extract(hours from avg(data2 - data1)) as average,
  percentile_cont(0.75) within group(order by roznica asc) as P75,
  percentile_cont(0.25) within group(order by roznica asc) as P25,
-  count(distinct case when roznica < 5 then wniosek end) as mniejnizP75,
-  count(distinct case when roznica > -2 then wniosek end) as wiecejnizP25
+  count(distinct case when roznica < 0 then wniosek end) as mniejnizP75,
+  count(distinct case when roznica > -4 then wniosek end) as wiecejnizP25,
+ count(distinct case when roznica != -1 then wniosek end) as rozne_od_mediany
+
  from czas
 
  ---
@@ -172,8 +178,10 @@ select percentile_cont(0.5) within group(order by roznica asc) as mediana,
 extract(hours from avg(data2 - data1)) as average,
  percentile_cont(0.75) within group(order by roznica asc) as P75,
  percentile_cont(0.25) within group(order by roznica asc) as P25,
-  count(distinct case when roznica < 5 then wniosek end) as mniejnizP75,
-  count(distinct case when roznica > -2 then wniosek end) as wiecejnizP25
+  count(distinct case when roznica < 17 then wniosek end) as mniejnizP75,
+  count(distinct case when roznica > 1 then wniosek end) as wiecejnizP25,
+  count(distinct case when roznica != 8 then wniosek end) as rozne_od_mediany
+
  from czas
 
 
