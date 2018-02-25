@@ -6,7 +6,8 @@ select wylot_kod || '-' || przylot_kod as trasa,
 from o_trasy
 GROUP BY 1
   having count(1) > 500
-ORDER BY 4 DESC;
+ORDER BY 4 DESC
+limit 10;
 
 select wylot_kod || '-' || przylot_kod as trasa,
   count(case when czas_opoznienia >= 180 then 1 end) opoznione,
@@ -15,7 +16,8 @@ select wylot_kod || '-' || przylot_kod as trasa,
 from o_trasy
 GROUP BY 1
     having count(1) > 500
-ORDER BY 4 DESC;
+ORDER BY 4 DESC
+limit 10;
 
 select wylot_kod || '-' || przylot_kod as trasa,
   count(case when wylot_status = 'CX' then 1 end) opoznione,
@@ -25,6 +27,7 @@ from o_trasy
 GROUP BY 1
       having count(1) > 500
 ORDER BY 4 DESC
+limit 10;
 
 
 
