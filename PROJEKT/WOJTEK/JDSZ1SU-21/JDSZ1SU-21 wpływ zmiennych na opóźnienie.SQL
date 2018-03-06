@@ -14,7 +14,7 @@ WITH tab_o_trasy_clean AS ( --wybranie unikalnych rekord?w w og?le
        AND przylot_status != 'CX' AND wylot_status != 'CX'
       -- AND przylot_status != 'DY' --check
 )
-SELECT * FROM tab_o_trasy_clean; --check
+--SELECT * FROM tab_o_trasy_clean; --check
 
 -- BADANE ZMIENNE
 -- zale?no?? d?ugo?ci op??nienia od wybranych zmiennych
@@ -37,7 +37,8 @@ SELECT tc.kod_operatora
       ,tc.wylot_nazwa
       ,tc.przylot_nazwa
 FROM tab_o_trasy_clean tc
---WHERE tc.czas_opoznienia >= 180
+WHERE tc.czas_opoznienia >= 180
+
 --WSTĘPNA ANALIZA
 --https://public.tableau.com/profile/wojciech.artichowicz#!/vizhome/JDSZ1SU-21/oprator_sprzet_general_view?publish=yes
 
