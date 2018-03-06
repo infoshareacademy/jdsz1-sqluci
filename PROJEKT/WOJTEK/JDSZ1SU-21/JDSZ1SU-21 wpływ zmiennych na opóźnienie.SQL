@@ -14,15 +14,14 @@ WITH tab_o_trasy_clean AS ( --wybranie unikalnych rekord?w w og?le
        AND przylot_status != 'CX' AND wylot_status != 'CX'
       -- AND przylot_status != 'DY' --check
 )
---SELECT * FROM tab_o_trasy_clean; --check
+SELECT * FROM tab_o_trasy_clean; --check
 
 -- BADANE ZMIENNE
--- czy zaklocenie wyst?pi?o, rodzaj zak??cenia,
 -- zale?no?? d?ugo?ci op??nienia od wybranych zmiennych
 --  marka poci?gu / operator / data
 
 -- wybranie operatora, kodu sprz?tu i statusu przyjazdu
-  --niekt?re rekordy maj null w czas op??nienia
+  --niekt?re rekordy maj null w czas op??nienia - zastąpione obliczonym opóxnieniem
 SELECT tc.kod_operatora
       ,tc.kod_sprzetu
       ,tc.przylot_status
@@ -53,3 +52,8 @@ FROM tab_o_trasy_clean tc
 
 --GROUP BY kod_operatora;
 
+
+-- UWAGI, WNIOSKI:
+/*
+
+*/
