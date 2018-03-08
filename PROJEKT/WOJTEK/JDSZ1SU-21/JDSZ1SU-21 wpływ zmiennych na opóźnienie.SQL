@@ -58,3 +58,6 @@ WHERE tc.czas_opoznienia >= 180
 /*
 
 */
+
+SELECT *
+FROM o_trasy;

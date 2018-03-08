@@ -1,0 +1,47 @@
+nazwa,case,liczba_tras,suma_rekompensaty,sr_rekompensata
+EiC,CX,52116,15408500,295.7
+EiC,DY,21964,8465000,385.4
+EiC,EY,17,5300,311.8
+EiC,NS,3,1600,533.3
+EiC,OT,10,2850,285
+EiC,UN,556,160650,288.9
+Koleje kujawskie,CX,26004,7690900,295.8
+Koleje kujawskie,DY,10779,4140950,384.2
+Koleje kujawskie,EY,7,2450,350
+Koleje kujawskie,NS,2,850,425
+Koleje kujawskie,OT,7,2100,300
+Koleje kujawskie,UN,278,81050,291.5
+Koleje lubelskie,CX,25990,7685800,295.7
+Koleje lubelskie,DY,10874,4179200,384.3
+Koleje lubelskie,EY,10,3200,320
+Koleje lubelskie,NS,1,600,600
+Koleje lubelskie,OT,6,2200,366.7
+Koleje lubelskie,UN,292,84250,288.5
+Koleje malopolskie,CX,25933,7685350,296.4
+Koleje malopolskie,DY,11029,4242800,384.7
+Koleje malopolskie,EY,9,2950,327.8
+Koleje malopolskie,NS,1,250,250
+Koleje malopolskie,OT,4,1350,337.5
+Koleje malopolskie,UN,289,83950,290.5
+Koleje mazowieckie,CX,26154,7726050,295.4
+Koleje mazowieckie,DY,11056,4280100,387.1
+Koleje mazowieckie,EY,5,1600,320
+Koleje mazowieckie,NS,1,250,250
+Koleje mazowieckie,OT,4,1000,250
+Koleje mazowieckie,UN,290,81450,280.9
+Koleje pomorskie,CX,25899,7653800,295.5
+Koleje pomorskie,DY,11224,4333500,386.1
+Koleje pomorskie,EY,5,1750,350
+Koleje pomorskie,NS,2,850,425
+Koleje pomorskie,OT,3,1100,366.7
+Koleje pomorskie,UN,298,81550,273.7
+Koleje wielkopolskie,CX,26014,7682600,295.3
+Koleje wielkopolskie,DY,11006,4255650,386.7
+Koleje wielkopolskie,EY,6,2000,333.3
+Koleje wielkopolskie,OT,4,1700,425
+Koleje wielkopolskie,UN,313,89150,284.8
+TLK,CX,26203,7750500,295.8
+TLK,DY,11094,4272750,385.1
+TLK,EY,10,4050,405
+TLK,OT,2,500,250
+TLK,UN,289,82700,286.2
