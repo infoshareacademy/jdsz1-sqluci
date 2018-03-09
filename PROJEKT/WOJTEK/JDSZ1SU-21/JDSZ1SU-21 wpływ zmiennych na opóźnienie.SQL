@@ -39,7 +39,7 @@ SELECT tc.kod_operatora
       ,tc.przylot_nazwa
 FROM tab_o_trasy_clean tc
 JOIN o_operatorzy op ON tc.kod_operatora = op.kod
-WHERE tc.czas_opoznienia >= 180
+WHERE tc.czas_opoznienia >= 180 AND tc.kod_sprzetu = '330'
 
 --WSTĘPNA ANALIZA
 --https://public.tableau.com/profile/wojciech.artichowicz#!/vizhome/JDSZ1SU-21/oprator_sprzet_general_view?publish=yes
