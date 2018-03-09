@@ -23,6 +23,7 @@ WITH tab_o_trasy_clean AS ( --wybranie unikalnych rekord?w w og?le
 -- wybranie operatora, kodu sprz?tu i statusu przyjazdu
   --niekt?re rekordy maj null w czas op??nienia - zastąpione obliczonym opóxnieniem
 SELECT tc.kod_operatora
+      ,op.nazwa
       ,tc.kod_sprzetu
       ,tc.przylot_status
       ,to_char(tc.plan_odjazd_dataczas,'YYYY-MM-DD HH:MI') plan_odjazd
@@ -37,6 +38,7 @@ SELECT tc.kod_operatora
       ,tc.wylot_nazwa
       ,tc.przylot_nazwa
 FROM tab_o_trasy_clean tc
+JOIN o_operatorzy op ON tc.kod_operatora = op.kod
 WHERE tc.czas_opoznienia >= 180
 
 --WSTĘPNA ANALIZA
@@ -59,5 +61,6 @@ WHERE tc.czas_opoznienia >= 180
 
 */
 
-SELECT *
-FROM o_trasy;
+SELECT count(*)
+FROM o_trasy
+where kod_sprzetu = '330';
