@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     24071,        576]
-NotebookOptionsPosition[     21734,        535]
-NotebookOutlinePosition[     22083,        550]
-CellTagsIndexPosition[     22040,        547]
+NotebookDataLength[     21634,        524]
+NotebookOptionsPosition[     19492,        485]
+NotebookOutlinePosition[     19841,        500]
+CellTagsIndexPosition[     19798,        497]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -395,8 +395,6 @@ Cell[BoxData[
 c2c26dcaa1cf"]
 }, Open  ]],
 
-Cell[CellGroupData[{
-
 Cell[BoxData[
  RowBox[{"\[IndentingNewLine]", 
   RowBox[{
@@ -454,83 +452,35 @@ Cell[BoxData[
   3.729697819280339*^9}},ExpressionUUID->"9da81171-9ff7-4065-bb60-\
 a1d000e65d71"],
 
-Cell[BoxData[
- StyleBox[
-  TagBox[GridBox[{
-     {"\<\"\"\>", "\<\"Statistic\"\>", "\<\"P\[Hyphen]Value\"\>"},
-     {"\<\"Mann\[Hyphen]Whitney\"\>", "1.2658461945`*^9", 
-      "4.892347587820619`*^-115"}
-    },
-    AutoDelete->False,
-    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
-    GridBoxDividers->{
-     "ColumnsIndexed" -> {2 -> GrayLevel[0.7]}, 
-      "RowsIndexed" -> {2 -> GrayLevel[0.7]}},
-    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-    GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-   "Grid"], "DialogStyle",
-  StripOnInput->False]], "Output",
- CellChangeTimes->{
-  3.729696083257885*^9, 3.7296961244493656`*^9, 3.729697179197556*^9, 
-   3.729697215586275*^9, {3.729697246237213*^9, 3.7296972631078963`*^9}, 
-   3.7296976924720783`*^9, {3.7296977860462575`*^9, 
-   3.7296978244493837`*^9}},ExpressionUUID->"c07aad4b-8301-4cea-8f01-\
-ffe92429ea99"],
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"operatorzyChi", " ", "=", " ", 
+   RowBox[{"Import", "[", 
+    RowBox[{
+     RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+     "\"\<operatorzy_chi.csv\>\""}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"IndependenceTest", "[", 
+  RowBox[{
+   RowBox[{"operatorzyChi", "\[LeftDoubleBracket]", 
+    RowBox[{";;", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+   RowBox[{"operatorzyChi", "\[LeftDoubleBracket]", 
+    RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.729704367149165*^9, 3.7297043779847937`*^9}, {
+  3.7297045537809563`*^9, 
+  3.729704558660265*^9}},ExpressionUUID->"329df59e-6066-46de-b32c-\
+b4c47eda8402"],
 
-Cell[BoxData["\<\"Test Z:\"\>"], "Print",
- CellChangeTimes->{
-  3.7296976924790487`*^9, {3.729697786049731*^9, 
-   3.7296978244513845`*^9}},ExpressionUUID->"e6a94b09-8f86-4f5c-ba42-\
-b826a8378a3c"],
+Cell[CellGroupData[{
 
-Cell[BoxData[
- TemplateBox[{
-  "ZTest","nortst",
-   "\"At least one of the p-values in \\!\\(\\*RowBox[{\\\"{\\\", \
-RowBox[{\\\"0\\\", \\\",\\\", \\\"0\\\"}], \\\"}\\\"}]\\), resulting from a \
-test for normality, is below \\!\\(\\*RowBox[{\\\"0.025`\\\"}]\\). The tests \
-in \\!\\(\\*RowBox[{\\\"{\\\", \\\"\\\\\\\"Z\\\\\\\"\\\", \\\"}\\\"}]\\) \
-require that the data is normally distributed.\"",2,61,9,17428009455720847300,
-   "Local"},
-  "MessageTemplate"]], "Message", "MSG",
- CellChangeTimes->{
-  3.729697693158164*^9, {3.7296977866650553`*^9, 
-   3.7296978250398083`*^9}},ExpressionUUID->"3966389c-553e-40b5-bd77-\
-e3bda4c1acb4"],
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.7297043906095715`*^9, 3.729704408103532*^9}, 
+   3.7297045574211664`*^9},ExpressionUUID->"a8a92ecc-6eae-4035-8c62-\
+b467ad9bd900"],
 
-Cell[BoxData["1.17752958368218314432579080930153809065534`15.778498511135323*^\
--537"], "Output",
+Cell[BoxData["0.5002189204351408`"], "Output",
  CellChangeTimes->{
-  3.729696083257885*^9, 3.7296961244493656`*^9, 3.729697179197556*^9, 
-   3.729697215586275*^9, {3.729697246237213*^9, 3.7296972631078963`*^9}, 
-   3.7296976924720783`*^9, {3.7296977860462575`*^9, 
-   3.7296978250758085`*^9}},ExpressionUUID->"bd519e83-eea6-43a1-ae31-\
-9e817321ab76"],
-
-Cell[BoxData[
- StyleBox[
-  TagBox[GridBox[{
-     {"\<\"\"\>", "\<\"Statistic\"\>", "\<\"P\[Hyphen]Value\"\>"},
-     {"\<\"Conover\"\>", "39.21053213370532`", 
-      "2.830037704971526998483905877337`15.778498511135323*^-336"},
-     {"\<\"Siegel\[Hyphen]Tukey\"\>", "149.03059089619373`", 
-      "7.29478267027356046812673424154`15.778498511135323*^-4826"}
-    },
-    AutoDelete->False,
-    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
-    GridBoxDividers->{
-     "ColumnsIndexed" -> {2 -> GrayLevel[0.7]}, 
-      "RowsIndexed" -> {2 -> GrayLevel[0.7]}},
-    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
-    GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
-   "Grid"], "DialogStyle",
-  StripOnInput->False]], "Output",
- CellChangeTimes->{
-  3.729696083257885*^9, 3.7296961244493656`*^9, 3.729697179197556*^9, 
-   3.729697215586275*^9, {3.729697246237213*^9, 3.7296972631078963`*^9}, 
-   3.7296976924720783`*^9, {3.7296977860462575`*^9, 
-   3.7296978259862947`*^9}},ExpressionUUID->"c5636554-58d3-47ce-b504-\
-c5bc91405228"]
+  3.7297044094416084`*^9},ExpressionUUID->"8f8dc356-1264-48e8-b594-\
+d42d02f1bd0b"]
 }, Open  ]]
 },
 WindowSize->{1000, 691},
@@ -570,13 +520,11 @@ Cell[CellGroupData[{
 Cell[11848, 317, 285, 7, 28, "Input",ExpressionUUID->"f37efb14-cda4-4d6c-a845-125a83109529"],
 Cell[12136, 326, 3996, 68, 198, "Output",ExpressionUUID->"fda1df1d-c461-4316-8c7f-c2c26dcaa1cf"]
 }, Open  ]],
+Cell[16147, 397, 2261, 55, 238, "Input",ExpressionUUID->"9da81171-9ff7-4065-bb60-a1d000e65d71"],
+Cell[18411, 454, 708, 16, 48, "Input",ExpressionUUID->"329df59e-6066-46de-b32c-b4c47eda8402"],
 Cell[CellGroupData[{
-Cell[16169, 399, 2261, 55, 238, "Input",ExpressionUUID->"9da81171-9ff7-4065-bb60-a1d000e65d71"],
-Cell[18433, 456, 943, 21, 52, "Output",ExpressionUUID->"c07aad4b-8301-4cea-8f01-ffe92429ea99"],
-Cell[19379, 479, 197, 4, 22, "Print",ExpressionUUID->"e6a94b09-8f86-4f5c-ba42-b826a8378a3c"],
-Cell[19579, 485, 637, 13, 23, "Message",ExpressionUUID->"3966389c-553e-40b5-bd77-e3bda4c1acb4"],
-Cell[20219, 500, 401, 7, 32, "Output",ExpressionUUID->"bd519e83-eea6-43a1-ae31-9e817321ab76"],
-Cell[20623, 509, 1095, 23, 72, "Output",ExpressionUUID->"c5636554-58d3-47ce-b504-c5bc91405228"]
+Cell[19144, 474, 179, 3, 28, "Input",ExpressionUUID->"a8a92ecc-6eae-4035-8c62-b467ad9bd900"],
+Cell[19326, 479, 150, 3, 32, "Output",ExpressionUUID->"8f8dc356-1264-48e8-b594-d42d02f1bd0b"]
 }, Open  ]]
 }
 ]
