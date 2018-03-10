@@ -19,6 +19,19 @@ WITH tab_o_trasy_clean AS ( --wybranie unikalnych rekord?w w og?le
 -- BADANE ZMIENNE
 -- zale?no?? d?ugo?ci op??nienia od wybranych zmiennych
 --  marka poci?gu / operator / data
+/*
+SELECT coalesce(tc.czas_opoznienia,EXTRACT(EPOCH FROM tc.real_przyjazd - tc.plan_przyjazd_dataczas)/60) czas_opoznienia_przyjazd_mi
+--,to_char(tc.plan_odjazd_dataczas,'YYYY')
+FROM tab_o_trasy_clean tc
+JOIN o_operatorzy op ON tc.kod_operatora = op.kod
+WHERE tc.czas_opoznienia >= 180  AND to_char(tc.plan_odjazd_dataczas,'YYYY') != '2017';
+*/
+  /*
+SELECT coalesce(tc.czas_opoznienia,EXTRACT(EPOCH FROM tc.real_przyjazd - tc.plan_przyjazd_dataczas)/60) czas_opoznienia_przyjazd_mi
+FROM tab_o_trasy_clean tc
+JOIN o_operatorzy op ON tc.kod_operatora = op.kod
+WHERE tc.czas_opoznienia >= 180  AND to_char(tc.plan_odjazd_dataczas,'YYYY') = '2017'
+*/
 
 -- wybranie operatora, kodu sprz?tu i statusu przyjazdu
   --niekt?re rekordy maj null w czas op??nienia - zastąpione obliczonym opóxnieniem
@@ -39,7 +52,7 @@ SELECT tc.kod_operatora
       ,tc.przylot_nazwa
 FROM tab_o_trasy_clean tc
 JOIN o_operatorzy op ON tc.kod_operatora = op.kod
-WHERE tc.czas_opoznienia >= 180 AND tc.kod_sprzetu = '330'
+WHERE tc.czas_opoznienia >= 180
 
 --WSTĘPNA ANALIZA
 --https://public.tableau.com/profile/wojciech.artichowicz#!/vizhome/JDSZ1SU-21/oprator_sprzet_general_view?publish=yes
@@ -64,3 +77,4 @@ WHERE tc.czas_opoznienia >= 180 AND tc.kod_sprzetu = '330'
 SELECT count(*)
 FROM o_trasy
 where kod_sprzetu = '330';
+
