@@ -53,3 +53,6 @@ FROM tab_o_trasy_clean tc
 
 --GROUP BY kod_operatora;
 
+SELECT COUNT(*)
+FROM o_trasy
+--WHERE przylot_status not in('CX','DY') ;
