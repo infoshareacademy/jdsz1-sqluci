@@ -131,19 +131,31 @@ FROM tab_o_trasy_clean
 GROUP BY 1, 2;
 */
 
+
 SELECT o.nazwa,
-       --tc.kod_operatora,
        CASE
           WHEN tc.przylot_status IN ('EY','OT','CX','DY','NS') THEN  tc.przylot_status
           ELSE 'UN'
         END,
        COUNT(*) liczba_tras,
        SUM(tc.rekompensata) suma_rekompensaty,
-       ROUND(AVG(tc.rekompensata),1) sr_rekompensata
+       ROUND(AVG(tc.rekompensata),1) sr_rekompensata,
+       to_char(plan_odjazd_data,'YYYY-MM-DD')
 FROM tab_o_trasy_clean tc
 JOIN o_operatorzy o ON o.kod = tc.kod_operatora
-WHERE tc.czy_uprawniony = TRUE
-GROUP BY 1, 2
-ORDER BY 1, 2;
+--WHERE tc.czy_uprawniony = TRUE
+GROUP BY 1, 2, 6
+ORDER BY 1, 2, 6;
 
+
+SELECT o.nazwa,
+       CASE
+          WHEN tc.przylot_status IN ('EY','OT','CX','DY','NS') THEN  tc.przylot_status
+          ELSE 'UN'
+        END,
+       tc.rekompensata suma_rekompensaty,
+       to_char(plan_odjazd_data,'YYYY-MM-DD')
+FROM tab_o_trasy_clean tc
+JOIN o_operatorzy o ON o.kod = tc.kod_operatora
+-- WHERE tc.czy_uprawniony = TRUE;
 

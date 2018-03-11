@@ -1,0 +1,532 @@
+(* Content-type: application/vnd.wolfram.mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 11.2' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       158,          7]
+NotebookDataLength[     21634,        524]
+NotebookOptionsPosition[     19492,        485]
+NotebookOutlinePosition[     19841,        500]
+CellTagsIndexPosition[     19798,        497]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"dane", " ", "=", " ", 
+   RowBox[{"Import", "[", 
+    RowBox[{
+     RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+     "\"\<JDSZ1SU_over180.csv\>\""}], "]"}]}], ";"}]], "Input",
+ CellChangeTimes->{{3.7296158407345724`*^9, 
+  3.729615871238346*^9}},ExpressionUUID->"3ea171e7-a285-44f2-90c2-\
+b8caa301a675"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{"por\[OAcute]wnanie", " ", "330", " ", "z", " ", "reszt\:0105"}], 
+   "*)"}], "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"kodSprzetu", " ", "=", " ", 
+     RowBox[{"dane", "\[LeftDoubleBracket]", 
+      RowBox[{
+       RowBox[{"2", ";;"}], ",", "3"}], "\[RightDoubleBracket]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"czasOpoznienia", " ", "=", "  ", 
+     RowBox[{"dane", "\[LeftDoubleBracket]", 
+      RowBox[{
+       RowBox[{"2", ";;"}], ",", "9"}], "\[RightDoubleBracket]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"srCzas330", "=", 
+     RowBox[{"czasOpoznienia", "\[LeftDoubleBracket]", " ", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Position", "[", 
+        RowBox[{"kodSprzetu", ",", "330"}], "]"}], "]"}], 
+      "\[RightDoubleBracket]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"srCzasInne", " ", "=", " ", 
+     RowBox[{"czasOpoznienia", "\[LeftDoubleBracket]", " ", 
+      RowBox[{"Complement", "[", 
+       RowBox[{
+        RowBox[{"Range", "[", 
+         RowBox[{"Length", "@", "kodSprzetu"}], "]"}], ",", 
+        RowBox[{"Flatten", "[", 
+         RowBox[{"Position", "[", 
+          RowBox[{"kodSprzetu", ",", "330"}], "]"}], "]"}]}], "]"}], 
+      "\[RightDoubleBracket]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"LocationTest", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"srCzas330", ",", "srCzasInne"}], "}"}], ",", "Automatic", 
+      ",", "\"\<HypothesisTestData\>\""}], "]"}], "[", 
+    RowBox[{"\"\<TestDataTable\>\"", ",", "All"}], "]"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", "\"\<Test Z:\>\"", "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"ZTest", "[", 
+    RowBox[{"{", 
+     RowBox[{"srCzas330", ",", "srCzasInne"}], "}"}], "]"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"VarianceTest", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"srCzas330", ",", "srCzasInne"}], "}"}], ",", "Automatic", 
+      ",", "\"\<HypothesisTestData\>\""}], "]"}], "[", 
+    RowBox[{"\"\<TestDataTable\>\"", ",", "All"}], "]"}], 
+   "\[IndentingNewLine]"}]}]], "Input",
+ CellChangeTimes->{{3.7296158283588295`*^9, 3.7296158324140997`*^9}, {
+  3.729615878680741*^9, 3.729615881222927*^9}, {3.729616499580084*^9, 
+  3.7296165367012587`*^9}, {3.729697955338129*^9, 
+  3.729697980283532*^9}},ExpressionUUID->"d37330fb-674e-43ef-8bf5-\
+616283b04297"],
+
+Cell[BoxData[
+ StyleBox[
+  TagBox[GridBox[{
+     {"\<\"\"\>", "\<\"Statistic\"\>", "\<\"P\[Hyphen]Value\"\>"},
+     {"\<\"Mann\[Hyphen]Whitney\"\>", "2.93105663`*^8", 
+      "6.03506323618326762536838923545136180987891`15.778498511135323*^-1364"}
+    },
+    AutoDelete->False,
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
+    GridBoxDividers->{
+     "ColumnsIndexed" -> {2 -> GrayLevel[0.7]}, 
+      "RowsIndexed" -> {2 -> GrayLevel[0.7]}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+    GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Grid"], "DialogStyle",
+  StripOnInput->False]], "Output",
+ CellChangeTimes->{3.7296165424275646`*^9, 
+  3.7296979819044495`*^9},ExpressionUUID->"619dfbfb-99a5-4e83-b1b8-\
+613a62681fd1"],
+
+Cell[BoxData["\<\"Test Z:\"\>"], "Print",
+ CellChangeTimes->{
+  3.7296979819084496`*^9},ExpressionUUID->"0cc0ffb7-8d34-4ca5-bdba-\
+fb223765749d"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "ZTest","nortst",
+   "\"At least one of the p-values in \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"0\\\", \\\",\\\", \\\"0\\\"}], \\\"}\\\"}]\\), resulting from a \
+test for normality, is below \\!\\(\\*RowBox[{\\\"0.025`\\\"}]\\). The tests \
+in \\!\\(\\*RowBox[{\\\"{\\\", \\\"\\\\\\\"Z\\\\\\\"\\\", \\\"}\\\"}]\\) \
+require that the data is normally distributed.\"",2,78,11,
+   17428009455720847300,"Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.729697982483567*^9},ExpressionUUID->"bc60d1c8-33e3-42bb-ad84-\
+58ed01ba9c44"],
+
+Cell[BoxData["4.051490165514442339283985807308511`15.778498511135323*^-2721"],\
+ "Output",
+ CellChangeTimes->{3.7296165424275646`*^9, 
+  3.729697982485567*^9},ExpressionUUID->"3030d8d5-e73b-40f6-8310-\
+bc62d25fe853"],
+
+Cell[BoxData[
+ StyleBox[
+  TagBox[GridBox[{
+     {"\<\"\"\>", "\<\"Statistic\"\>", "\<\"P\[Hyphen]Value\"\>"},
+     {"\<\"Conover\"\>", 
+      RowBox[{"-", "8.593693407343808`"}], "8.42175506154474`*^-18"},
+     {"\<\"Siegel\[Hyphen]Tukey\"\>", "75.75021817761662`", 
+      "1.0253276325841501986759387653065730751662234`15.778498511135323*^-\
+1248"}
+    },
+    AutoDelete->False,
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
+    GridBoxDividers->{
+     "ColumnsIndexed" -> {2 -> GrayLevel[0.7]}, 
+      "RowsIndexed" -> {2 -> GrayLevel[0.7]}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+    GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Grid"], "DialogStyle",
+  StripOnInput->False]], "Output",
+ CellChangeTimes->{3.7296165424275646`*^9, 
+  3.729697983374892*^9},ExpressionUUID->"09301024-cbe5-483d-b135-\
+ff75e5a4daf8"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"(*", 
+   RowBox[{
+   "por\[OAcute]wnanie", " ", "problematycznego", " ", "sprz\:0119tu", " ", 
+    "bez", " ", "330", " ", "z", " ", "reszt\:0105"}], "*)"}], 
+  "\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"kodSprzetu", " ", "=", " ", 
+     RowBox[{"dane", "\[LeftDoubleBracket]", 
+      RowBox[{
+       RowBox[{"2", ";;"}], ",", "3"}], "\[RightDoubleBracket]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"czasOpoznienia", " ", "=", "  ", 
+     RowBox[{"dane", "\[LeftDoubleBracket]", 
+      RowBox[{
+       RowBox[{"2", ";;"}], ",", "9"}], "\[RightDoubleBracket]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"srCzas330", "=", 
+     RowBox[{"czasOpoznienia", "\[LeftDoubleBracket]", " ", 
+      RowBox[{"Flatten", "[", 
+       RowBox[{"Position", "[", 
+        RowBox[{"kodSprzetu", ",", "330"}], "]"}], "]"}], 
+      "\[RightDoubleBracket]"}]}], ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"srCzasWyroznione", "=", 
+     RowBox[{"Join", "[", 
+      RowBox[{
+       RowBox[{"Flatten", "[", 
+        RowBox[{"Position", "[", 
+         RowBox[{"kodSprzetu", ",", "772"}], "]"}], "]"}], ",", 
+       RowBox[{"Flatten", "[", 
+        RowBox[{"Position", "[", 
+         RowBox[{"kodSprzetu", ",", "\"\<74H\>\""}], "]"}], "]"}]}], "]"}]}], 
+    ";"}], "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"srCzasInne", " ", "=", " ", 
+     RowBox[{"czasOpoznienia", "\[LeftDoubleBracket]", " ", 
+      RowBox[{"Complement", "[", 
+       RowBox[{
+        RowBox[{"Range", "[", 
+         RowBox[{"Length", "@", "kodSprzetu"}], "]"}], ",", 
+        RowBox[{"Join", "[", 
+         RowBox[{"Flatten", "[", 
+          RowBox[{"Position", "[", 
+           RowBox[{"kodSprzetu", ",", "330"}], "]"}], "]"}], "]"}], ",", 
+        "srCzasWyroznione"}], "]"}], "\[RightDoubleBracket]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"LocationTest", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"srCzas330", ",", "srCzasInne"}], "}"}], ",", "Automatic", 
+      ",", "\"\<HypothesisTestData\>\""}], "]"}], "[", 
+    RowBox[{"\"\<TestDataTable\>\"", ",", "All"}], "]"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", "\"\<Test Z:\>\"", "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"ZTest", "[", 
+    RowBox[{"{", 
+     RowBox[{"srCzas330", ",", "srCzasInne"}], "}"}], "]"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"VarianceTest", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"srCzas330", ",", "srCzasInne"}], "}"}], ",", "Automatic", 
+      ",", "\"\<HypothesisTestData\>\""}], "]"}], "[", 
+    RowBox[{"\"\<TestDataTable\>\"", ",", "All"}], "]"}]}]}]], "Input",
+ CellChangeTimes->{{3.7296169695792093`*^9, 3.729617039941319*^9}, {
+  3.729617091384252*^9, 3.7296171148666086`*^9}, {3.729697885624552*^9, 
+  3.7296979496823807`*^9}},ExpressionUUID->"4e59e941-709d-46e4-af2f-\
+5bf165beab30"],
+
+Cell[BoxData[
+ StyleBox[
+  TagBox[GridBox[{
+     {"\<\"\"\>", "\<\"Statistic\"\>", "\<\"P\[Hyphen]Value\"\>"},
+     {"\<\"Mann\[Hyphen]Whitney\"\>", "2.86256189`*^8", 
+      "5.950029359963968947226917808621`15.778498511135323*^-1376"}
+    },
+    AutoDelete->False,
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
+    GridBoxDividers->{
+     "ColumnsIndexed" -> {2 -> GrayLevel[0.7]}, 
+      "RowsIndexed" -> {2 -> GrayLevel[0.7]}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+    GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Grid"], "DialogStyle",
+  StripOnInput->False]], "Output",
+ CellChangeTimes->{{3.729617110503399*^9, 3.7296171168467646`*^9}, 
+   3.7296979071368537`*^9},ExpressionUUID->"2f8353c0-2407-4bec-8d2e-\
+4645c354e100"],
+
+Cell[BoxData["\<\"Test Z:\"\>"], "Print",
+ CellChangeTimes->{
+  3.729697907140826*^9},ExpressionUUID->"b2a7fdf6-725a-43e7-8005-\
+369ea3d6cfee"],
+
+Cell[BoxData[
+ TemplateBox[{
+  "ZTest","nortst",
+   "\"At least one of the p-values in \\!\\(\\*RowBox[{\\\"{\\\", \
+RowBox[{\\\"0\\\", \\\",\\\", \\\"0\\\"}], \\\"}\\\"}]\\), resulting from a \
+test for normality, is below \\!\\(\\*RowBox[{\\\"0.025`\\\"}]\\). The tests \
+in \\!\\(\\*RowBox[{\\\"{\\\", \\\"\\\\\\\"Z\\\\\\\"\\\", \\\"}\\\"}]\\) \
+require that the data is normally distributed.\"",2,70,10,
+   17428009455720847300,"Local"},
+  "MessageTemplate"]], "Message", "MSG",
+ CellChangeTimes->{
+  3.7296979077064323`*^9},ExpressionUUID->"9164cfca-d1f1-41b2-aba0-\
+481ef934189c"],
+
+Cell[BoxData["1.10413973793992309028395422508249954073149`15.778498511135323*^\
+-2752"], "Output",
+ CellChangeTimes->{{3.729617110503399*^9, 3.7296171168467646`*^9}, 
+   3.72969790770813*^9},ExpressionUUID->"75ab7577-48c6-4961-8ec8-\
+03cda63cb6e4"],
+
+Cell[BoxData[
+ StyleBox[
+  TagBox[GridBox[{
+     {"\<\"\"\>", "\<\"Statistic\"\>", "\<\"P\[Hyphen]Value\"\>"},
+     {"\<\"Conover\"\>", 
+      RowBox[{"-", "8.233342015276936`"}], "1.820614362176836`*^-16"},
+     {"\<\"Siegel\[Hyphen]Tukey\"\>", "76.96723557201791`", 
+      "4.4157123257657963151312873463420340391029`15.778498511135323*^-1289"}
+    },
+    AutoDelete->False,
+    GridBoxAlignment->{"Columns" -> {{Left}}, "Rows" -> {{Automatic}}},
+    GridBoxDividers->{
+     "ColumnsIndexed" -> {2 -> GrayLevel[0.7]}, 
+      "RowsIndexed" -> {2 -> GrayLevel[0.7]}},
+    GridBoxItemSize->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}},
+    GridBoxSpacings->{"Columns" -> {{Automatic}}, "Rows" -> {{Automatic}}}],
+   "Grid"], "DialogStyle",
+  StripOnInput->False]], "Output",
+ CellChangeTimes->{{3.729617110503399*^9, 3.7296171168467646`*^9}, 
+   3.7296979085670996`*^9},ExpressionUUID->"5b34ec23-6a7f-416e-9db4-\
+d57046605810"]
+}, Open  ]],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[
+ RowBox[{
+  RowBox[{"dane", "\[LeftDoubleBracket]", 
+   RowBox[{";;", "10"}], "\[RightDoubleBracket]"}], " ", "//", 
+  "TableForm"}]], "Input",
+ CellChangeTimes->{{3.729695402495989*^9, 
+  3.7296954150327377`*^9}},ExpressionUUID->"f37efb14-cda4-4d6c-a845-\
+125a83109529"],
+
+Cell[BoxData[
+ TagBox[GridBox[{
+    {"\<\"kod_operatora\"\>", "\<\"nazwa\"\>", "\<\"kod_sprzetu\"\>", \
+"\<\"przylot_status\"\>", "\<\"plan_odjazd\"\>", "\<\"plan_przyjazd\"\>", "\<\
+\"real_odjazd\"\>", "\<\"real_przyjazd\"\>", "\<\"czas_opoznienia_przyjazd_mi\
+\"\>", "\<\"wylot_kod_regionu\"\>", "\<\"przylot_kod_regionu\"\>", \
+"\<\"wylot_nazwa_kraju\"\>", "\<\"przylot_nazwa_kraju\"\>", \
+"\<\"wylot_nazwa\"\>", "\<\"przylot_nazwa\"\>"},
+    {"\<\"KMA\"\>", "\<\"Koleje mazowieckie\"\>", "\<\"73H\"\>", \
+"\<\"DY\"\>", "\<\"2017-09-16 07:45\"\>", "\<\"2017-09-16 09:05\"\>", \
+"\<\"2017-09-16 12:29\"\>", "\<\"2017-09-16 01:36\"\>", 
+     "271", "\<\"EU1\"\>", "\<\"EU1\"\>", "\<\"Sweden\"\>", "\<\"Sweden\"\>", \
+"\<\"Lulea\"\>", "\<\"Stockholm Arlanda Airport\"\>"},
+    {"\<\"KKU\"\>", "\<\"Koleje kujawskie\"\>", "\<\"73W\"\>", "\<\"DY\"\>", \
+"\<\"2016-05-20 06:30\"\>", "\<\"2016-05-20 07:35\"\>", "\<\"2016-05-20 09:49\
+\"\>", "\<\"2016-05-20 10:57\"\>", 
+     "202", "\<\"EU1\"\>", "\<\"EU1\"\>", "\<\"Sweden\"\>", "\<\"Sweden\"\>", \
+"\<\"Skelleftea\"\>", "\<\"Stockholm Arlanda Airport\"\>"},
+    {"\<\"KML\"\>", "\<\"Koleje malopolskie\"\>", 
+     "736", "\<\"DY\"\>", "\<\"2016-11-07 06:30\"\>", "\<\"2016-11-07 07:40\"\
+\>", "\<\"2016-11-07 11:35\"\>", "\<\"2016-11-07 12:41\"\>", 
+     "301", "\<\"EU1\"\>", "\<\"EU1\"\>", "\<\"Sweden\"\>", "\<\"Sweden\"\>", \
+"\<\"Skelleftea\"\>", "\<\"Stockholm Arlanda Airport\"\>"},
+    {"\<\"EIC\"\>", "\<\"EiC\"\>", 
+     "736", "\<\"DY\"\>", "\<\"2017-11-17 06:45\"\>", "\<\"2017-11-17 07:55\"\
+\>", "\<\"2017-11-17 04:30\"\>", "\<\"2017-11-17 05:42\"\>", 
+     "587", "\<\"EU1\"\>", "\<\"EU1\"\>", "\<\"Sweden\"\>", "\<\"Sweden\"\>", \
+"\<\"Skelleftea\"\>", "\<\"Stockholm Arlanda Apt\"\>"},
+    {"\<\"KLU\"\>", "\<\"Koleje lubelskie\"\>", "\<\"32A\"\>", "\<\"DY\"\>", \
+"\<\"2017-12-08 08:10\"\>", "\<\"2017-12-08 09:20\"\>", "\<\"2017-12-08 08:54\
+\"\>", "\<\"2017-12-08 12:45\"\>", 
+     "205", "\<\"EU1\"\>", "\<\"EU1\"\>", "\<\"Sweden\"\>", "\<\"Sweden\"\>", \
+"\<\"Stockholm Arlanda Apt\"\>", "\<\"Skelleftea\"\>"},
+    {"\<\"KWI\"\>", "\<\"Koleje wielkopolskie\"\>", "\<\"32A\"\>", \
+"\<\"DY\"\>", "\<\"2017-12-08 09:45\"\>", "\<\"2017-12-08 10:55\"\>", \
+"\<\"2017-12-08 01:24\"\>", "\<\"2017-12-08 02:38\"\>", 
+     "223", "\<\"EU1\"\>", "\<\"EU1\"\>", "\<\"Sweden\"\>", "\<\"Sweden\"\>", \
+"\<\"Skelleftea\"\>", "\<\"Stockholm Arlanda Apt\"\>"},
+    {"\<\"KLU\"\>", "\<\"Koleje lubelskie\"\>", 
+     "736", "\<\"DY\"\>", "\<\"2016-05-19 04:10\"\>", "\<\"2016-05-19 05:15\"\
+\>", "\<\"2016-05-19 07:15\"\>", "\<\"2016-05-19 08:19\"\>", 
+     "184", "\<\"EU1\"\>", "\<\"EU1\"\>", "\<\"Sweden\"\>", "\<\"Sweden\"\>", \
+"\<\"Skelleftea\"\>", "\<\"Stockholm Arlanda Airport\"\>"},
+    {"\<\"KLU\"\>", "\<\"Koleje lubelskie\"\>", "\<\"73H\"\>", "\<\"DY\"\>", \
+"\<\"2016-12-17 06:55\"\>", "\<\"2016-12-17 08:05\"\>", "\<\"2016-12-17 10:27\
+\"\>", "\<\"2016-12-17 11:33\"\>", 
+     "208", "\<\"EU1\"\>", "\<\"EU1\"\>", "\<\"Sweden\"\>", "\<\"Sweden\"\>", \
+"\<\"Stockholm Arlanda Apt\"\>", "\<\"Skelleftea Airport\"\>"},
+    {"\<\"KMA\"\>", "\<\"Koleje mazowieckie\"\>", "\<\"73H\"\>", \
+"\<\"DY\"\>", "\<\"2016-11-09 05:50\"\>", "\<\"2016-11-09 07:00\"\>", \
+"\<\"2016-11-09 09:16\"\>", "\<\"2016-11-09 10:25\"\>", 
+     "205", "\<\"EU1\"\>", "\<\"EU1\"\>", "\<\"Sweden\"\>", "\<\"Sweden\"\>", \
+"\<\"Stockholm Arlanda Apt\"\>", "\<\"Skelleftea Airport\"\>"}
+   },
+   GridBoxAlignment->{
+    "Columns" -> {{Left}}, "ColumnsIndexed" -> {}, "Rows" -> {{Baseline}}, 
+     "RowsIndexed" -> {}},
+   GridBoxSpacings->{"Columns" -> {
+       Offset[0.27999999999999997`], {
+        Offset[2.0999999999999996`]}, 
+       Offset[0.27999999999999997`]}, "ColumnsIndexed" -> {}, "Rows" -> {
+       Offset[0.2], {
+        Offset[0.4]}, 
+       Offset[0.2]}, "RowsIndexed" -> {}}],
+  Function[BoxForm`e$, 
+   TableForm[BoxForm`e$]]]], "Output",
+ CellChangeTimes->{
+  3.729695415564747*^9},ExpressionUUID->"fda1df1d-c461-4316-8c7f-\
+c2c26dcaa1cf"]
+}, Open  ]],
+
+Cell[BoxData[
+ RowBox[{"\[IndentingNewLine]", 
+  RowBox[{
+   RowBox[{
+    RowBox[{"opoznienie2017", " ", "=", 
+     RowBox[{
+      RowBox[{"Flatten", "[", " ", 
+       RowBox[{"Import", "[", 
+        RowBox[{
+         RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+         "\"\<czas_opoznienia2017.csv\>\""}], "]"}], "]"}], 
+      "\[LeftDoubleBracket]", 
+      RowBox[{"2", ";;"}], "\[RightDoubleBracket]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"opoznienieNot2017", " ", "=", 
+     RowBox[{
+      RowBox[{"Flatten", "[", " ", 
+       RowBox[{"Import", "[", 
+        RowBox[{
+         RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+         "\"\<czas_opoznienia_not_2017.csv\>\""}], "]"}], "]"}], 
+      "\[LeftDoubleBracket]", 
+      RowBox[{"2", ";;"}], "\[RightDoubleBracket]"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"LocationTest", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"opoznienie2017", ",", "opoznienieNot2017"}], " ", "}"}], ",", 
+      "Automatic", ",", "\"\<HypothesisTestData\>\""}], "]"}], "[", 
+    RowBox[{"\"\<TestDataTable\>\"", ",", "All"}], "]"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"Print", "[", "\"\<Test Z:\>\"", "]"}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{"ZTest", "[", 
+    RowBox[{"{", 
+     RowBox[{"opoznienie2017", ",", "opoznienieNot2017"}], " ", "}"}], "]"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"VarianceTest", "[", 
+     RowBox[{
+      RowBox[{"{", 
+       RowBox[{"opoznienie2017", ",", "opoznienieNot2017"}], " ", "}"}], ",", 
+      "Automatic", ",", "\"\<HypothesisTestData\>\""}], "]"}], "[", 
+    RowBox[{"\"\<TestDataTable\>\"", ",", "All"}], "]"}], 
+   "\[IndentingNewLine]", "\[IndentingNewLine]", "\[IndentingNewLine]", 
+   "\[IndentingNewLine]", "\[IndentingNewLine]"}]}]], "Input",
+ CellChangeTimes->{{3.7296954284184875`*^9, 3.7296954595862894`*^9}, {
+  3.7296959710581045`*^9, 3.729696035147179*^9}, {3.7296960663733187`*^9, 
+  3.7296961232541027`*^9}, {3.729697163585431*^9, 3.729697261310197*^9}, {
+  3.7296973174057465`*^9, 3.729697321388713*^9}, {3.729697678017178*^9, 
+  3.729697690801555*^9}, {3.7296977766614313`*^9, 
+  3.729697819280339*^9}},ExpressionUUID->"9da81171-9ff7-4065-bb60-\
+a1d000e65d71"],
+
+Cell[BoxData[{
+ RowBox[{
+  RowBox[{"operatorzyChi", " ", "=", " ", 
+   RowBox[{"Import", "[", 
+    RowBox[{
+     RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+     "\"\<operatorzy_chi.csv\>\""}], "]"}]}], ";"}], "\[IndentingNewLine]", 
+ RowBox[{"IndependenceTest", "[", 
+  RowBox[{
+   RowBox[{"operatorzyChi", "\[LeftDoubleBracket]", 
+    RowBox[{";;", ",", "1"}], "\[RightDoubleBracket]"}], ",", 
+   RowBox[{"operatorzyChi", "\[LeftDoubleBracket]", 
+    RowBox[{";;", ",", "2"}], "\[RightDoubleBracket]"}]}], "]"}]}], "Input",
+ CellChangeTimes->{{3.729704367149165*^9, 3.7297043779847937`*^9}, {
+  3.7297045537809563`*^9, 
+  3.729704558660265*^9}},ExpressionUUID->"329df59e-6066-46de-b32c-\
+b4c47eda8402"],
+
+Cell[CellGroupData[{
+
+Cell[BoxData[""], "Input",
+ CellChangeTimes->{{3.7297043906095715`*^9, 3.729704408103532*^9}, 
+   3.7297045574211664`*^9},ExpressionUUID->"a8a92ecc-6eae-4035-8c62-\
+b467ad9bd900"],
+
+Cell[BoxData["0.5002189204351408`"], "Output",
+ CellChangeTimes->{
+  3.7297044094416084`*^9},ExpressionUUID->"8f8dc356-1264-48e8-b594-\
+d42d02f1bd0b"]
+}, Open  ]]
+},
+WindowSize->{1000, 691},
+WindowMargins->{{256, Automatic}, {48, Automatic}},
+FrontEndVersion->"11.2 for Microsoft Windows (64-bit) (September 10, 2017)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[558, 20, 342, 9, 28, "Input",ExpressionUUID->"3ea171e7-a285-44f2-90c2-b8caa301a675"],
+Cell[CellGroupData[{
+Cell[925, 33, 2476, 63, 200, "Input",ExpressionUUID->"d37330fb-674e-43ef-8bf5-616283b04297"],
+Cell[3404, 98, 810, 18, 52, "Output",ExpressionUUID->"619dfbfb-99a5-4e83-b1b8-613a62681fd1"],
+Cell[4217, 118, 145, 3, 22, "Print",ExpressionUUID->"0cc0ffb7-8d34-4ca5-bdba-fb223765749d"],
+Cell[4365, 123, 584, 12, 23, "Message",ExpressionUUID->"bc60d1c8-33e3-42bb-ad84-58ed01ba9c44"],
+Cell[4952, 137, 216, 4, 32, "Output",ExpressionUUID->"3030d8d5-e73b-40f6-8310-bc62d25fe853"],
+Cell[5171, 143, 912, 21, 72, "Output",ExpressionUUID->"09301024-cbe5-483d-b135-ff75e5a4daf8"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[6120, 169, 2940, 76, 219, "Input",ExpressionUUID->"4e59e941-709d-46e4-af2f-5bf165beab30"],
+Cell[9063, 247, 824, 18, 52, "Output",ExpressionUUID->"2f8353c0-2407-4bec-8d2e-4645c354e100"],
+Cell[9890, 267, 143, 3, 22, "Print",ExpressionUUID->"b2a7fdf6-725a-43e7-8005-369ea3d6cfee"],
+Cell[10036, 272, 586, 12, 23, "Message",ExpressionUUID->"9164cfca-d1f1-41b2-aba0-481ef934189c"],
+Cell[10625, 286, 248, 4, 32, "Output",ExpressionUUID->"75ab7577-48c6-4961-8ec8-03cda63cb6e4"],
+Cell[10876, 292, 935, 20, 72, "Output",ExpressionUUID->"5b34ec23-6a7f-416e-9db4-d57046605810"]
+}, Open  ]],
+Cell[CellGroupData[{
+Cell[11848, 317, 285, 7, 28, "Input",ExpressionUUID->"f37efb14-cda4-4d6c-a845-125a83109529"],
+Cell[12136, 326, 3996, 68, 198, "Output",ExpressionUUID->"fda1df1d-c461-4316-8c7f-c2c26dcaa1cf"]
+}, Open  ]],
+Cell[16147, 397, 2261, 55, 238, "Input",ExpressionUUID->"9da81171-9ff7-4065-bb60-a1d000e65d71"],
+Cell[18411, 454, 708, 16, 48, "Input",ExpressionUUID->"329df59e-6066-46de-b32c-b4c47eda8402"],
+Cell[CellGroupData[{
+Cell[19144, 474, 179, 3, 28, "Input",ExpressionUUID->"a8a92ecc-6eae-4035-8c62-b467ad9bd900"],
+Cell[19326, 479, 150, 3, 32, "Output",ExpressionUUID->"8f8dc356-1264-48e8-b594-d42d02f1bd0b"]
+}, Open  ]]
+}
+]
+*)
+
