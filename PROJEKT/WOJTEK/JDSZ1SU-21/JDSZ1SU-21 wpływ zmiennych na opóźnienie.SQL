@@ -19,9 +19,48 @@ SELECT * FROM tab_o_trasy_clean; --check
 -- BADANE ZMIENNE
 -- zale?no?? d?ugo?ci op??nienia od wybranych zmiennych
 --  marka poci?gu / operator / data
+/*
+SELECT coalesce(tc.czas_opoznienia,EXTRACT(EPOCH FROM tc.real_przyjazd - tc.plan_przyjazd_dataczas)/60) czas_opoznienia_przyjazd_mi
+--,to_char(tc.plan_odjazd_dataczas,'YYYY')
+FROM tab_o_trasy_clean tc
+JOIN o_operatorzy op ON tc.kod_operatora = op.kod
+WHERE tc.czas_opoznienia >= 180  AND to_char(tc.plan_odjazd_dataczas,'YYYY') != '2017';
+*/
+  /*
+SELECT coalesce(tc.czas_opoznienia,EXTRACT(EPOCH FROM tc.real_przyjazd - tc.plan_przyjazd_dataczas)/60) czas_opoznienia_przyjazd_mi
+FROM tab_o_trasy_clean tc
+JOIN o_operatorzy op ON tc.kod_operatora = op.kod
+WHERE tc.czas_opoznienia >= 180  AND to_char(tc.plan_odjazd_dataczas,'YYYY') = '2017'
+*/
+ /* -- do testów niezależności
+SELECT CASE
+        when tc.kod_operatora = 'TLK' then 1
+        when tc.kod_operatora = 'KLU' then 2
+        when tc.kod_operatora = 'KSL' then 3
+        when tc.kod_operatora = 'KWI' then 4
+        when tc.kod_operatora = 'KMA' then 5
+        when tc.kod_operatora = 'KKU' then 6
+        when tc.kod_operatora = 'EIC' then 7
+        when tc.kod_operatora = 'KPO' then 8
+       END
+      ,coalesce(tc.czas_opoznienia,EXTRACT(EPOCH FROM tc.real_przyjazd - tc.plan_przyjazd_dataczas)/60) czas_opoznienia_przyjazd_mi
+FROM tab_o_trasy_clean tc
+JOIN o_operatorzy op ON tc.kod_operatora = op.kod
+WHERE tc.czas_opoznienia >= 180 AND CASE
+        when tc.kod_operatora = 'TLK' then 1
+        when tc.kod_operatora = 'KLU' then 2
+        when tc.kod_operatora = 'KSL' then 3
+        when tc.kod_operatora = 'KWI' then 4
+        when tc.kod_operatora = 'KMA' then 5
+        when tc.kod_operatora = 'KKU' then 6
+        when tc.kod_operatora = 'EIC' then 7
+        when tc.kod_operatora = 'KPO' then 8
+       END is NOT null
+*/
 
 -- wybranie operatora, kodu sprz?tu i statusu przyjazdu
   --niekt?re rekordy maj null w czas op??nienia - zastąpione obliczonym opóxnieniem
+ /*
 SELECT tc.kod_operatora
       ,op.nazwa
       ,tc.kod_sprzetu
@@ -40,7 +79,7 @@ SELECT tc.kod_operatora
 FROM tab_o_trasy_clean tc
 JOIN o_operatorzy op ON tc.kod_operatora = op.kod
 WHERE tc.czas_opoznienia >= 180
-
+*/
 --WSTĘPNA ANALIZA
 --https://public.tableau.com/profile/wojciech.artichowicz#!/vizhome/JDSZ1SU-21/oprator_sprzet_general_view?publish=yes
 
@@ -55,6 +94,10 @@ WHERE tc.czas_opoznienia >= 180
 
 --GROUP BY kod_operatora;
 
+SELECT COUNT(*)
+FROM o_trasy
+--WHERE przylot_status not in('CX','DY') ;
+=======
 
 -- UWAGI, WNIOSKI:
 /*
@@ -64,3 +107,6 @@ WHERE tc.czas_opoznienia >= 180
 SELECT count(*)
 FROM o_trasy
 where kod_sprzetu = '330';
+
+Select distinct kod
+from o_operatorzy
