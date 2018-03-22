@@ -14,7 +14,7 @@ WITH tab_o_trasy_clean AS ( --wybranie unikalnych rekord?w w og?le
        AND przylot_status != 'CX' AND wylot_status != 'CX'
       -- AND przylot_status != 'DY' --check
 )
---SELECT * FROM tab_o_trasy_clean; --check
+SELECT * FROM tab_o_trasy_clean; --check
 
 -- BADANE ZMIENNE
 -- zale?no?? d?ugo?ci op??nienia od wybranych zmiennych
