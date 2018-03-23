@@ -104,9 +104,9 @@ FROM o_trasy
 
 */
 
-SELECT count(*)
+SELECT MIN(plan_przyjazd_data), max(plan_przyjazd_data)
 FROM o_trasy
-where kod_sprzetu = '330';
 
 Select distinct kod
 from o_operatorzy
+

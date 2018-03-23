@@ -97,7 +97,7 @@ FROM (SELECT DISTINCT * FROM o_trasy) dist;
 -- kody tras
 
 
-    SELECT DISTINCT kod_polaczenia, COUNT(1)
+SELECT DISTINCT kod_polaczenia, COUNT(1)
 FROM o_trasy
 GROUP BY kod_polaczenia;
 /*
