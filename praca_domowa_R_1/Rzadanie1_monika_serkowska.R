@@ -63,6 +63,7 @@ length(v_accounts)
 #13) Because previously created vector containst duplicated values, we need a new vector (v_accounts_unique), with unique values. Print vector and check its length 
 
 v_accounts_unique <- unique(v_accounts)
+length(v_accounts_unique)
 
 #MATRIX
 
@@ -84,15 +85,15 @@ c("no cancer", "cancer"))
 
 precision<-sample_matrix[4]/sum(sample_matrix[,2]) 
 recall<-sample_matrix[4]/sum(sample_matrix[2,]) 
-accuracy<-sum(diag(sample_matrix))/sum(sample_matrix) 
+accuracy<-sample_matrix[1]/sum(sample_matrix) 
 fscore<-2*precision*recall/(precision+recall) 
-#100%, 50%, 99,9%, 66,67%
+#100%, 50%, 99,8%, 66,67%
 
 
 #17) Create matrix gen_matrix with random data: 10 columns, 100 rows, random numbers from 1 to 50 inside 
 
 gen_matrix <- matrix( 
-  c(1:50),  
+  sample(1:50),  
   nrow=100,        
   ncol=10,        
   byrow = TRUE) 
@@ -182,6 +183,7 @@ avg_kwota <- mean(df_comp_small$kwota)
 df_comp_small$amount_category <- ifelse (df_comp_small$kwota<avg_kwota, 'small' ,'high')
 dbWriteTable(con, "df_comp_small", df_comp_small)
 
-#30) Create function f_agent_stats which for given agent_id, will return total number of actions in all tables (analiza_wniosku, analiza_operatora etc)
+#30) Create function f_agent_stats which for given agent_id, will return total number of actions in all tables 
+#(analiza_wniosku, analiza_operatora etc)
 
 #tu poleglam, niestety
