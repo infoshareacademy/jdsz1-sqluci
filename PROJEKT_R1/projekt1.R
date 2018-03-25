@@ -29,3 +29,29 @@ ggplot(data = df2) +
 
 
 
+#Monika wykres K'15
+ggplot(data = df2) + 
+  geom_point(mapping = aes(
+    x = as.Date(df2$Publikacja,"%d.%m.%y"),
+    y = df2$`K'15`,
+    color = df2$Oœrodek)) +
+  geom_smooth(mapping = aes(
+    x = as.Date(df2$Publikacja,"%d.%m.%y"),
+    y = df2$`K'15`,
+    color = df2$Oœrodek))
+
+#Monika wykres geom_tile
+df2_tile <- df2 %>%
+  count(`Metoda badania`, Osrodek)
+  ggplot(df2_tile) + 
+  geom_tile(mapping = aes(
+    x = Osrodek,
+    y = `Metoda badania`,
+    fill=n)) # n to jest count
+   
+  
+#Monika shiny - tab "parties"
+ff <- read_lines("C:\\Users\\BUNT\\Documents\\JDS\\GitHub\\jdsz1-sqluci\\PROJEKT_R1\\parties_en.txt")
+ff
+  
+  
