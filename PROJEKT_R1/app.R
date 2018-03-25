@@ -1,4 +1,15 @@
+#install.packages("dplyr")
+#install_github("rstudio/shiny")  #instal shiny
+#install.packages("shiny")
 #install.packages("shinydashboard")
+#install.packages("wordcloud")
+#install.packages("syuzhet")
+#install.packages("tidyverse")
+#install.packages("tm")
+#install.packages("SnowballC")
+
+library(devtools)
+library(shiny)
 library(shinydashboard)
 library(RPostgreSQL)
 library(plyr)
@@ -10,6 +21,8 @@ library(tidyverse)
 library(XML)
 library(RCurl)
 library(tidyr)
+library(tm)
+library(SnowballC)
 
 ui <- dashboardPage(
   # HEADER
@@ -207,7 +220,9 @@ word_freq_magda <- function() {
   library(RColorBrewer)
   library(tidyverse)
   
-  filePath <- "parties_en.txt"
+  
+  
+  filePath <- paste(getwd(),"parties_en.txt",sep = "/")
   text <- read_lines(filePath)
   docs <- Corpus(VectorSource(text))
   
