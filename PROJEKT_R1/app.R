@@ -11,7 +11,7 @@ library(tidyverse)
 ui <- dashboardPage(
   # HEADER
   ################################################################################################
-  dashboardHeader(title = "Analiza sondazy wyborczych"
+  dashboardHeader(title = "Polls analysis"
                   #,dropdownMenu(type = "tasks",
                   #             taskItem("ABC")
                   #             )
@@ -20,23 +20,23 @@ ui <- dashboardPage(
   ################################################################################################
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Partie polityczne (DEV)", tabName = "tab_partie", icon = icon("th")),
+      menuItem("Political party", tabName = "tab_partie", icon = icon("th")),
       
-      menuItem("Wyniki", tabName = "tab_wyniki_ogolne", icon = icon("dashboard"),  badgeColor = "green",
-               menuSubItem("Wyniki ogolnie", tabName = "tab_wyniki_ogolne", icon = icon("th")),
-               menuSubItem("Wyniki szczegolowe", tabName = "tab_wyniki_szczegolowe", icon = icon("th"))
+      menuItem("Results", tabName = "tab_wyniki_ogolne", icon = icon("dashboard"),  badgeColor = "green",
+               menuSubItem("General results", tabName = "tab_wyniki_ogolne", icon = icon("th")),
+               menuSubItem("Detailed results", tabName = "tab_wyniki_szczegolowe", icon = icon("th"))
                ),
       
       menuItem("Text mining (DEV)", tabName = "tab_text_mining", icon = icon("th"),
-               menuSubItem("Czestosc slow", tabName = "tab_text_mining_czestosc_slow", icon = icon("th")),
-               menuSubItem("Chmura slow", tabName = "tab_text_mining_chmura_slow", icon = icon("th")),
+               menuSubItem("Word frequencies", tabName = "tab_text_mining_czestosc_slow", icon = icon("th")),
+               menuSubItem("Word cloud", tabName = "tab_text_mining_chmura_slow", icon = icon("th")),
                menuSubItem("Find freq terms", tabName = "tab_text_mining_czestosci", icon = icon("th")),
-               menuSubItem("Asocjacje", tabName = "tab_text_mining_asocjacje", icon = icon("th")),
-               menuSubItem("Emocje", tabName = "tab_text_mining_emocje", icon = icon("th")),
-               menuSubItem("Sentyment", tabName = "tab_text_mining_sentyment", icon = icon("th"))
+               menuSubItem("Associacis", tabName = "tab_text_mining_asocjacje", icon = icon("th")),
+               menuSubItem("Emotions", tabName = "tab_text_mining_emocje", icon = icon("th")),
+               menuSubItem("Sentiment", tabName = "tab_text_mining_sentyment", icon = icon("th"))
                ),
       
-      menuItem("Tworcy", tabName = "tab_creators", icon = icon("th"),
+      menuItem("Creators", tabName = "tab_creators", icon = icon("th"),
                menuSubItem("Monika Serkowska", tabName = "tab_creators_ms", icon = icon("th")),
                menuSubItem("Magdalena Kortas", tabName = "tab_creators_mk", icon = icon("th")),
                menuSubItem("Wojciech Artichowicz", tabName = "tab_creators_wa", icon = icon("th"))
@@ -53,7 +53,7 @@ ui <- dashboardPage(
       ################################################################################################
       tabItem(tabName = "tab_partie",
               fluidRow(
-                h2("Analiza partii politycznych")
+                h2("Political parties")
               ),
               fluidRow(
                 infoBox("TEST",  "TEST", icon = icon("credit-card")),
@@ -66,50 +66,50 @@ ui <- dashboardPage(
       #ogolne
       tabItem(tabName = "tab_wyniki_ogolne",
               fluidRow(
-                h2("Uogolnione wyniki sondazy wyborczych")
+                h2("General results")
               )
       ),
       
       tabItem(tabName = "tab_wyniki_szczegolowe",
               fluidRow(
-                h2("Szczegolowe wyniki sondazy wyborczych")
+                h2("Detailed results")
               )
       ),      
       # Text mining
       ################################################################################################
       tabItem(tabName = "tab_text_mining",
               fluidRow(
-                h2("Text mining ogolna")
+                h2("Text mining")
               )
       ), 
       tabItem(tabName = "tab_text_mining_czestosc_slow",
               fluidRow(
-                h2("Text mining :: czestosc slow")
+                h2("Text mining :: word frequencies")
               )
       ), 
       tabItem(tabName = "tab_text_mining_chmura_slow",
               fluidRow(
-                h2("Text mining :: chmura slow")
+                h2("Text mining :: word cloud")
               )
       ),      
       tabItem(tabName = "tab_text_mining_czestosci",
               fluidRow(
-                h2("Text mining :: czestosci (?)")
+                h2("Text mining :: findFreqTerms")
               )
       ), 
       tabItem(tabName = "tab_text_mining_asocjacje",
               fluidRow(
-                h2("Text mining :: asocjacje")
+                h2("Text mining :: associacions")
               )
       ),   
       tabItem(tabName = "tab_text_mining_emocje",
               fluidRow(
-                h2("Text mining :: emocje")
+                h2("Text mining :: emotions")
               )
       ),  
       tabItem(tabName = "tab_text_mining_sentyment",
               fluidRow(
-                h2("Text mining :: sentyment")
+                h2("Text mining :: sentiment")
               )
       ),
       
@@ -124,12 +124,12 @@ ui <- dashboardPage(
   )
 )
 
+
 server <- function(input, output) {
 
+  
+
 }
-
-
-
 
 
 shinyApp(ui, server)
