@@ -7,6 +7,11 @@ library(scales)
 library(wordcloud)
 library(syuzhet)
 library(tidyverse)
+library(XML)
+library(RCurl)
+library(tidyr)
+
+
 
 ui <- dashboardPage(
   # HEADER
@@ -77,8 +82,12 @@ ui <- dashboardPage(
       ),
     
       tabItem(tabName = "tab_wyniki_szczegolowe",
+              fluidRow(h2("Detailed results")),
               fluidRow(
-                h2("Detailed results")
+                radioButtons("in_rb_partie", label = h3("Partia polityczna"),
+                             choices = list("A","B"),
+                             inline = TRUE
+                      )
               )
       ),      
       # Text mining
@@ -135,7 +144,39 @@ ui <- dashboardPage(
 )
 
 
-server <- function(input, output) {
+
+bool_app_init <- TRUE
+
+server <- function(input, output,session) {
+
+  if (bool_app_init){
+    print("init - loading data")
+    
+      bool_app_init<-FALSE
+      
+      link <- "https://docs.google.com/spreadsheets/d/1P9PG5mcbaIeuO9v_VE5pv6U4T2zyiRiFK_r8jVksTyk/htmlembed?single=true&gid=0&range=a10:o400&widget=false&chrome=false" 
+      xData <- getURL(link)  #get link
+      dane_z_html <- readHTMLTable(xData, stringsAsFactors = FALSE, skip.rows = c(1,3), encoding = "utf8") #read html
+      df_dane <- as.data.frame(dane_z_html)   #data frame
+      colnames(df_dane) <- df_dane[1,]  #nazwy kolumn
+      df2 <- df_dane[2:nrow(df_dane),]  
+      rm(df_dane)
+      rm(dane_z_html)
+      rm(xData)
+      for (i in 8:16)
+         df2[[i]] <- as.numeric(gsub(",",".",df2[[i]]))      # remove commas
+     colnames(df2)[2]<- "Osrodek"  
+     
+     
+     observe({
+       # Can also set the label and select items
+       updateRadioButtons(session, "in_rb_partie",
+                          choices = as.list(colnames(df2)[8:16] ),
+                          inline = TRUE
+       )
+     })     
+     
+}
 
   results()
   output$results <-renderDataTable(df2)
