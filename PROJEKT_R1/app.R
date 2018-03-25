@@ -81,7 +81,8 @@ ui <- dashboardPage(
                 radioButtons("in_rb_partie", label = h3("Partia polityczna"),
                              choices = list("A","B"),
                              inline = TRUE
-                      )
+                      ),
+              fluidRow(plotOutput("plot_partie"))
               )
       ),      
       # Text mining
@@ -166,6 +167,19 @@ server <- function(input, output,session) {
        )
      })     
      
+     
+     output$plot_partie <- renderPlot({
+       ggplot(data = df2) + 
+         geom_point(mapping = aes(
+           x = as.Date(Publikacja,"%d.%m.%y"),
+           y = ,
+           color = Osrodek)
+         ) +
+         geom_smooth(mapping = aes(
+           x = as.Date(Publikacja,"%d.%m.%y"),
+           y = .N,
+           color = Osrodek))       
+     })
 }
 
   
