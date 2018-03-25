@@ -1,7 +1,6 @@
 library(XML)
 library(RCurl)
 library(tidyr)
-#install.packages("tidyr")
 
 link <- "https://docs.google.com/spreadsheets/d/1P9PG5mcbaIeuO9v_VE5pv6U4T2zyiRiFK_r8jVksTyk/htmlembed?single=true&gid=0&range=a10:o400&widget=false&chrome=false" 
 xData <- getURL(link)  #get link
@@ -11,19 +10,22 @@ colnames(df_dane) <- df_dane[1,]  #nazwy kolumn
 df2 <- df_dane[2:nrow(df_dane),]  #pominiÄ™cie pierwszego wiersza
 for (i in 8:16)
   df2[[i]] <- as.numeric(gsub(",",".",df2[[i]]))      #przecinki
-df2
+
+colnames(df2)[2]<- "Osrodek"  #zmiana bo z polskim znakiem nie dzia³a 
+head(df2)
 
 
 #wojtek
-ggplot(data = tab) + 
+ggplot(data = df2) + 
   geom_point(mapping = aes(
-    x = as.Date(tab$Publikacja,"%d.%m.%y"),
-    y = tab$.N,
-    color = tab$Osrodek)) +
+    x = as.Date(Publikacja,"%d.%m.%y"),
+    y = .N,
+    color = Osrodek)
+    ) +
    geom_smooth(mapping = aes(
-    x = as.Date(tab$Publikacja,"%d.%m.%y"),
-    y = tab$.N,
-    color = tab$Osrodek))
+    x = as.Date(Publikacja,"%d.%m.%y"),
+    y = .N,
+    color = Osrodek))
 
 
 
