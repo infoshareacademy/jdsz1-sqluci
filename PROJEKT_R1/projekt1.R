@@ -11,8 +11,9 @@ df2 <- df_dane[2:nrow(df_dane),]  #pominiÄ™cie pierwszego wiersza
 for (i in 8:16)
   df2[[i]] <- as.numeric(gsub(",",".",df2[[i]]))      #przecinki
 
-colnames(df2)[2]<- "Osrodek"  #zmiana bo z polskim znakiem nie dzia³a 
+colnames(df2)[2]<- "Osrodek"  #zmiana bo z polskim znakiem nie dzia?a 
 head(df2)
+df2
 
 
 #wojtek

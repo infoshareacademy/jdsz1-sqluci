@@ -67,9 +67,15 @@ ui <- dashboardPage(
       tabItem(tabName = "tab_wyniki_ogolne",
               fluidRow(
                 h2("General results")
+              ),
+              
+              fluidRow(
+                column(width = 10,
+                       dataTableOutput("results")
+                )
               )
       ),
-      
+    
       tabItem(tabName = "tab_wyniki_szczegolowe",
               fluidRow(
                 h2("Detailed results")
@@ -85,6 +91,10 @@ ui <- dashboardPage(
       tabItem(tabName = "tab_text_mining_czestosc_slow",
               fluidRow(
                 h2("Text mining :: word frequencies")
+              ),
+              fluidRow(
+                column(width = 6, plotOutput("word_freq_magda")
+                )
               )
       ), 
       tabItem(tabName = "tab_text_mining_chmura_slow",
@@ -127,9 +137,66 @@ ui <- dashboardPage(
 
 server <- function(input, output) {
 
+  results()
+  output$results <-renderDataTable(df2)
   
-
+  output$word_freq_magda <- renderPlot({
+    ggplot(data = head(d,50), mapping = aes(x = reorder(word, freq), y = freq)) +
+      geom_bar(stat = "identity") +
+      xlab("Word") +
+      ylab("Word frequency") +
+      coord_flip() 
+  }, bg="transparent")
+    
 }
 
+results <- function() {      #funkcja results Magdy
+  library(XML)
+  library(RCurl)
+  library(tidyr)
+link <- "https://docs.google.com/spreadsheets/d/1P9PG5mcbaIeuO9v_VE5pv6U4T2zyiRiFK_r8jVksTyk/htmlembed?single=true&gid=0&range=a10:o400&widget=false&chrome=false" 
+xData <- getURL(link)  #get link
+dane_z_html <- readHTMLTable(xData, stringsAsFactors = FALSE, skip.rows = c(1,3), encoding = "utf8") #read html
+df_dane <- as.data.frame(dane_z_html)   #data frame
+colnames(df_dane) <- df_dane[1,]  #nazwy kolumn
+df2 <- df_dane[2:nrow(df_dane),]  #pominięcie pierwszego wiersza
+for (i in 8:16)
+  df2[[i]] <- as.numeric(gsub(",",".",df2[[i]]))      #przecinki
+colnames(df2)[2]<- "Osrodek"  #zmiana bo z polskim znakiem nie dzia?a 
+head(df2)
+df2
+}
+
+word_freq_magda <- function() {
+  
+  library(tm)
+  library(SnowballC)
+  library(wordcloud)
+  library(RColorBrewer)
+  library(tidyverse)
+  
+  filePath <- "parties_en.txt"
+  text <- read_lines(filePath)
+  docs <- Corpus(VectorSource(text))
+  
+  docs <- tm_map(docs, tolower) #mniejszy rozmiar
+  docs <- tm_map(docs, removeNumbers) #numerki
+  docs <- tm_map(docs, removeWords, stopwords("english")) #usuwanie
+  docs <- tm_map(docs, removePunctuation) #punktuacja
+  docs <- tm_map(docs, stripWhitespace) #białeznaki
+  
+  docs2 <-tm_map(docs, stemDocument)   #słowa kluczowe
+  dtm <- TermDocumentMatrix(docs2)      #matryca słów
+  m   <- as.matrix(dtm)                   #na matrycę
+  v   <- sort(rowSums(m), decreasing=TRUE)   #sortowanie według ilości dec
+  d   <- data.frame(word=names(v), freq=v)  #nowa data frame: słowo, ilość
+
+  # bar chart
+  ggplot(data = head(d,50), mapping = aes(x = reorder(word, freq), y = freq)) +
+    geom_bar(stat = "identity") +
+    xlab("Word") +
+    ylab("Word frequency") +
+    coord_flip()
+}
 
 shinyApp(ui, server)
