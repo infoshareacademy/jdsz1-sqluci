@@ -11,8 +11,9 @@ df2 <- df_dane[2:nrow(df_dane),]  #pominiÄ™cie pierwszego wiersza
 for (i in 8:16)
   df2[[i]] <- as.numeric(gsub(",",".",df2[[i]]))      #przecinki
 
-colnames(df2)[2]<- "Osrodek"  #zmiana bo z polskim znakiem nie dzia³a 
+colnames(df2)[2]<- "Osrodek"  #zmiana bo z polskim znakiem nie dzia?a 
 head(df2)
+df2
 
 
 #wojtek
@@ -57,3 +58,29 @@ ggplot(data = df2) +
     linetype = research_center,
     color=research_center)) 
 
+#Monika wykres K'15
+ggplot(data = df2) + 
+  geom_point(mapping = aes(
+    x = as.Date(df2$Publikacja,"%d.%m.%y"),
+    y = df2$`K'15`,
+    color = df2$Oœrodek)) +
+  geom_smooth(mapping = aes(
+    x = as.Date(df2$Publikacja,"%d.%m.%y"),
+    y = df2$`K'15`,
+    color = df2$Oœrodek))
+
+#Monika wykres geom_tile
+df2_tile <- df2 %>%
+  count(`Metoda badania`, Osrodek)
+  ggplot(df2_tile) + 
+  geom_tile(mapping = aes(
+    x = Osrodek,
+    y = `Metoda badania`,
+    fill=n)) # n to jest count
+   
+  
+#Monika shiny - tab "parties"
+ff <- read_lines("C:\\Users\\BUNT\\Documents\\JDS\\GitHub\\jdsz1-sqluci\\PROJEKT_R1\\parties_en.txt")
+ff
+  
+  
