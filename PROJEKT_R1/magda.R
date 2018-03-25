@@ -1,9 +1,11 @@
+install.packages("tidyverse")
 
 library(XML)
 library(RCurl)
 library(openxlsx)
 library(caroline)
 library(devtools)
+library(tidyverse)
 
 link <- "https://docs.google.com/spreadsheets/d/1P9PG5mcbaIeuO9v_VE5pv6U4T2zyiRiFK_r8jVksTyk/htmlembed?single=true&gid=0&range=a10:o400&widget=false&chrome=false" 
 xData <- getURL(link)  #get link

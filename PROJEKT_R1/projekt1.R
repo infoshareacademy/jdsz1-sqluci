@@ -28,4 +28,32 @@ ggplot(data = df2) +
     color = Osrodek))
 
 
+#magda
+
+
+time <- as.Date(df2$Publikacja,"%d.%m.%y") 
+results_SLD <- df2$SLD
+research_center <- df2$`Ośrodek ▼`
+
+ggplot(data = df2) +
+  geom_point(mapping = aes(
+    x = time,
+    y = results_SLD,
+    color=research_center)) +
+  geom_smooth(mapping = aes(
+    x = time,
+    y = results_SLD,
+    linetype = research_center,
+    color=research_center)) 
+
+ggplot(data = df2) +
+  geom_point(mapping = aes(
+    x = time,
+    y = df2$WOLNOŚĆ,
+    color=research_center)) +
+  geom_smooth(mapping = aes(
+    x = time,
+    y = df2$WOLNOŚĆ,
+    linetype = research_center,
+    color=research_center)) 
 
