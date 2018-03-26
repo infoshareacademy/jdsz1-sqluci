@@ -7,6 +7,10 @@
 #install.packages("tidyverse")
 #install.packages("tm")
 #install.packages("SnowballC")
+#install.packages("XML")
+#install.packages("RCurl")
+#install.packages("tm")
+#install.packages("SnowballC")
 
 library(devtools)
 library(shiny)
@@ -20,7 +24,6 @@ library(syuzhet)
 library(tidyverse)
 library(XML)
 library(RCurl)
-library(tidyr)
 library(tm)
 library(SnowballC)
 
@@ -192,12 +195,12 @@ server <- function(input, output,session) {
        ggplot(data = df2) + 
          geom_point(mapping = aes(
            x = as.Date(Publikacja,"%d.%m.%y"),
-           y = .N,
+           y = df2[input$in_rb_partie],
            color = Osrodek)
          ) +
          geom_smooth(mapping = aes(
            x = as.Date(Publikacja,"%d.%m.%y"),
-           y = .N,
+          y = df2[input$in_rb_partie],
            color = Osrodek))       
      })
      
