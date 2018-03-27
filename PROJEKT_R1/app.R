@@ -11,6 +11,7 @@
 #install.packages("RCurl")
 #install.packages("tm")
 #install.packages("SnowballC")
+#install.packages("RColorBrewer")
 
 library(devtools)
 library(shiny)
@@ -26,6 +27,7 @@ library(XML)
 library(RCurl)
 library(tm)
 library(SnowballC)
+library(RColorBrewer)
 
 ui <- dashboardPage(
   # HEADER
@@ -216,14 +218,6 @@ server <- function(input, output,session) {
 
 
 word_freq_magda <- function() {
-  
-  library(tm)
-  library(SnowballC)
-  library(wordcloud)
-  library(RColorBrewer)
-  library(tidyverse)
-  
-  
   
   filePath <- paste(getwd(),"parties_en.txt",sep = "/")
   text <- read_lines(filePath)
