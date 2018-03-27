@@ -12,14 +12,19 @@ xData <- getURL(link)  #get link
 dane_z_html <- readHTMLTable(xData, stringsAsFactors = FALSE, skip.rows = c(1,3), encoding = "utf8") #read html
 df_dane <- as.data.frame(dane_z_html)   #data frame
 colnames(df_dane) <- df_dane[1,]  #nazwy kolumn
-df2 <- df_dane[2:nrow(df_dane),]  #pominięcie pierwszego wiersza
+df2 <- df_dane[2:nrow(df_dane),]  
+rm(df_dane)
+rm(dane_z_html)
+rm(xData)
 for (i in 8:16)
-  df2[[i]] <- as.numeric(gsub(",",".",df2[[i]]))      #przecinki
-df2
+  df2[[i]] <- as.numeric(gsub(",",".",df2[[i]]))      # remove commas
+colnames(df2)[2]<- "Osrodek"
+
+print(head(df2))
 
 time <- as.Date(df2$Publikacja,"%d.%m.%y") 
 results_SLD <- df2$SLD
-research_center <- df2$`Ośrodek ▼`
+research_center <- df2$`O`
 
 ggplot(data = df2) +
   geom_point(mapping = aes(
@@ -35,10 +40,10 @@ ggplot(data = df2) +
 ggplot(data = df2) +
   geom_point(mapping = aes(
     x = time,
-    y = df2$WOLNOŚĆ,
+    y = df2$WOLNOSC,
     color=research_center)) +
   geom_smooth(mapping = aes(
     x = time,
-    y = df2$WOLNOŚĆ,
+    y = df2$WOLNOSC,
     linetype = research_center,
     color=research_center)) 
