@@ -198,15 +198,17 @@ server <- function(input, output,session) {
      output$plot_partie <- renderPlot({
        ggplot(data = df2) + 
          geom_point(mapping = aes(
-           x = as.Date(Publikacja,"%d.%m.%y"),
+           x = as.Date(Publikacja,"%d.%m.%Y"),
            y = df2[input$in_rb_partie],
            color = Osrodek)
          ) +
          geom_smooth(mapping = aes(
-           x = as.Date(Publikacja,"%d.%m.%y"),
+           x = as.Date(Publikacja,"%d.%m.%Y"),
           y = df2[input$in_rb_partie],
-           color = Osrodek))       
-     })
+           color = Osrodek))  + 
+         xlab("Poll publication date") + 
+         ylab("Percent") + theme(plot.margin = margin(0, 0, 0, 1, "cm"))
+     }, bg="transparent")
      
      # Magda ##################################################################################
      output$results <-renderDataTable(df2)
@@ -216,44 +218,13 @@ server <- function(input, output,session) {
      }, bg="transparent")
 }
 
-
-remove_polish_chars <- function(txt)
-{
-  txt = gsub("ą","a",txt);
-  txt = gsub("Ą","A",txt);
-  
-  txt = gsub("ć","c",txt);
-  txt = gsub("Ć","C",txt);
-  
-  txt = gsub("ł","l",txt);
-  txt = gsub("Ł","L",txt);  
-  
-  txt = gsub("ń","n",txt);
-  txt = gsub("Ń","N",txt);  
-  
-  txt = gsub("ó","o",txt);
-  txt = gsub("Ó","O",txt); 
-  
-  txt = gsub("ś","s",txt);
-  txt = gsub("Ś","S",txt);
-  
-  txt = gsub("ź","z",txt);
-  txt = gsub("Ź","Z",txt);  
-  
-  txt = gsub("ż","z",txt);
-  txt = gsub("Ż","Z",txt);  
-  
-  return(txt)
-}
-
 word_freq_magda <- function() {
   
-  #filePath <- paste(getwd(),"parties_en.txt",sep = "/") # zawiera polskie znaki, Corpus nie jest w stanie ich obsluzyc
-  filePath <- paste(getwd(),"lorem_ipsum.txt",sep = "/")
+  filePath <- paste(getwd(),"parties_en.txt",sep = "/") # zawiera polskie znaki, Corpus nie jest w stanie ich obsluzyc
+ # filePath <- paste(getwd(),"lorem_ipsum.txt",sep = "/")
   
   txt <- read_lines(filePath)
- # txt <- remove_polish_chars(txt) #does not help
-  
+
   docs <- Corpus(VectorSource(txt))
   
   docs <- tm_map(docs, tolower) #mniejszy rozmiar liter
@@ -280,7 +251,3 @@ word_freq_magda <- function() {
 
 
 shinyApp(ui, server)
-
-
-
-
