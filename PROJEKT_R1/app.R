@@ -29,6 +29,8 @@ library(tm)
 library(SnowballC)
 library(RColorBrewer)
 
+# locale test  ąćł
+
 ui <- dashboardPage(
   # HEADER
   ################################################################################################
@@ -192,7 +194,7 @@ server <- function(input, output,session) {
        )
      })     
      
-     
+     # Wojtek ##################################################################################
      output$plot_partie <- renderPlot({
        ggplot(data = df2) + 
          geom_point(mapping = aes(
@@ -206,7 +208,7 @@ server <- function(input, output,session) {
            color = Osrodek))       
      })
      
-     
+     # Magda ##################################################################################
      output$results <-renderDataTable(df2)
      
      output$word_freq_magda <- renderPlot({
@@ -215,21 +217,47 @@ server <- function(input, output,session) {
 }
 
 
-
+remove_polish_chars <- function(txt)
+{
+  txt = gsub("ą","a",txt);
+  txt = gsub("Ą","A",txt);
+  
+  txt = gsub("ć","c",txt);
+  txt = gsub("Ć","C",txt);
+  
+  txt = gsub("ł","l",txt);
+  txt = gsub("Ł","L",txt);  
+  
+  txt = gsub("ń","n",txt);
+  txt = gsub("Ń","N",txt);  
+  
+  txt = gsub("ó","o",txt);
+  txt = gsub("Ó","O",txt); 
+  
+  txt = gsub("ś","s",txt);
+  txt = gsub("Ś","S",txt);
+  
+  txt = gsub("ź","z",txt);
+  txt = gsub("Ź","Z",txt);  
+  
+  txt = gsub("ż","z",txt);
+  txt = gsub("Ż","Z",txt);  
+  
+  return(txt)
+}
 
 word_freq_magda <- function() {
   
   #filePath <- paste(getwd(),"parties_en.txt",sep = "/") # zawiera polskie znaki, Corpus nie jest w stanie ich obsluzyc
   filePath <- paste(getwd(),"lorem_ipsum.txt",sep = "/")
   
-  print(filePath)
-  text <- read_lines(filePath)
-  print(text)
-  docs <- Corpus(VectorSource(text))
+  txt <- read_lines(filePath)
+ # txt <- remove_polish_chars(txt) #does not help
+  
+  docs <- Corpus(VectorSource(txt))
   
   docs <- tm_map(docs, tolower) #mniejszy rozmiar liter
  
-
   docs <- tm_map(docs, removeNumbers) #usuwanie liczb
   docs <- tm_map(docs, removeWords, stopwords("english")) #usuwanie
   docs <- tm_map(docs, removePunctuation) #punktuacja
