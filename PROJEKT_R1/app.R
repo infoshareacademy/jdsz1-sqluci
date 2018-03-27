@@ -190,7 +190,8 @@ server <- function(input, output,session) {
        # Can also set the label and select items
        updateRadioButtons(session, "in_rb_partie",
                           choices = as.list(colnames(df2)[8:16] ),
-                          inline = TRUE
+                          inline = TRUE,
+                          selected = ".N"
        )
      })     
      
