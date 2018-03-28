@@ -99,14 +99,17 @@ ui <- dashboardPage(
       
       tabItem(tabName = "tab_wyniki_szczegolowe",
               fluidRow(
-
                 radioButtons("in_rb_partie", label = h3("Political party"),
                              choices = list("A","B"),
                              inline = TRUE
                       ),
               fluidRow(plotOutput("plot_partie"))
-
-            )
+            ),
+            fluidRow(h3("Test"),
+                     bootstrapPage(
+                       div(style="display:inline-block",selectInput("in_si_osrodek", "Osrodek:",c("A","B"))), 
+                       div(style="display:inline-block",selectInput("in_si_zamawiajacy", "Zamawiajacy:",c("A","B")))),
+                     dataTableOutput("dt_extended_table"))
       ),      
       # Text mining
       ################################################################################################
@@ -183,8 +186,9 @@ server <- function(input, output,session) {
       rm(xData)
       for (i in 8:16)
          df2[[i]] <- as.numeric(gsub(",",".",df2[[i]]))      # remove commas
-     colnames(df2)[2]<- "Osrodek"  
-  }
+     colnames(df2)[2] <- "Osrodek"  
+     colnames(df2)[15] <- "WOLNOSC"
+
      
      observe({
        # Can also set the label and select items
@@ -192,9 +196,12 @@ server <- function(input, output,session) {
                           choices = as.list(colnames(df2)[8:16] ),
                           inline = TRUE,
                           selected = ".N"
-       )
+                          )
+       updateSelectInput(session, "in_si_osrodek",choices = unique(df2$Osrodek))
+       updateSelectInput(session, "in_si_zamawiajacy",choices = unique(df2$Zleceniodawca))
+       
      })     
-     
+  }
      # Wojtek ##################################################################################
      output$plot_partie <- renderPlot({
        ggplot(data = df2) + 
@@ -210,6 +217,10 @@ server <- function(input, output,session) {
          xlab("Poll publication date") + 
          ylab("Percent") + theme(plot.margin = margin(0, 0, 0, 1, "cm"))
      }, bg="transparent")
+     
+     output$dt_extended_table<-renderDataTable({
+       df2[df2$Osrodek == input$in_si_osrodek & df2$Zleceniodawca == input$in_si_zamawiajacy,]
+         })
      
      # Magda ##################################################################################
      output$results <-renderDataTable(df2)
