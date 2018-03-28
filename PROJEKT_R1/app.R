@@ -107,8 +107,9 @@ ui <- dashboardPage(
             ),
             fluidRow(h3("Test"),
                      bootstrapPage(
-                       div(style="display:inline-block",selectInput("in_si_osrodek", "Osrodek:",c("A","B"))), 
-                       div(style="display:inline-block",selectInput("in_si_zamawiajacy", "Zamawiajacy:",c("A","B")))),
+                       div(style="display:inline-block", selectInput("in_si_osrodek", "Osrodek:",c("A","B"),multiple = TRUE) ), 
+                       div(style="display:inline-block", selectInput("in_si_zamawiajacy", "Zamawiajacy:",c("A","B") ,multiple = TRUE)) 
+                      ),
                      dataTableOutput("dt_extended_table"))
       ),      
       # Text mining
