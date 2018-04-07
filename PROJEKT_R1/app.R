@@ -163,7 +163,18 @@ ui <- dashboardPage(
                 h2("Text mining :: twitter")
               ),
               fluidRow(
-                verbatimTextOutput("twitter")
+                textInput(inputId = "twitterinput",
+                          label = "Text:",
+                          value = "#smolensk")
+              ),
+              fluidRow(
+                dataTableOutput("twitter1")
+              ),
+              fluidRow(
+                dataTableOutput("twitter2")
+              ),
+              fluidRow(
+                dataTableOutput("twitter3")
               )
       ),
       
@@ -276,9 +287,29 @@ server <- function(input, output,session) {
 
   # Twitter (Magda)
   twitter()
-  output$twitter <- renderPrint({ 
+  output$twitter1 <- renderDataTable({
+    found_tweets <- search_tweets(q = input$twitterinput, n = 20)
+    
+    found_tweets %>%
+      group_by(user_id) %>%
+      summarise(liczba = n())
+    
+    })
+  output$twitter2 <- renderDataTable({
+    found_tweets <- search_tweets(q = input$twitterinput, n = 20)
+    
+    found_tweets %>%
+      group_by(source) %>%
+      summarise(liczba = n())
+    
   })
-
+  output$twitter3 <- renderDataTable({
+    found_tweets <- search_tweets(q = input$twitterinput, n = 20)
+    
+    top20 <- arrange(found_tweets, desc(favorite_count))
+    head(top20, n = 20)
+    
+  })
   # Associations (Magda)
   output$find_ass <- renderPrint({
     findAssocs(dtm, terms = input$ass_text, corlimit = input$ass_cor)
@@ -350,6 +381,7 @@ word_freq_magda <- function() {   # word frequency Magdy
 twitter <- function() {   # twitter Magdy
   library(rtweet)
   library(httpuv)
+  library(dplyr)
   
   appname <- "magda_sentiment_analysis"
   key <- "3d09h36rBQoSThXzaHqnIaezI"
