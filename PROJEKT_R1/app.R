@@ -29,7 +29,7 @@ ui <- dashboardPage(
   ################################################################################################
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Political party"),
+      menuItem("Political party", tabName = "tab_partie", icon = icon("th")),
       
       menuItem("Results", tabName = "tab_wyniki_ogolne", icon = icon("dashboard"),  badgeColor = "green",
                menuSubItem("General results", tabName = "tab_wyniki_ogolne", icon = icon("th")),
@@ -64,11 +64,10 @@ ui <- dashboardPage(
       ################################################################################################
       tabItem(tabName = "tab_partie",
               fluidRow(
-                h2("Political parties")
+                h2("Analiza partii politycznych")
               ),
               fluidRow(
-                infoBox("TEST",  "TEST", icon = icon("credit-card")),
-                infoBoxOutput("winRate")
+                plotOutput("wykresy")
               )
       ),
       
@@ -126,9 +125,19 @@ ui <- dashboardPage(
       ),      
       tabItem(tabName = "tab_text_mining_czestosci",
               fluidRow(
-                h2("Text mining :: findFreqTerms")
+                h2("Text mining :: czestosci (?)")
+              ),
+              fluidRow(
+                numericInput(inputId="czestosci_input",
+                             label = "POdaj minimalna liczbę wystąpień:",
+                             value = 10)
+              ),
+              fluidRow(
+                verbatimTextOutput("find_cze")
+                
+                
               )
-      ), 
+      ),
       tabItem(tabName = "tab_text_mining_asocjacje",
               fluidRow(
                 h2("Text mining :: associacions")
@@ -300,7 +309,39 @@ server <- function(input, output,session) {
   
   results()
   output$results <-renderDataTable(df2)
+ 
+  #parte monika
+
   
+  init_polls <- function() {
+    link <- "https://docs.google.com/spreadsheets/d/1P9PG5mcbaIeuO9v_VE5pv6U4T2zyiRiFK_r8jVksTyk/htmlembed?single=true&gid=0&range=a10:o400&widget=false&chrome=false" 
+    xData <- getURL(link)  #get link
+    dane_z_html <- readHTMLTable(xData, stringsAsFactors = FALSE, skip.rows = c(1,3), encoding = "utf8") #read html
+    df_dane <- as.data.frame(dane_z_html)   #data frame
+    colnames(df_dane) <- df_dane[1,]  #nazwy kolumn
+    df2 <- df_dane[2:nrow(df_dane),]  #pominiecie pierwszego wiersza
+    for (i in 8:16)
+      df2[[i]] <<- as.numeric(gsub(",",".",df2[[i]]))
+    
+    colnames(df2)[2]<- "Osrodek"  #zmiana bo z polskim znakiem nie dziala 
+  
+  }
+   init_polls() 
+  output$wykresy <- renderPlot({
+    ggplot(data = df2) + 
+      geom_point(mapping = aes(
+        x = as.Date(df2$Publikacja,"%d.%m.%y"),
+        y = df2$`K'15`,
+        color = df2$Osrodek)) +
+      geom_smooth(mapping = aes(
+        x = as.Date(df2$Publikacja,"%d.%m.%y"),
+        y = df2$`K'15`,
+        color = df2$Osrodek))})
+  
+  #Czestotliwosc MOnika
+  output$find_cze <- renderPrint({
+    findFreqTerms(dtm, lowfreq=czestosci_input)
+  }) 
 
 }
 
