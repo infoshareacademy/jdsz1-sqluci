@@ -198,6 +198,41 @@ server <- function(input, output,session) {
     })     
     
   }
+
+     # Wojtek ##################################################################################
+     output$plot_partie <- renderPlot({
+       ggplot(data = df2) + 
+         geom_point(mapping = aes(
+           x = as.Date(Publikacja,"%d.%m.%Y"),
+           y = df2[input$in_rb_partie],
+           color = Osrodek)
+         ) +
+         geom_smooth(mapping = aes(
+           x = as.Date(Publikacja,"%d.%m.%Y"),
+          y = df2[input$in_rb_partie],
+           color = Osrodek))  + 
+         xlab("Poll publication date") + 
+         ylab("Percent") + theme(plot.margin = margin(0, 0, 0, 1, "cm"))
+     }, bg="transparent")
+     
+     output$dt_extended_table<-renderDataTable({
+       df2[df2$Osrodek == input$in_si_osrodek & df2$Zleceniodawca == input$in_si_zamawiajacy,]
+         })
+     
+     most_popular_method <- tail(names(sort(table(df2$`Metoda badania`))),1)
+     
+     # Magda ##################################################################################
+     output$results <-renderDataTable(df2)
+     
+     output$word_freq_magda <- renderPlot({
+       word_freq_magda() 
+     }, bg="transparent")
+}
+
+word_freq_magda <- function() {
+  
+  filePath <- paste(getwd(),"parties_en.txt",sep = "/") # zawiera polskie znaki, Corpus nie jest w stanie ich obsluzyc
+
   
   # Associations (Magda)
   output$find_ass <- renderPrint({
