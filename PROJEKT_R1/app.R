@@ -223,6 +223,8 @@ server <- function(input, output,session) {
        df2[df2$Osrodek == input$in_si_osrodek & df2$Zleceniodawca == input$in_si_zamawiajacy,]
          })
      
+     most_popular_method <- tail(names(sort(table(df2$`Metoda badania`))),1)
+     
      # Magda ##################################################################################
      output$results <-renderDataTable(df2)
      
