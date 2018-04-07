@@ -28,7 +28,7 @@ library(RCurl)
 library(tm)
 library(SnowballC)
 library(RColorBrewer)
-
+#unimportnt commit
 # locale test  ąćł
 
 ui <- dashboardPage(
