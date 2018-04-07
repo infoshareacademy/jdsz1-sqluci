@@ -161,6 +161,9 @@ ui <- dashboardPage(
       tabItem(tabName = "tab_text_mining_twitter",
               fluidRow(
                 h2("Text mining :: twitter")
+              ),
+              fluidRow(
+                verbatimTextOutput("twitter")
               )
       ),
       
@@ -271,6 +274,10 @@ server <- function(input, output,session) {
     word_freq_magda() 
   }, bg="transparent")
 
+  # Twitter (Magda)
+  twitter()
+  output$twitter <- renderPrint({ 
+  })
 
   # Associations (Magda)
   output$find_ass <- renderPrint({
@@ -339,6 +346,16 @@ word_freq_magda <- function() {   # word frequency Magdy
     xlab("Word") +
     ylab("Word frequency") +
     coord_flip() }
+
+twitter <- function() {   # twitter Magdy
+  library(rtweet)
+  library(httpuv)
+  
+  appname <- "magda_sentiment_analysis"
+  key <- "3d09h36rBQoSThXzaHqnIaezI"
+  secret <- "omOF174fJEj8OfwlHUNWfrdtt4NlY9tPyxH7igQcvy3dscOEb3"
+}
+
 
 
 shinyApp(ui, server)
