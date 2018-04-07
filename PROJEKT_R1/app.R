@@ -10,7 +10,11 @@ library(tidyverse)
 library(XML)
 library(RCurl)
 library(tidyr)
-
+library(tm)
+library(SnowballC)
+library(RColorBrewer)
+#unimportnt commit
+# locale test  ąćł
 
 
 ui <- dashboardPage(
