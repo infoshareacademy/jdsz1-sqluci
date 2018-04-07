@@ -38,7 +38,9 @@ ui <- dashboardPage(
                menuSubItem("Find freq terms", tabName = "tab_text_mining_czestosci", icon = icon("th")),
                menuSubItem("Associacis", tabName = "tab_text_mining_asocjacje", icon = icon("th")),
                menuSubItem("Emotions", tabName = "tab_text_mining_emocje", icon = icon("th")),
-               menuSubItem("Sentiment", tabName = "tab_text_mining_sentyment", icon = icon("th"))
+               menuSubItem("Sentiment", tabName = "tab_text_mining_sentyment", icon = icon("th")),
+               menuSubItem("Twitter", tabName = "tab_text_mining_twitter", icon = icon("th"))
+               
       ),
       
       menuItem("Creators", tabName = "tab_creators", icon = icon("th"),
@@ -143,6 +145,11 @@ ui <- dashboardPage(
       tabItem(tabName = "tab_text_mining_sentyment",
               fluidRow(
                 h2("Text mining :: sentiment")
+              )
+      ),
+      tabItem(tabName = "tab_text_mining_twitter",
+              fluidRow(
+                h2("Text mining :: twitter")
               )
       ),
       
