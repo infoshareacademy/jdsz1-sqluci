@@ -29,7 +29,7 @@ ui <- dashboardPage(
   ################################################################################################
   dashboardSidebar(
     sidebarMenu(
-      menuItem("Political party", tabName = "tab_partie", icon = icon("th")),
+      menuItem("Political party"),
       
       menuItem("Results", tabName = "tab_wyniki_ogolne", icon = icon("dashboard"),  badgeColor = "green",
                menuSubItem("General results", tabName = "tab_wyniki_ogolne", icon = icon("th")),
@@ -43,8 +43,8 @@ ui <- dashboardPage(
                menuSubItem("Associacis", tabName = "tab_text_mining_asocjacje", icon = icon("th")),
                menuSubItem("Emotions", tabName = "tab_text_mining_emocje", icon = icon("th")),
                menuSubItem("Sentiment", tabName = "tab_text_mining_sentyment", icon = icon("th")),
-               menuSubItem("Twitter", tabName = "tab_text_mining_twitter", icon = icon("th"))
-               
+               menuSubItem("Twitter", tabName = "tab_text_mining_twitter", icon = icon("th")),
+               menuSubItem("Sentiment", tabName = "tab_text_mining_sentyment", icon = icon("th"))
       ),
       
       menuItem("Creators", tabName = "tab_creators", icon = icon("th"),
@@ -93,8 +93,15 @@ ui <- dashboardPage(
                 radioButtons("in_rb_partie", label = h3("Partia polityczna"),
                              choices = list("A","B"),
                              inline = TRUE
-                )
-              )
+                ),
+                fluidRow(plotOutput("plot_partie"))
+              ),
+              fluidRow(h3("Test"),
+                       bootstrapPage(
+                         div(style="display:inline-block", selectInput("in_si_osrodek", "Osrodek:",c("A","B"),multiple = TRUE) ), 
+                         div(style="display:inline-block", selectInput("in_si_zamawiajacy", "Zamawiajacy:",c("A","B") ,multiple = TRUE)) 
+                       ),
+                       dataTableOutput("dt_extended_table"))
       ),      
       # Text mining
       ################################################################################################
@@ -190,47 +197,51 @@ server <- function(input, output,session) {
     rm(xData)
     for (i in 8:16)
       df2[[i]] <- as.numeric(gsub(",",".",df2[[i]]))      # remove commas
-    colnames(df2)[2]<- "Osrodek"  
+
+    colnames(df2)[2] <- "Osrodek"  
+    colnames(df2)[15] <- "WOLNOSC"
+
     
     
     observe({
       # Can also set the label and select items
       updateRadioButtons(session, "in_rb_partie",
                          choices = as.list(colnames(df2)[8:16] ),
-                         inline = TRUE
+                         inline = TRUE,
+                         selected = ".N"
       )
+      updateSelectInput(session, "in_si_osrodek",choices = unique(df2$Osrodek))
+      updateSelectInput(session, "in_si_zamawiajacy",choices = unique(df2$Zleceniodawca))
+      
     })     
-    
   }
+  # Wojtek ##################################################################################
+  output$plot_partie <- renderPlot({
+    ggplot(data = df2) + 
+      geom_point(mapping = aes(
+        x = as.Date(Publikacja,"%d.%m.%Y"),
+        y = df2[input$in_rb_partie],
+        color = Osrodek)
+      ) +
+      geom_smooth(mapping = aes(
+        x = as.Date(Publikacja,"%d.%m.%Y"),
+        y = df2[input$in_rb_partie],
+        color = Osrodek))  + 
+      xlab("Poll publication date") + 
+      ylab("Percent") + theme(plot.margin = margin(0, 0, 0, 1, "cm"))
+  }, bg="transparent")
+  
+  output$dt_extended_table<-renderDataTable({
+    df2[df2$Osrodek == input$in_si_osrodek & df2$Zleceniodawca == input$in_si_zamawiajacy,]
+  })
+  
+  # Magda ##################################################################################
+  output$results <-renderDataTable(df2)
+  
+  output$word_freq_magda <- renderPlot({
+    word_freq_magda() 
+  }, bg="transparent")
 
-     # Wojtek ##################################################################################
-     output$plot_partie <- renderPlot({
-       ggplot(data = df2) + 
-         geom_point(mapping = aes(
-           x = as.Date(Publikacja,"%d.%m.%Y"),
-           y = df2[input$in_rb_partie],
-           color = Osrodek)
-         ) +
-         geom_smooth(mapping = aes(
-           x = as.Date(Publikacja,"%d.%m.%Y"),
-          y = df2[input$in_rb_partie],
-           color = Osrodek))  + 
-         xlab("Poll publication date") + 
-         ylab("Percent") + theme(plot.margin = margin(0, 0, 0, 1, "cm"))
-     }, bg="transparent")
-     
-     output$dt_extended_table<-renderDataTable({
-       df2[df2$Osrodek == input$in_si_osrodek & df2$Zleceniodawca == input$in_si_zamawiajacy,]
-         })
-     
-     most_popular_method <- tail(names(sort(table(df2$`Metoda badania`))),1)
-     
-     # Magda ##################################################################################
-     output$results <-renderDataTable(df2)
-     
-     output$word_freq_magda <- renderPlot({
-       word_freq_magda() 
-     }, bg="transparent")
 }
 
 word_freq_magda <- function() {
@@ -252,12 +263,14 @@ word_freq_magda <- function() {
       ylab("Word frequency") +
       coord_flip() 
   }, bg="transparent")
+
   
   # General results (Magda)
   
   results()
   output$results <-renderDataTable(df2)
   
+
 }
 
 results <- function() {      #funkcja results Magdy
@@ -302,5 +315,6 @@ word_freq_magda <- function() {   # word frequency Magdy
     xlab("Word") +
     ylab("Word frequency") +
     coord_flip() }
+
 
 shinyApp(ui, server)
