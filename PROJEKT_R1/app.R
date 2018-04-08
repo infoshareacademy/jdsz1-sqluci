@@ -126,7 +126,8 @@ ui <- dashboardPage(
       tabItem(tabName = "tab_text_mining_chmura_slow",
               fluidRow(
                 h2("Text mining :: word cloud")
-              )
+              ),
+              fluidRow( plotOutput("wordcloud_wojtek") )
       ),      
       tabItem(tabName = "tab_text_mining_czestosci",
               fluidRow(
@@ -270,6 +271,35 @@ server <- function(input, output,session) {
     
     df3 <- data.frame(daty,wynik,partia,metoda_badania)  
     most_popular_method <- tail(names(sort(table(df2$`Metoda badania`))),1)
+    
+    #wordcloud init
+    filePath <- "parties_en.txt"
+    text <- read_lines(filePath)    
+    
+    # Corpus - kolekcja dokument
+    docs <- Corpus(VectorSource(text))
+    
+    docs <- tm_map(docs,tolower)
+    docs <- tm_map(docs,removeNumbers)
+
+    docs <- tm_map(docs,removeWords,stopwords("english"))
+    
+    docs <- tm_map(docs,removePunctuation)
+    docs <- tm_map(docs,stripWhitespace)
+    
+    docs <- tm_map(docs,stemDocument)
+    dtm <- TermDocumentMatrix(docs)    
+    
+    processSparseOfWords <- function(sp)
+    {
+      tmp = X <- vector(mode="integer", length=length(sp$i))
+      for (r in sp$i)
+        tmp[r] = tmp[r]+1
+      idx = order(tmp,decreasing = TRUE);
+      return(data.frame(word = rownames(sp)[idx], freq = tmp[idx]))
+    }
+    
+    d <- processSparseOfWords(dtm)
   }
 
      # Wojtek ##################################################################################
@@ -299,9 +329,13 @@ server <- function(input, output,session) {
          y = wynik)
        ) +   geom_smooth(mapping = aes(
          x = as.Date(daty,"%d.%m.%Y"),
-         y = wynik)) + 
-       facet_wrap(~ partia, ncol = 2) })
+         y = wynik)) + xlab("data publikacji")+
+       facet_wrap(~ partia, ncol = 2,scales = "free_y") })
      
+     
+     output$wordcloud_wojtek <-  renderPlot({wordcloud(words = d$word, freq = d$freq, min.freq = 1, 
+                                                       max.words = 100,random.order = TRUE, rot.per = 0.1, 
+                                                       colors = brewer.pal(8,"Dark2"))})
      # Magda ##################################################################################
      output$results <-renderDataTable(df2)
      
