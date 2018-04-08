@@ -166,7 +166,8 @@ ui <- dashboardPage(
       tabItem(tabName = "tab_text_mining_emocje",
               fluidRow(
                 h2("Text mining :: emotions")
-              )
+              ),
+              fluidRow(plotOutput("sentiment_plot_wojtek"))
       ),  
       tabItem(tabName = "tab_text_mining_sentyment",
               fluidRow(
@@ -300,6 +301,15 @@ server <- function(input, output,session) {
     }
     
     d <- processSparseOfWords(dtm)
+    
+    df_sentiment <- get_nrc_sentiment(as.String(d$word)) # as.String for certainity
+    df_sentiment_transposed <- t(df_sentiment)
+    df_sentiment_final <- data.frame(sentiment = row.names(df_sentiment_transposed),
+                                     sentiment_value = df_sentiment_transposed, row.names = NULL )
+    
+    
+    df_emotions <- df_sentiment_final[1:8,]
+    df_sentiments <- df_sentiment_final[9:10,]    
   }
 
      # Wojtek ##################################################################################
@@ -332,10 +342,20 @@ server <- function(input, output,session) {
          y = wynik)) + xlab("data publikacji")+
        facet_wrap(~ partia, ncol = 2,scales = "free_y") })
      
-     
+     #wordcloud
      output$wordcloud_wojtek <-  renderPlot({wordcloud(words = d$word, freq = d$freq, min.freq = 1, 
                                                        max.words = 100,random.order = TRUE, rot.per = 0.1, 
                                                        colors = brewer.pal(8,"Dark2"))})
+     
+     #sentiment
+     output$sentiment_plot_wojtek <-  renderPlot({ggplot(data = df_emotions, 
+            mapping = aes(x = sentiment, 
+                          y = sentiment_value, 
+                          color = sentiment, fill = sentiment_value)) +
+       geom_bar( stat = "identity") + xlab("emotion") + ylab("word count") +
+       theme(axis.text.x = element_text(angle = 45, hjust = 1)) })    
+     
+     
      # Magda ##################################################################################
      output$results <-renderDataTable(df2)
      
