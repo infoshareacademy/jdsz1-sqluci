@@ -33,7 +33,8 @@ ui <- dashboardPage(
       
       menuItem("Results", tabName = "tab_wyniki_ogolne", icon = icon("dashboard"),  badgeColor = "green",
                menuSubItem("General results", tabName = "tab_wyniki_ogolne", icon = icon("th")),
-               menuSubItem("Detailed results", tabName = "tab_wyniki_szczegolowe", icon = icon("th"))
+               menuSubItem("Detailed results", tabName = "tab_wyniki_szczegolowe", icon = icon("th")),
+               menuSubItem("Results by party", tabName = "tab_wyniki_partie", icon = icon("th"))
       ),
       
       menuItem("Text mining (DEV)", tabName = "tab_text_mining", icon = icon("th"),
@@ -102,6 +103,10 @@ ui <- dashboardPage(
                          div(style="display:inline-block", selectInput("in_si_zamawiajacy", "Zamawiajacy:",c("A","B") ,multiple = TRUE)) 
                        ),
                        dataTableOutput("dt_extended_table"))
+      ),     
+      tabItem(tabName = "tab_wyniki_partie",
+              fluidRow(h2("Results by party")),
+              fluidRow(plotOutput("plot_partie_facet"))
       ),      
       # Text mining
       ################################################################################################
@@ -216,7 +221,35 @@ server <- function(input, output,session) {
       updateSelectInput(session, "in_si_osrodek",choices = unique(df2$Osrodek))
       updateSelectInput(session, "in_si_zamawiajacy",choices = unique(df2$Zleceniodawca))
       
-    })     
+    })  
+    
+    daty <- c(df2$Publikacja,df2$Publikacja,df2$Publikacja,df2$Publikacja,
+              df2$Publikacja,df2$Publikacja,df2$Publikacja,df2$Publikacja)
+    
+    metoda_badania <- c(df2$`Metoda badania`,df2$`Metoda badania`,df2$`Metoda badania`,df2$`Metoda badania`,
+                        df2$`Metoda badania`,df2$`Metoda badania`,df2$`Metoda badania`,df2$`Metoda badania`)
+    
+    wynik <- c(df2$PiS,
+               df2$PO,
+               df2$`K'15`,
+               df2$SLD,
+               df2$.N,
+               df2$PSL,
+               df2$`PARTIA RAZEM`,
+               df2$WOLNOSC)
+    
+    partia <- c(rep("PiS",length(df2$PiS)),
+                rep("PO",length(df2$PO)),
+                rep("K'15",length(df2$`K'15`)),
+                rep("SLD",length(df2$SLD)),
+                rep(".N",length(df2$.N)),
+                rep("PSL",length(df2$PSL)),
+                rep("PARTIA RAZEM",length(df2$`PARTIA RAZEM`)),
+                rep("WOLNOSC",length(df2$WOLNOSC))   
+                ) 
+    
+    df3 <- data.frame(daty,wynik,partia,metoda_badania)  
+    most_popular_method <- tail(names(sort(table(df2$`Metoda badania`))),1)
   }
 
      # Wojtek ##################################################################################
@@ -239,7 +272,15 @@ server <- function(input, output,session) {
        df2[df2$Osrodek == input$in_si_osrodek & df2$Zleceniodawca == input$in_si_zamawiajacy,]
          })
      
-     most_popular_method <- tail(names(sort(table(df2$`Metoda badania`))),1)
+     output$plot_partie_facet <- renderPlot({ 
+       ggplot(data = df3[df3$metoda_badania == most_popular_method,]) + 
+       geom_point(mapping = aes(
+         x = as.Date(daty,"%d.%m.%Y"),
+         y = wynik)
+       ) +   geom_smooth(mapping = aes(
+         x = as.Date(daty,"%d.%m.%Y"),
+         y = wynik)) + 
+       facet_wrap(~ partia, ncol = 2) })
      
      # Magda ##################################################################################
      output$results <-renderDataTable(df2)
@@ -247,25 +288,7 @@ server <- function(input, output,session) {
      output$word_freq_magda <- renderPlot({
        word_freq_magda() 
      }, bg="transparent")
-  # Wojtek ##################################################################################
-  output$plot_partie <- renderPlot({
-    ggplot(data = df2) + 
-      geom_point(mapping = aes(
-        x = as.Date(Publikacja,"%d.%m.%Y"),
-        y = df2[input$in_rb_partie],
-        color = Osrodek)
-      ) +
-      geom_smooth(mapping = aes(
-        x = as.Date(Publikacja,"%d.%m.%Y"),
-        y = df2[input$in_rb_partie],
-        color = Osrodek))  + 
-      xlab("Poll publication date") + 
-      ylab("Percent") + theme(plot.margin = margin(0, 0, 0, 1, "cm"))
-  }, bg="transparent")
-  
-  output$dt_extended_table<-renderDataTable({
-    df2[df2$Osrodek == input$in_si_osrodek & df2$Zleceniodawca == input$in_si_zamawiajacy,]
-  })
+
   
   # Magda ##################################################################################
   output$results <-renderDataTable(df2)
