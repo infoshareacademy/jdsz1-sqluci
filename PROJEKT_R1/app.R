@@ -425,8 +425,8 @@ twitter <- function() {   # twitter Magdy
   library(dplyr)
   
   appname <- "magda_sentiment_analysis"
-  key <- "3d09h36rBQoSThXzaHqnIaezI"
-  secret <- "omOF174fJEj8OfwlHUNWfrdtt4NlY9tPyxH7igQcvy3dscOEb3"
+  key <- "Cw4v8f0xPkjZz1UTLTTI8czoq"
+  secret <- "HZ6RKMn9LJI6oMvUomN7ZxBxyXSZSeXvXOG15DTNArAv5waKvc"
 }
 
 
