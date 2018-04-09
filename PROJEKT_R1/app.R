@@ -68,8 +68,14 @@ ui <- dashboardPage(
                 h2("Analiza partii politycznych")
               ),
               fluidRow(
-                plotOutput("wykresy")
+                radioButtons("in_rb_partie_monika", label = h3("Partia polityczna"),
+                             choices = list("A","B"),
+                             inline = TRUE)
+                ),
+              fluidRow(plotOutput("wykresy")
+                
               )
+    
       ),
       
       # Wyniki
@@ -134,7 +140,7 @@ ui <- dashboardPage(
               ),
               fluidRow(
                 numericInput(inputId="czestosci_input",
-                             label = "POdaj minimalna liczbę wystąpień:",
+                             label = "Podaj minimalna liczbe wystapien:",
                              value = 10)
               ),
               fluidRow(
@@ -241,6 +247,11 @@ server <- function(input, output,session) {
       updateSelectInput(session, "in_si_osrodek",choices = unique(df2$Osrodek))
       updateSelectInput(session, "in_si_zamawiajacy",choices = unique(df2$Zleceniodawca))
       
+      updateRadioButtons(session, "in_rb_partie_monika",
+                         choices = as.list(colnames(df2)[8:16] ),
+                         inline = TRUE,
+                         selected = "PO"
+      )      
     })  
     
     daty <- c(df2$Publikacja,df2$Publikacja,df2$Publikacja,df2$Publikacja,
@@ -364,9 +375,7 @@ server <- function(input, output,session) {
   results()
   output$results <-renderDataTable(df2)
  
-  #parte monika
-
-  
+  #partie monika
   init_polls <- function() {
     link <- "https://docs.google.com/spreadsheets/d/1P9PG5mcbaIeuO9v_VE5pv6U4T2zyiRiFK_r8jVksTyk/htmlembed?single=true&gid=0&range=a10:o400&widget=false&chrome=false" 
     xData <- getURL(link)  #get link
@@ -382,20 +391,20 @@ server <- function(input, output,session) {
   }
    init_polls() 
   output$wykresy <- renderPlot({
-    ggplot(data = df2) + 
-      geom_point(mapping = aes(
-        x = as.Date(df2$Publikacja,"%d.%m.%y"),
-        y = df2$`K'15`,
-        color = df2$Osrodek)) +
-      geom_smooth(mapping = aes(
-        x = as.Date(df2$Publikacja,"%d.%m.%y"),
-        y = df2$`K'15`,
-        color = df2$Osrodek))})
-  
-  #Czestotliwosc MOnika
-  output$find_cze <- renderPrint({
-    findFreqTerms(dtm, lowfreq=czestosci_input)
-  }) 
+    
+    df3 <- df2 %>%
+      select(-`Metoda badania`,-`Uwzgl. niezdecyd.`, -`Zleceniodawca`, -`Termin badania`, -`11`)
+    df3 <- gather(data = df3, key = Partia, value = Proc, -`Osrodek`, -`Publikacja`)
+    df3 <- filter(df3, df3$Partia == input$in_rb_partie_monika)
+     
+    ggplot(data = df3, mapping = aes(
+        x = as.Date(df3$Publikacja,"%d.%m.%y"),
+        y = Proc,
+        color = df3$Osrodek)) + 
+      geom_point() +
+      geom_smooth()
+  })
+
 
 }
 
@@ -441,6 +450,14 @@ word_freq_magda <- function() {   # word frequency Magdy
     xlab("Word") +
     ylab("Word frequency") +
     coord_flip() }
+
+#Czestosc MOnika
+
+output$find_cze <- renderPrint({
+  findFreqTerms(dtm, lowfreq=input$czestosci_input)
+}) 
+
+
 
 twitter <- function() {   # twitter Magdy
   library(rtweet)
