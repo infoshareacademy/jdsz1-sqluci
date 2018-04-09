@@ -1,4 +1,6 @@
 #install.packages("shinydashboard")
+#install.packages("rtweet")
+#install.packages("scala")
 library(shinydashboard)
 library(RPostgreSQL)
 library(plyr)
@@ -14,8 +16,7 @@ library(tm)
 library(SnowballC)
 library(RColorBrewer)
 library(rtweet)
-#unimportnt commit
-# locale test  ąćł
+library(e1071)
 
 
 
@@ -45,6 +46,7 @@ ui <- dashboardPage(
                menuSubItem("Find freq terms", tabName = "tab_text_mining_czestosci", icon = icon("th")),
                menuSubItem("Associacis", tabName = "tab_text_mining_asocjacje", icon = icon("th")),
                menuSubItem("Emotions", tabName = "tab_text_mining_emocje", icon = icon("th")),
+               menuSubItem("Sentiment", tabName = "tab_text_mining_sentiment", icon = icon("th")),
                menuSubItem("Twitter", tabName = "tab_text_mining_twitter", icon = icon("th"))
       ),
       
@@ -71,11 +73,11 @@ ui <- dashboardPage(
                 radioButtons("in_rb_partie_monika", label = h3("Partia polityczna"),
                              choices = list("A","B"),
                              inline = TRUE)
-              ),
+                ),
               fluidRow(plotOutput("wykresy")
-                       
+                
               )
-              
+    
       ),
       
       # Wyniki
@@ -157,8 +159,8 @@ ui <- dashboardPage(
               
               fluidRow(
                 textInput(inputId = "ass_text",
-                          label = "Terms:",
-                          value = "win"),
+                             label = "Terms:",
+                             value = "win"),
                 
                 numericInput(inputId = "ass_cor",
                              label = "CorLimit:",
@@ -167,7 +169,7 @@ ui <- dashboardPage(
               fluidRow(
                 verbatimTextOutput("find_ass")
               )
-              
+            
       ),   
       tabItem(tabName = "tab_text_mining_emocje",
               fluidRow(
@@ -175,10 +177,17 @@ ui <- dashboardPage(
               ),
               fluidRow(plotOutput("sentiment_plot_wojtek"))
       ),  
-      tabItem(tabName = "tab_text_mining_sentyment",
+      tabItem(tabName = "tab_text_mining_sentiment",
               fluidRow(
                 h2("Text mining :: sentiment")
+              ),
+              fluidRow(
+                h3("Positive/Negative")
+              ),
+              fluidRow(
+                infoBoxOutput("sentiment_pos_monika")
               )
+             
       ),
       tabItem(tabName = "tab_text_mining_twitter",
               fluidRow(
@@ -197,7 +206,32 @@ ui <- dashboardPage(
               ),
               fluidRow(
                 dataTableOutput("twitter3")
+              ),
+              fluidRow(
+                h3("favorite count vs retweet count")
+              ),
+              fluidRow(
+                plotOutput("twitter_monika_1")
+              ),
+              fluidRow(
+                h3("Density")
+              ),
+              fluidRow(
+                plotOutput("twitter_monika_2")
+              ),
+              fluidRow(
+                h3("Correlation")
+              ),  
+              fluidRow(
+                infoBoxOutput("twitter_monika_3")
+              ),
+              fluidRow(
+                h3("a (t1), b (t0)")
+              ),  
+                fluidRow(
+                  infoBoxOutput("twitter_monika_4")
               )
+      )
       ),
       
       # Credits
@@ -209,7 +243,7 @@ ui <- dashboardPage(
       )      
     )
   )
-)
+
 
 
 
@@ -233,10 +267,10 @@ server <- function(input, output,session) {
     rm(xData)
     for (i in 8:16)
       df2[[i]] <- as.numeric(gsub(",",".",df2[[i]]))      # remove commas
-    
+
     colnames(df2)[2] <- "Osrodek"  
     colnames(df2)[15] <- "WOLNOSC"
-    
+
     
     
     observe({
@@ -279,7 +313,7 @@ server <- function(input, output,session) {
                 rep("PSL",length(df2$PSL)),
                 rep("PARTIA RAZEM",length(df2$`PARTIA RAZEM`)),
                 rep("WOLNOSC",length(df2$WOLNOSC))   
-    ) 
+                ) 
     
     df3 <- data.frame(daty,wynik,partia,metoda_badania)  
     most_popular_method <- tail(names(sort(table(df2$`Metoda badania`))),1)
@@ -293,7 +327,7 @@ server <- function(input, output,session) {
     
     docs <- tm_map(docs,tolower)
     docs <- tm_map(docs,removeNumbers)
-    
+
     docs <- tm_map(docs,removeWords,stopwords("english"))
     
     docs <- tm_map(docs,removePunctuation)
@@ -322,50 +356,58 @@ server <- function(input, output,session) {
     df_emotions <- df_sentiment_final[1:8,]
     df_sentiments <- df_sentiment_final[9:10,]    
   }
-  
-  # Wojtek ##################################################################################
-  output$plot_partie <- renderPlot({
-    ggplot(data = df2) + 
-      geom_point(mapping = aes(
-        x = as.Date(Publikacja,"%d.%m.%Y"),
-        y = df2[input$in_rb_partie],
-        color = Osrodek)
-      ) +
-      geom_smooth(mapping = aes(
-        x = as.Date(Publikacja,"%d.%m.%Y"),
-        y = df2[input$in_rb_partie],
-        color = Osrodek))  + 
-      xlab("Poll publication date") + 
-      ylab("Percent") + theme(plot.margin = margin(0, 0, 0, 1, "cm"))
-  }, bg="transparent")
-  
-  output$dt_extended_table<-renderDataTable({
-    df2[df2$Osrodek == input$in_si_osrodek & df2$Zleceniodawca == input$in_si_zamawiajacy,]
-  })
-  
-  output$plot_partie_facet <- renderPlot({ 
-    ggplot(data = df3[df3$metoda_badania == most_popular_method,]) + 
-      geom_point(mapping = aes(
-        x = as.Date(daty,"%d.%m.%Y"),
-        y = wynik)
-      ) +   geom_smooth(mapping = aes(
-        x = as.Date(daty,"%d.%m.%Y"),
-        y = wynik)) + xlab("data publikacji")+
-      facet_wrap(~ partia, ncol = 2,scales = "free_y") })
-  
-  #wordcloud
-  output$wordcloud_wojtek <-  renderPlot({wordcloud(words = d$word, freq = d$freq, min.freq = 1, 
-                                                    max.words = 100,random.order = TRUE, rot.per = 0.1, 
-                                                    colors = brewer.pal(8,"Dark2"))})
-  
-  #sentiment
-  output$sentiment_plot_wojtek <-  renderPlot({ggplot(data = df_emotions, 
-                                                      mapping = aes(x = sentiment, 
-                                                                    y = sentiment_value, 
-                                                                    color = sentiment, fill = sentiment_value)) +
-      geom_bar( stat = "identity") + xlab("emotion") + ylab("word count") +
-      theme(axis.text.x = element_text(angle = 45, hjust = 1)) })    
-  
+
+     # Wojtek ##################################################################################
+     output$plot_partie <- renderPlot({
+       ggplot(data = df2) + 
+         geom_point(mapping = aes(
+           x = as.Date(Publikacja,"%d.%m.%Y"),
+           y = df2[input$in_rb_partie],
+           color = Osrodek)
+         ) +
+         geom_smooth(mapping = aes(
+           x = as.Date(Publikacja,"%d.%m.%Y"),
+          y = df2[input$in_rb_partie],
+           color = Osrodek))  + 
+         xlab("Poll publication date") + 
+         ylab("Percent") + theme(plot.margin = margin(0, 0, 0, 1, "cm"))
+     }, bg="transparent")
+     
+     output$dt_extended_table<-renderDataTable({
+       df2[df2$Osrodek == input$in_si_osrodek & df2$Zleceniodawca == input$in_si_zamawiajacy,]
+         })
+     
+     output$plot_partie_facet <- renderPlot({ 
+       ggplot(data = df3[df3$metoda_badania == most_popular_method,]) + 
+       geom_point(mapping = aes(
+         x = as.Date(daty,"%d.%m.%Y"),
+         y = wynik)
+       ) +   geom_smooth(mapping = aes(
+         x = as.Date(daty,"%d.%m.%Y"),
+         y = wynik)) + xlab("data publikacji")+
+       facet_wrap(~ partia, ncol = 2,scales = "free_y") })
+     
+     #wordcloud
+     output$wordcloud_wojtek <-  renderPlot({wordcloud(words = d$word, freq = d$freq, min.freq = 1, 
+                                                       max.words = 100,random.order = TRUE, rot.per = 0.1, 
+                                                       colors = brewer.pal(8,"Dark2"))})
+     
+     #sentiment
+     output$sentiment_plot_wojtek <-  renderPlot({ggplot(data = df_emotions, 
+            mapping = aes(x = sentiment, 
+                          y = sentiment_value, 
+                          color = sentiment, fill = sentiment_value)) +
+       geom_bar( stat = "identity") + xlab("emotion") + ylab("word count") +
+       theme(axis.text.x = element_text(angle = 45, hjust = 1)) })    
+     
+     
+     # Magda ##################################################################################
+     output$results <-renderDataTable(df2)
+     
+     output$word_freq_magda <- renderPlot({
+       word_freq_magda() 
+     }, bg="transparent")
+
   
   # Magda ##################################################################################
   output$results <-renderDataTable(df2)
@@ -373,15 +415,7 @@ server <- function(input, output,session) {
   output$word_freq_magda <- renderPlot({
     word_freq_magda() 
   }, bg="transparent")
-  
-  
-  # Magda ##################################################################################
-  output$results <-renderDataTable(df2)
-  
-  output$word_freq_magda <- renderPlot({
-    word_freq_magda() 
-  }, bg="transparent")
-  
+
   # Twitter (Magda)
   twitter()
   output$twitter1 <- renderDataTable({
@@ -391,7 +425,7 @@ server <- function(input, output,session) {
       group_by(user_id) %>%
       summarise(liczba = n())
     
-  })
+    })
   output$twitter2 <- renderDataTable({
     found_tweets <- search_tweets(q = input$twitterinput, n = 20)
     
@@ -407,11 +441,42 @@ server <- function(input, output,session) {
     head(top20, n = 20)
     
   })
+  
+  #twitter MOnika
+  output$twitter_monika_1 <-renderPlot({
+    found_tweets <- search_tweets(q = input$twitterinput, n = 20)
+    
+    ggplot(found_tweets, aes(x=favorite_count, y=retweet_count)) +
+        geom_point() 
+  })
+    
+   output$twitter_monika_2 <-renderPlot({
+      found_tweets <- search_tweets(q = input$twitterinput, n = 20)   
+      
+      par(mfrow=c(1,2))    
+    plot(density(found_tweets$favorite_count), main="Favorite count", ylab="Frequency",
+         sub=paste("Skosnosc:", round(e1071::skewness(found_tweets$favorite_count), 1)))
+    polygon(density(found_tweets$favorite_count), col="red")
+    plot(density(found_tweets$retweet_count), main="Retweet count", ylab="Frequency",
+         sub=paste("Skosnosc:", round(e1071::skewness(found_tweets$retweet_count), 1)))
+    polygon(density(found_tweets$retweet_count), col="red")      
+      })
+   
+   output$twitter_monika_3 <-renderPrint({
+     found_tweets <- search_tweets(q = input$twitterinput, n = 20)   
+     cor(found_tweets$favorite_count, found_tweets$retweet_count)
+   })
+   output$twitter_monika_4 <-renderPrint({
+     found_tweets <- search_tweets(q = input$twitterinput, n = 20) 
+     linearMod <- lm(favorite_count ~retweet_count, data=found_tweets)
+     print(linearMod)
+  })
+     
   # Associations (Magda)
   output$find_ass <- renderPrint({
     findAssocs(dtm, terms = input$ass_text, corlimit = input$ass_cor)
   })
-  
+
   # Word Freq (Magda)
   
   word_freq_magda()
@@ -422,13 +487,13 @@ server <- function(input, output,session) {
       ylab("Word frequency") +
       coord_flip() 
   }, bg="transparent")
-  
+
   
   # General results (Magda)
   
   results()
   output$results <-renderDataTable(df2)
-  
+ 
   #partie monika
   init_polls <- function() {
     link <- "https://docs.google.com/spreadsheets/d/1P9PG5mcbaIeuO9v_VE5pv6U4T2zyiRiFK_r8jVksTyk/htmlembed?single=true&gid=0&range=a10:o400&widget=false&chrome=false" 
@@ -441,32 +506,44 @@ server <- function(input, output,session) {
       df2[[i]] <<- as.numeric(gsub(",",".",df2[[i]]))
     
     colnames(df2)[2]<- "Osrodek"  #zmiana bo z polskim znakiem nie dziala 
-    
+  
   }
-  init_polls() 
+   init_polls() 
   output$wykresy <- renderPlot({
     
     df3 <- df2 %>%
       select(-`Metoda badania`,-`Uwzgl. niezdecyd.`, -`Zleceniodawca`, -`Termin badania`, -`11`)
     df3 <- gather(data = df3, key = Partia, value = Proc, -`Osrodek`, -`Publikacja`)
     df3 <- filter(df3, df3$Partia == input$in_rb_partie_monika)
-    
+     
     ggplot(data = df3, mapping = aes(
-      x = as.Date(df3$Publikacja,"%d.%m.%y"),
-      y = Proc,
-      color = df3$Osrodek)) + 
+        x = as.Date(df3$Publikacja,"%d.%m.%y"),
+        y = Proc,
+        color = df3$Osrodek)) + 
       geom_point() +
       geom_smooth()
   })
-  
+
+
   #Czestosc MOnika
   
   output$find_cze <- renderPrint({
     findFreqTerms(dtm, lowfreq=input$czestosci_input)
   })   
+ 
+  #sentiment MOnika
+ 
+  output$sentiment_pos_monika <- renderPrint({
+    df_sentiments_pos_monika <- percent(df_sentiments$sentiment_value/sum(df_sentiments$sentiment_value))
+    print(df_sentiments_pos_monika)
+  })
   
+
   
+   
 }
+
+
 
 results <- function() {      #funkcja results Magdy
   library(XML)
@@ -505,7 +582,7 @@ word_freq_magda <- function() {   # word frequency Magdy
   m   <- as.matrix(dtm)                   #na matrycę
   v   <- sort(rowSums(m), decreasing=TRUE)   #sortowanie według ilości dec
   d   <<- data.frame(word=names(v), freq=v)  #nowa data frame: słowo, ilość
-  ggplot(data = head(d,50), mapping = aes(x = reorder(word, freq), y = freq)) +
+    ggplot(data = head(d,50), mapping = aes(x = reorder(word, freq), y = freq)) +
     geom_bar(stat = "identity") +
     xlab("Word") +
     ylab("Word frequency") +
@@ -523,6 +600,8 @@ twitter <- function() {   # twitter Magdy
   appname <- "magda_sentiment_analysis"
   key <- "Cw4v8f0xPkjZz1UTLTTI8czoq"
   secret <- "HZ6RKMn9LJI6oMvUomN7ZxBxyXSZSeXvXOG15DTNArAv5waKvc"
+
+
 }
 
 
