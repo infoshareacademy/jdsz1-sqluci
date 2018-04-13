@@ -13,6 +13,7 @@ library(tidyr)
 library(tm)
 library(SnowballC)
 library(RColorBrewer)
+library(rtweet)
 #unimportnt commit
 # locale test  ąćł
 
