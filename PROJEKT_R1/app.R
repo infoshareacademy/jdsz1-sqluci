@@ -226,7 +226,8 @@ ui <- dashboardPage(
                 infoBoxOutput("twitter_monika_3")
               ),
               fluidRow(
-                h3("a (t1), b (t0)")
+                h3("a (t1), b
+                  (t0)")
               ),  
                 fluidRow(
                   infoBoxOutput("twitter_monika_4")
