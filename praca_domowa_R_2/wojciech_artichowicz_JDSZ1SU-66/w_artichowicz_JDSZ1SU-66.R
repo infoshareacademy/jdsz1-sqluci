@@ -102,7 +102,9 @@ bestLMtreshold <- summarySMSE[2] #choose the models which are in the smalles 25%
 bestLM <- models[SMSE <= bestLMtreshold]
 bestVarForLinearFit <- var_com[,SMSE <= bestLMtreshold] #best variables for linear models (mtcars column indexes)
 
+bestTriples <- matrix(hdr[bestVarForLinearFit],nrow=3,ncol = ncol(bestVarForLinearFit)) #triples of variables from the best linear models of three vars
 
+cts <- table(hdr[bestVarForLinearFit]) #frequency of well correlated variables
 
 
 
