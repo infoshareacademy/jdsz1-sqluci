@@ -1,0 +1,249 @@
+---
+title: "mtcars linear regression analysis"
+author: "Wojciech Artichowicz"
+date: "13 kwietnia 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#install.packages(c("tidyverse","FactoMineR","factoextra","kernlab","plotly","combinat","gdata","reshape","formattable"))
+
+library(ggplot2)
+library(FactoMineR)
+library(factoextra)
+library(kernlab)
+library(plotly)
+library(combinat)
+library(gdata)
+library(reshape)
+library(formattable)
+source("multiplot.R")
+```
+
+## Dataset description
+
+The dataset contains the following information on car properties:
+
+```{r mtcars}
+data("mtcars")  #loading dataset
+head(mtcars) #brief view to content
+```
+
+The dataset contanins 32 unique elements which represent car models. The dataset is small. and will not provide robust information
+
+
+## Introductory graphical exploration
+
+
+```{r distributions, echo=TRUE}
+#distribution plots
+ggplot(melt.data.frame(mtcars), aes (value)) +
+  geom_histogram(bins=15,aes(y=..density..)) + geom_density() + 
+  facet_wrap(~variable,scales = "free")
+```
+
+Fig.1 Distribution plots of dataset variables (exploratory analysis)
+
+Distributions of the variables are depicted in Fig. 1. Basing on the Fig. 1. it can be stated that variables *cyl*, *gear*, *carb* are of ordinal type. *vs*, *am* are nominal variables. Especially nominal variables should be taken into special consideration during clustering procedure and pattern identifications. 
+In order to determine the possible linear correlations between pairs of variables the correlation matrix has been constructed. It is presented below in Tab. 1.
+
+```{r correlation matrix, echo=TRUE}
+nc <- ncol(mtcars) #number of dataframe columns
+hdr <- colnames(mtcars) # header (dataframe column names)
+
+#correlation matrix
+C <- round(cor(mtcars),2) #create correlation matrix
+lowerTriangle(C) <- NA #for better readability purge lower triangular part
+print(C)
+```
+
+In Fig. 2. a scatterplot of all variables pairs is presented. Further graphical exploration of the data has been driven in order to choose the proper variables from the viewpoint of this exercise.
+
+```{r correlation matrix plot, echo=TRUE}
+pairs(mtcars)
+```
+
+Fig.2. Scatter plots of dataset variables (exploratory analysis)
+
+
+Choosing pairs of variables which have sufficient correlation level.
+
+```{r interestingly correlated variables, echo=TRUE}
+interesting_correlation_level <- 0.6
+vlist <- list()
+plist <- list()
+k<-0
+for (i in 1:nc)
+{
+  if (i==nc) #yes! I am R and I don't care about being fast! I never have..., use while and stop complaining
+    vec <- NULL
+  else 
+    vec <- (i+1):nc
+
+  for (j in vec){
+     if (abs(C[i,j]) > interesting_correlation_level)
+     {
+       #print(c(hdr[i],hdr[j]))
+       k <- k+1
+       vlist[[k]] <- c(hdr[i],hdr[j])
+       local ({
+         i<-i
+         j<-j
+         p <- ggplot(mtcars) + geom_point(aes( x= mtcars[hdr[i]], y= mtcars[hdr[j]] )) +xlab(hdr[i]) +ylab(hdr[j])
+         plist[[k]] <<- p}) #symbolic manipulation in R is somewhat strange!
+     }
+  }
+}
+
+length(vlist)
+```
+
+Plotting them
+
+```{r interestingly correlated variables plots 1}
+multiplot(plotlist = plist[1:9], cols = 3) #yeah, manually! For Gods sake!
+```
+
+```{r interestingly correlated variables plots 2}
+multiplot(plotlist = plist[10:18], cols = 3)
+```
+
+```{r interestingly correlated variables plots 3}
+multiplot(plotlist = plist[19:26], cols = 3)
+```
+
+```{r manually chosen interesting variables}
+linvlist <- c(1,2,4,5,7,8,10,12,13,14,16,17,19,20,22,25) #list of potentially interesting linear correlations (chosen manually)
+multiplot(plotlist = plist[linvlist], cols = 4) #multiplot definition in different source file
+```
+
+### Creating regression models
+
+It is done manually in order to provide intuitive relation between variables. it is more reasonable that *cyl* variable has influence to *mpg* not the other way round.
+
+```{r regression mpg~cyl}
+  lmodel <- lm(data=mtcars,mpg~cyl) #it should rather be Ist type regression
+  ggplot(data=mtcars,aes(x=cyl,y=mpg)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+```{r regression mpg~disp}
+  lmodel <- lm(data=mtcars,mpg~disp) 
+  ggplot(data=mtcars,aes(x=disp,y=mpg)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+```{r regression mpg~drat}
+  lmodel <- lm(data=mtcars,mpg~drat) 
+  ggplot(data=mtcars,aes(x=drat,y=mpg)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+```{r regression mpg~wt}
+  lmodel <- lm(data=mtcars,mpg~wt) 
+  ggplot(data=mtcars,aes(x=wt,y=mpg)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+```{r regression disp~cyl}
+  lmodel <- lm(data=mtcars,disp~cyl) 
+  ggplot(data=mtcars,aes(x=cyl,y=disp)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+```{r regression hp~cyl}
+  lmodel <- lm(data=mtcars,hp~cyl)
+  ggplot(data=mtcars,aes(x=cyl,y=hp)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+```{r regression wt~cyl}
+  lmodel <- lm(data=mtcars,wt~cyl) 
+  ggplot(data=mtcars,aes(x=cyl,y=wt)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+```{r regression hp~disp}
+  lmodel <- lm(data=mtcars,hp~disp) 
+  ggplot(data=mtcars,aes(x=disp,y=hp)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+```{r regression drat~disp}
+  lmodel <- lm(data=mtcars,drat~disp) 
+  ggplot(data=mtcars,aes(x=disp,y=drat)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+```{r regression wt~disp}
+  lmodel <- lm(data=mtcars,wt~disp) 
+  ggplot(data=mtcars,aes(x=disp,y=wt)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+```{r regression hp~wt}
+  lmodel <- lm(data=mtcars,hp~wt) 
+  ggplot(data=mtcars,aes(x=wt,y=hp)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+```{r regression qsec~hp}
+  lmodel <- lm(data=mtcars,qsec~hp) 
+  ggplot(data=mtcars,aes(x=hp,y=qsec)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+```{r regression hp~carb}
+  lmodel <- lm(data=mtcars,hp~carb) 
+  ggplot(data=mtcars,aes(x=carb,y=hp)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+```{r regression drat~wt}
+  lmodel <- lm(data=mtcars,drat~wt) 
+  ggplot(data=mtcars,aes(x=wt,y=drat)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+```{r regression drat~gear}
+  lmodel <- lm(data=mtcars,drat~gear) 
+  ggplot(data=mtcars,aes(x=gear,y=drat)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+```{r regression qsec~carb}
+  lmodel <- lm(data=mtcars,qsec~carb) 
+  ggplot(data=mtcars,aes(x=carb,y=qsec)) +geom_point() + geom_abline(slope = lmodel$coefficients[2], intercept = lmodel$coefficients[1])
+```
+
+### PCA
+To search for possible correlation dependencies PCA was performed on continuous and ordinal variables. Categorical variables were neglected.
+```{r PCA circle plot}
+   gPCAreduced <- PCA(mtcars[c("mpg","disp","hp","drat","wt","qsec")], scale.unit = TRUE, ncp = 6, graph = TRUE)
+```
+
+No surprise - it only confirms linear regression
+
+Trying to linearly reduce the datase dimensionality
+
+```{r PCA eigenvalues}
+dPCAreduced <- PCA(mtcars[c("mpg","disp","hp","drat","wt","qsec")], scale.unit = TRUE, ncp = 6, graph = FALSE)
+dPCAreduced$eig
+```
+
+The dataset can be reduced to 3 or 4 features.
+
+
+
+##TODO
+
+#check non-linear mappings
+```{r ckPCA}
+#kPCA with some assumed params
+kpc <- kpca(~.,data=mtcars,kernel="rbfdot",
+            kpar=list(sigma=0.2),features=ncol(mtcars))
+
+#print the principal component vectors
+PC <-pcv(kpc)
+
+mtc = mtcars
+
+mtc$pc1 <- PC[,1]
+mtc$pc2 <- PC[,2]
+mtc$pc3 <- PC[,3]
+
+ plot_ly(mtc, x = ~pc1, y = ~pc2, z = ~pc3) %>%
+  add_markers() %>%
+  layout(scene = list(xaxis = list(title = "PC1"),
+                     yaxis = list(title = "PC2"),
+                     zaxis = list(title = "PC3")))
+```
+
+kPCA Seems quite promising.
