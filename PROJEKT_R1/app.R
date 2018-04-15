@@ -230,10 +230,13 @@ ui <- dashboardPage(
               ),  
                 fluidRow(
                   infoBoxOutput("twitter_monika_4")
-              )
+                ),
+              fluidRow(
+                plotOutput("twitter4")
+
+              
       )
       ),
-      
       # Credits
       ################################################################################################
       tabItem(tabName = "tab_creators", fluidRow(h2("Tworcy") ),
@@ -243,6 +246,7 @@ ui <- dashboardPage(
       )      
     )
   )
+)
 
 
 
@@ -441,6 +445,7 @@ server <- function(input, output,session) {
     head(top20, n = 20)
     
   })
+
   
   #twitter MOnika
   output$twitter_monika_1 <-renderPlot({
@@ -472,6 +477,14 @@ server <- function(input, output,session) {
      print(linearMod)
   })
      
+
+  output$twitter4 <- renderPlot({
+    found_tweets <- search_tweets(q = input$twitterinput, n = 20)
+    
+    plot(found_tweets$retweet_count~found_tweets$favorite_count)
+    abline(lm(found_tweets$retweet_count~found_tweets$favorite_count), col="blue", lwd=3)
+  })
+
   # Associations (Magda)
   output$find_ass <- renderPrint({
     findAssocs(dtm, terms = input$ass_text, corlimit = input$ass_cor)
@@ -587,6 +600,8 @@ word_freq_magda <- function() {   # word frequency Magdy
     xlab("Word") +
     ylab("Word frequency") +
     coord_flip() }
+
+
 
 
 
