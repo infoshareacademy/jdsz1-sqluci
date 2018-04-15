@@ -504,11 +504,6 @@ word_freq_magda <- function() {   # word frequency Magdy
     ylab("Word frequency") +
     coord_flip() }
 
-#Czestosc MOnika
-
-output$find_cze <- renderPrint({
-  findFreqTerms(dtm, lowfreq=input$czestosci_input)
-}) 
 
 
 
