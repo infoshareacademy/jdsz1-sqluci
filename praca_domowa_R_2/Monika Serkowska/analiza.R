@@ -167,7 +167,7 @@ par("mar")
 par(mar=c(1,1,1,1))
 
 par(mfrow = c(2, 1))
-hist(cars_auto$mpg, main = "Distribution mpg - automatic", xlab = "mpg")
+hist(cars_auto$mpg, main = "Distribution mpg - automatic", xlab = "mpg", breaks=5)
 abline(v = mean(cars_auto$mpg), col = "red")
 hist(cars_manu$mpg, main = "Distribution mpg - manual", xlab = "mpg")
 abline(v = mean(cars_manu$mpg), col = "red")

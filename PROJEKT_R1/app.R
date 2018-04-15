@@ -1,4 +1,6 @@
 #install.packages("shinydashboard")
+#install.packages("rtweet")
+#install.packages("scala")
 library(shinydashboard)
 library(RPostgreSQL)
 library(plyr)
@@ -14,8 +16,8 @@ library(tm)
 library(SnowballC)
 library(RColorBrewer)
 library(rtweet)
-#unimportnt commit
-# locale test  ąćł
+library(e1071)
+
 
 
 ui <- dashboardPage(
@@ -44,6 +46,7 @@ ui <- dashboardPage(
                menuSubItem("Find freq terms", tabName = "tab_text_mining_czestosci", icon = icon("th")),
                menuSubItem("Associacis", tabName = "tab_text_mining_asocjacje", icon = icon("th")),
                menuSubItem("Emotions", tabName = "tab_text_mining_emocje", icon = icon("th")),
+               menuSubItem("Sentiment", tabName = "tab_text_mining_sentiment", icon = icon("th")),
                menuSubItem("Twitter", tabName = "tab_text_mining_twitter", icon = icon("th"))
       ),
       
@@ -174,10 +177,17 @@ ui <- dashboardPage(
               ),
               fluidRow(plotOutput("sentiment_plot_wojtek"))
       ),  
-      tabItem(tabName = "tab_text_mining_sentyment",
+      tabItem(tabName = "tab_text_mining_sentiment",
               fluidRow(
                 h2("Text mining :: sentiment")
+              ),
+              fluidRow(
+                h3("Positive/Negative")
+              ),
+              fluidRow(
+                infoBoxOutput("sentiment_pos_monika")
               )
+             
       ),
       tabItem(tabName = "tab_text_mining_twitter",
               fluidRow(
@@ -196,7 +206,32 @@ ui <- dashboardPage(
               ),
               fluidRow(
                 dataTableOutput("twitter3")
+              ),
+              fluidRow(
+                h3("favorite count vs retweet count")
+              ),
+              fluidRow(
+                plotOutput("twitter_monika_1")
+              ),
+              fluidRow(
+                h3("Density")
+              ),
+              fluidRow(
+                plotOutput("twitter_monika_2")
+              ),
+              fluidRow(
+                h3("Correlation")
+              ),  
+              fluidRow(
+                infoBoxOutput("twitter_monika_3")
+              ),
+              fluidRow(
+                h3("a (t1), b (t0)")
+              ),  
+                fluidRow(
+                  infoBoxOutput("twitter_monika_4")
               )
+      )
       ),
       
       # Credits
@@ -208,7 +243,7 @@ ui <- dashboardPage(
       )      
     )
   )
-)
+
 
 
 
@@ -406,6 +441,37 @@ server <- function(input, output,session) {
     head(top20, n = 20)
     
   })
+  
+  #twitter MOnika
+  output$twitter_monika_1 <-renderPlot({
+    found_tweets <- search_tweets(q = input$twitterinput, n = 20)
+    
+    ggplot(found_tweets, aes(x=favorite_count, y=retweet_count)) +
+        geom_point() 
+  })
+    
+   output$twitter_monika_2 <-renderPlot({
+      found_tweets <- search_tweets(q = input$twitterinput, n = 20)   
+      
+      par(mfrow=c(1,2))    
+    plot(density(found_tweets$favorite_count), main="Favorite count", ylab="Frequency",
+         sub=paste("Skosnosc:", round(e1071::skewness(found_tweets$favorite_count), 1)))
+    polygon(density(found_tweets$favorite_count), col="red")
+    plot(density(found_tweets$retweet_count), main="Retweet count", ylab="Frequency",
+         sub=paste("Skosnosc:", round(e1071::skewness(found_tweets$retweet_count), 1)))
+    polygon(density(found_tweets$retweet_count), col="red")      
+      })
+   
+   output$twitter_monika_3 <-renderPrint({
+     found_tweets <- search_tweets(q = input$twitterinput, n = 20)   
+     cor(found_tweets$favorite_count, found_tweets$retweet_count)
+   })
+   output$twitter_monika_4 <-renderPrint({
+     found_tweets <- search_tweets(q = input$twitterinput, n = 20) 
+     linearMod <- lm(favorite_count ~retweet_count, data=found_tweets)
+     print(linearMod)
+  })
+     
   # Associations (Magda)
   output$find_ass <- renderPrint({
     findAssocs(dtm, terms = input$ass_text, corlimit = input$ass_cor)
@@ -451,7 +517,7 @@ server <- function(input, output,session) {
     df3 <- filter(df3, df3$Partia == input$in_rb_partie_monika)
      
     ggplot(data = df3, mapping = aes(
-        x = as.Date(df3$Publikacja,"%d.%m.%y"),
+        x = as.Date(df3$Publikacja,"%d.%m.%Y"),
         y = Proc,
         color = df3$Osrodek)) + 
       geom_point() +
@@ -459,7 +525,25 @@ server <- function(input, output,session) {
   })
 
 
+  #Czestosc MOnika
+  
+  output$find_cze <- renderPrint({
+    findFreqTerms(dtm, lowfreq=input$czestosci_input)
+  })   
+ 
+  #sentiment MOnika
+ 
+  output$sentiment_pos_monika <- renderPrint({
+    df_sentiments_pos_monika <- percent(df_sentiments$sentiment_value/sum(df_sentiments$sentiment_value))
+    print(df_sentiments_pos_monika)
+  })
+  
+
+  
+   
 }
+
+
 
 results <- function() {      #funkcja results Magdy
   library(XML)
@@ -504,11 +588,7 @@ word_freq_magda <- function() {   # word frequency Magdy
     ylab("Word frequency") +
     coord_flip() }
 
-#Czestosc MOnika
 
-output$find_cze <- renderPrint({
-  findFreqTerms(dtm, lowfreq=input$czestosci_input)
-}) 
 
 
 
@@ -520,6 +600,8 @@ twitter <- function() {   # twitter Magdy
   appname <- "magda_sentiment_analysis"
   key <- "Cw4v8f0xPkjZz1UTLTTI8czoq"
   secret <- "HZ6RKMn9LJI6oMvUomN7ZxBxyXSZSeXvXOG15DTNArAv5waKvc"
+
+
 }
 
 
