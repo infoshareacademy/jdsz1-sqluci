@@ -226,8 +226,7 @@ ui <- dashboardPage(
                 infoBoxOutput("twitter_monika_3")
               ),
               fluidRow(
-                h3("a (t1), b
-                  (t0)")
+                h3("a (t1), b (t0)")
               ),  
                 fluidRow(
                   infoBoxOutput("twitter_monika_4")
@@ -518,7 +517,7 @@ server <- function(input, output,session) {
     df3 <- filter(df3, df3$Partia == input$in_rb_partie_monika)
      
     ggplot(data = df3, mapping = aes(
-        x = as.Date(df3$Publikacja,"%d.%m.%y"),
+        x = as.Date(df3$Publikacja,"%d.%m.%Y"),
         y = Proc,
         color = df3$Osrodek)) + 
       geom_point() +
