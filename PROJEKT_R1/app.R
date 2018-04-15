@@ -189,9 +189,11 @@ ui <- dashboardPage(
               ),
               fluidRow(
                 dataTableOutput("twitter3")
+              ),
+              fluidRow(
+                plotOutput("twitter4")
               )
       ),
-      
       # Credits
       ################################################################################################
       tabItem(tabName = "tab_creators", fluidRow(h2("Tworcy") ),
@@ -393,6 +395,12 @@ server <- function(input, output,session) {
     top20 <- arrange(found_tweets, desc(favorite_count))
     head(top20, n = 20)
     
+  })
+  output$twitter4 <- renderPlot({
+    found_tweets <- search_tweets(q = input$twitterinput, n = 20)
+    
+    plot(found_tweets$retweet_count~found_tweets$favorite_count)
+    abline(lm(found_tweets$retweet_count~found_tweets$favorite_count), col="blue", lwd=3)
   })
   # Associations (Magda)
   output$find_ass <- renderPrint({
