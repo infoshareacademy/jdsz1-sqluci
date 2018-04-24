@@ -1,0 +1,99 @@
+---
+title: "WW2 dataset Initial analysis description"
+author: "Wojciech Artichowicz"
+date: "22 kwietnia 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+
+library(ggmap)
+library(maps)
+library(mapdata)
+```
+
+## Initial analysis of the dataset files
+
+#### Analysis pipeline
+ - importing data
+ - data cleaning
+    * checking for duplicates
+    * checking integrity of the data
+
+### Importing weather stations datafile
+```{r importing weater stations}
+df_stations <- read.csv("data/Weather Station Locations.csv")
+head(df_stations,3)
+```
+
+#### Dataset size:
+```{r weater stations dataset size (num of records)}
+nrow(df_stations)
+```
+
+
+#### Some weather stations are repeated, checking that
+```{r weater stations dataset checking}
+nt <- table(df_stations$NAME)
+nt[nt>1]
+df_stations[df_stations$NAME == "BASTIA/CORSICA" | df_stations$NAME == "SAN JOSE",]
+```
+ok it is not an error - stations do not duplicate
+
+
+### Importing weather measurement datafile
+```{r importing weather measurement datafile}
+df_weather <-  read.csv("data/Summary of Weather.csv")
+head(df_weather,3)
+```
+
+Set weather station as factor
+#### overview weather measurement dataset plot
+```{r setting STA as factor}
+df_weather$STA <- as.factor(df_weather$STA)
+```
+
+```{r plotting weather measurement datafile}
+ggplot(df_weather,aes(x = MinTemp, y = MaxTemp, col = STA)) + 
+  geom_point() + scale_colour_discrete(guide = FALSE)
+```
+```{r dataset merging}
+df_all <- merge(x = df_weather, y = df_stations, by.x = "STA", by.y = "WBAN")
+```
+
+```{r plotting weather measurement datafile with coutries}
+ggplot(df_all,aes(x = MinTemp, y = MaxTemp, col = STATE.COUNTRY.ID)) + 
+  geom_point() 
+  
+```
+
+```{r removing rows for which MinTemp > MaxTemp}
+ df_all <- df_all[df_all$MinTemp < df_all$MaxTemp,]
+
+```
+
+
+```{r plotting filtered data}
+ ggplot(df_all,aes(x = MinTemp, y = MaxTemp, col = STATE.COUNTRY.ID)) + 
+  geom_point() #+ geom_text(aes(col = STATE.COUNTRY.ID,label=STATE.COUNTRY.ID),hjust=0, vjust=0)
+  
+```
+
+####Facet wrap of the max ~ min temperature 
+```{r plotting filtered data on facet grid}
+ ggplot(df_all,aes(x = MinTemp, y = MaxTemp, col = STATE.COUNTRY.ID)) +
+  geom_point(show.legend = FALSE) + facet_wrap(~STATE.COUNTRY.ID) 
+```
+```{r plotting filtered data on facet grid free scales}
+ggplot(df_all,aes(x = MinTemp, y = MaxTemp, col = STATE.COUNTRY.ID)) +
+  geom_point(show.legend = FALSE) + facet_wrap(~STATE.COUNTRY.ID,scales="free")
+```
+
+```{r plotting filtered data on the worldmap}
+wrld <- map_data("world")
+ggplot() + geom_polygon(data = wrld, aes(x=long, y = lat, group = group)) +
+  geom_point(data = df_stations, aes(x = Longitude, y = Latitude, col = STATE.COUNTRY.ID)) +   geom_text(data = df_stations, aes(x = Longitude, y = Latitude, col = STATE.COUNTRY.ID,label=STATE.COUNTRY.ID),hjust=0, vjust=0) + scale_fill_discrete(guide=FALSE) + scale_color_discrete(guide = FALSE)
+  
+```
