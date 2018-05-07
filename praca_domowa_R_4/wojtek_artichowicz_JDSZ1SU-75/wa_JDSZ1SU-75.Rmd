@@ -1,0 +1,43 @@
+---
+title: "Correspondence analysis of mtcars dataset"
+author: "Wojciech Artichowicz"
+date: "7 maja 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(FactoMineR)
+library(factoextra)
+library(gplots)
+library(ggplot2)
+```
+
+### Init
+
+Loading dataset
+
+```{r cars}
+data("mtcars")  #loading dataset
+#summary(mtcars)
+```
+
+## Plots and tabs
+
+Baloonplot
+
+```{r baloonplot, echo=FALSE}
+mtcars.tab <- as.table(as.matrix(mtcars))
+balloonplot(t(mtcars.tab),main = "mtcars",xlab = "", ylab = "",label = TRUE,show.margins = FALSE)
+```
+```{r correspondence analysis, echo=FALSE}
+ca_result <- CA(mtcars,graph = TRUE) # show plot
+fviz_ca_biplot(ca_result,col.row = "contrib") 
+```
+```{r contributions, scree plot etc, echo=FALSE}
+print(ca_result$eig[,c(2,3)]) # show contributions in the new feature space
+fviz_screeplot(ca_result)
+fviz_contrib(ca_result,choice = "row",axes = 1, top = 10)  #dim 1
+fviz_contrib(ca_result,choice = "row",axes = 2, top = 10)  #dim 2
+```
