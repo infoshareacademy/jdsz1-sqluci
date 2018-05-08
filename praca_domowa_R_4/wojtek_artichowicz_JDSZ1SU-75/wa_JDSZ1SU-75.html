@@ -126,17 +126,18 @@ $(document).ready(function () {
 
 
 <div id="conclusions-for-stakeholder" class="section level3">
-<h3>0. COnclusions for stakeholder</h3>
-<div id="from-pca" class="section level4">
-<h4>from PCA</h4>
+<h3>Conclusions for stakeholder</h3>
+<div id="based-on-pca" class="section level4">
+<h4>Based on PCA</h4>
 <ul>
 <li>Car models which are close on the plot are similar in terms of examined parameters (mpg,disp,hp,drat,wt,qsec);</li>
 <li>This means that if we want to aim our product at specified customer, we should point with designed car models parameters to be close to one of the groups;</li>
-<li>On the other hand one should take into consideration technical solutions used in particular car type. For example if we want to make a fast sports car, using solutions similar to ones used in Maserati Bora and Ford Pantera L should be a good first guess; In such case one should possibly take into consideration why those cars have different number of carburetors with similar other parameter values</li>
+<li>On the other hand one should take into consideration technical solutions used in particular car type. For example if we want to design a new fast sports car, then solutions similar to ones used in Maserati Bora and Ford Pantera L should be a good first guess; In such case one should possibly take into consideration why those cars have different number of carburetors with similar other parameter values</li>
 </ul>
 </div>
-<div id="loading-dataset" class="section level4">
-<h4>Loading dataset</h4>
+</div>
+<div id="data-science-part" class="section level3">
+<h3>Data science part</h3>
 <pre class="r"><code>data(&quot;mtcars&quot;)  #loading dataset
 head(mtcars,5)</code></pre>
 <pre><code>##                    mpg cyl disp  hp drat    wt  qsec vs am gear carb
@@ -146,9 +147,9 @@ head(mtcars,5)</code></pre>
 ## Hornet 4 Drive    21.4   6  258 110 3.08 3.215 19.44  1  0    3    1
 ## Hornet Sportabout 18.7   8  360 175 3.15 3.440 17.02  0  0    3    2</code></pre>
 </div>
-</div>
 <div id="general-pca-performed-on-the-dataset" class="section level3">
 <h3>1. General PCA performed on the dataset</h3>
+<p>PCA creates a new projection of the features in such way that new features are not correlated Arrows on the bip</p>
 <p>To search for possible correlation dependencies PCA was performed on continuous and ordinal variables. Categorical variables were neglected.</p>
 <pre class="r"><code>   PCAreduced &lt;- PCA(mtcars[c(&quot;mpg&quot;,&quot;disp&quot;,&quot;hp&quot;,&quot;drat&quot;,&quot;wt&quot;,&quot;qsec&quot;)], scale.unit = TRUE, ncp = 6, graph = FALSE)
 

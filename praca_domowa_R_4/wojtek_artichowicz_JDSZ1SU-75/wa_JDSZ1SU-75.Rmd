@@ -15,15 +15,15 @@ library(ggplot2)
 ```
 
 
-### 0. Conclusions for stakeholder
-#### 0.1. from PCA
+### Conclusions for stakeholder
+#### Based on PCA
 
 * Car models which are close on the plot are similar in terms of examined parameters (mpg,disp,hp,drat,wt,qsec);
 * This means that if we want to aim our product at specified customer, we should point with designed car models parameters to be close to one of the groups;
 * On the other hand one should take into consideration technical solutions used in particular car type. For example if we want to design a new fast sports car, then solutions similar to ones used in Maserati Bora and Ford Pantera L should be a good first guess; In such case one should possibly take into consideration why those cars have different number of carburetors with similar other parameter values
 
 
-#### Loading dataset
+### Data science part
 
 ```{r cars}
 data("mtcars")  #loading dataset
@@ -32,7 +32,21 @@ head(mtcars,5)
 
 ### 1. General PCA performed on the dataset
 
+#### Remark
 To search for possible correlation dependencies PCA was performed on continuous and ordinal variables. Categorical variables were neglected.
+
+#### DS comment
+PCA creates a new projection of the features in such way that new features are not correlated
+Arrows on the plot show correlations. Arrows pointing aong similarly sloped lines are correlated. If the arrow heads are in the same direction, they are correlated positively, otherwise negatively.
+
+Variables (for example car entities) ploted on such plot depict the poistion of that points in the new features space procected onto plane of chosen directions. If points are close they are somewhat similar, if they are far they significantly different.
+
+Scree plot shows the amount of information in each of the new variables.For example here ~60% of the total dataset variability is "compressed" into first PCA
+
+Contribution plots show how strong is the nfluence of each variable to given new feature.
+
+Similar explanations hold for correspondence analysis.
+
 ```{r PCA circle plot}
    PCAreduced <- PCA(mtcars[c("mpg","disp","hp","drat","wt","qsec")], scale.unit = TRUE, ncp = 6, graph = FALSE)
 
@@ -45,18 +59,22 @@ fviz_contrib(PCAreduced,choice = "var",axes = 1, top = 10)  #dim 1
 fviz_contrib(PCAreduced,choice = "var",axes = 2, top = 10)  #dim 2
 ```
 
+
 ### 2. Correspondence analysis of three pairs of fields
 
 Correspondence analysis is performed for categorcal and ordinal variables, therefore following pairs were chosen:
 
 * cylinders and carburetors
 * gear vs. carburetors
-* Cylinders vs. gear
+* cylinders vs. gear
 
 #### 2.1. Cylinders vs. carburetors
 
-Baloonplot
+Baloonplot shows that the most commonly used engines have 4 or 8 cylinders and 4 carburetors. USually 2 or 4 carburetors are used. Further examination leads to the following conclusion:
+Only Ferrari Dino and Maserati Bora have number of cylinders equal to number of carburetors.
+Usually number of carburetors is lower than number of cylinders. 
 
+CA biplot shows that all engine configurations are far one from another except the ones that have 3 or 8 carburetors.
 ```{r Cylinders vs. carburetors, echo=FALSE}
 mtcars.tab <- table(mtcars[[2]],mtcars[[11]])
 balloonplot(t(mtcars.tab),main = "cyl vs. carb",xlab = "", ylab = "",label = TRUE,show.margins = FALSE)
