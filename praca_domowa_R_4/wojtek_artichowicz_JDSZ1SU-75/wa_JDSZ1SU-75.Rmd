@@ -14,28 +14,85 @@ library(gplots)
 library(ggplot2)
 ```
 
-### Init
 
-Loading dataset
+### 0. Conclusions for stakeholder
+#### 0.1. from PCA
+
+* Car models which are close on the plot are similar in terms of examined parameters (mpg,disp,hp,drat,wt,qsec);
+* This means that if we want to aim our product at specified customer, we should point with designed car models parameters to be close to one of the groups;
+* On the other hand one should take into consideration technical solutions used in particular car type. For example if we want to design a new fast sports car, then solutions similar to ones used in Maserati Bora and Ford Pantera L should be a good first guess; In such case one should possibly take into consideration why those cars have different number of carburetors with similar other parameter values
+
+
+#### Loading dataset
 
 ```{r cars}
 data("mtcars")  #loading dataset
-#summary(mtcars)
+head(mtcars,5)
 ```
 
-## Plots and tabs
+### 1. General PCA performed on the dataset
+
+To search for possible correlation dependencies PCA was performed on continuous and ordinal variables. Categorical variables were neglected.
+```{r PCA circle plot}
+   PCAreduced <- PCA(mtcars[c("mpg","disp","hp","drat","wt","qsec")], scale.unit = TRUE, ncp = 6, graph = FALSE)
+
+print(PCAreduced$eig)
+
+fviz_pca_biplot(PCAreduced)
+
+fviz_screeplot(PCAreduced)
+fviz_contrib(PCAreduced,choice = "var",axes = 1, top = 10)  #dim 1
+fviz_contrib(PCAreduced,choice = "var",axes = 2, top = 10)  #dim 2
+```
+
+### 2. Correspondence analysis of three pairs of fields
+
+Correspondence analysis is performed for categorcal and ordinal variables, therefore following pairs were chosen:
+
+* cylinders and carburetors
+* gear vs. carburetors
+* Cylinders vs. gear
+
+#### 2.1. Cylinders vs. carburetors
 
 Baloonplot
 
-```{r baloonplot, echo=FALSE}
-mtcars.tab <- as.table(as.matrix(mtcars))
-balloonplot(t(mtcars.tab),main = "mtcars",xlab = "", ylab = "",label = TRUE,show.margins = FALSE)
-```
-```{r correspondence analysis, echo=FALSE}
-ca_result <- CA(mtcars,graph = TRUE) # show plot
+```{r Cylinders vs. carburetors, echo=FALSE}
+mtcars.tab <- table(mtcars[[2]],mtcars[[11]])
+balloonplot(t(mtcars.tab),main = "cyl vs. carb",xlab = "", ylab = "",label = TRUE,show.margins = FALSE)
+
+ca_result <- CA(mtcars.tab,graph = TRUE) # show plot
 fviz_ca_biplot(ca_result,col.row = "contrib") 
+
+print(ca_result$eig[,c(2,3)]) # show contributions in the new feature space
+fviz_screeplot(ca_result)
+fviz_contrib(ca_result,choice = "row",axes = 1, top = 10)  #dim 1
+fviz_contrib(ca_result,choice = "row",axes = 2, top = 10)  #dim 2
 ```
-```{r contributions, scree plot etc, echo=FALSE}
+
+### 2.2. gear vs. carburetors
+
+```{r gear vs. carburetors, echo=FALSE}
+mtcars.tab <- table(mtcars[[10]],mtcars[[11]])
+balloonplot(t(mtcars.tab),main = "gear vs. carb",xlab = "", ylab = "",label = TRUE,show.margins = FALSE)
+
+ca_result <- CA(mtcars.tab,graph = TRUE) # show plot
+fviz_ca_biplot(ca_result,col.row = "contrib") 
+
+print(ca_result$eig[,c(2,3)]) # show contributions in the new feature space
+fviz_screeplot(ca_result)
+fviz_contrib(ca_result,choice = "row",axes = 1, top = 10)  #dim 1
+fviz_contrib(ca_result,choice = "row",axes = 2, top = 10)  #dim 2
+```
+
+### 2.3. Cylinders vs. gear
+```{r cylinders vs. gear, echo=FALSE}
+mtcars.tab <- table(mtcars[[2]],mtcars[[10]])
+balloonplot(t(mtcars.tab),main = "gear vs. carb",xlab = "", ylab = "",label = TRUE,show.margins = FALSE)
+
+ca_result <- CA(mtcars.tab,graph = TRUE) # show plot
+fviz_ca_biplot(ca_result,col.row = "contrib") 
+
 print(ca_result$eig[,c(2,3)]) # show contributions in the new feature space
 fviz_screeplot(ca_result)
 fviz_contrib(ca_result,choice = "row",axes = 1, top = 10)  #dim 1
