@@ -1,0 +1,565 @@
+\documentclass[]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath}
+\usepackage{ifxetex,ifluatex}
+\usepackage{fixltx2e} % provides \textsubscript
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+\else % if luatex or xelatex
+  \ifxetex
+    \usepackage{mathspec}
+  \else
+    \usepackage{fontspec}
+  \fi
+  \defaultfontfeatures{Ligatures=TeX,Scale=MatchLowercase}
+\fi
+% use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+% use microtype if available
+\IfFileExists{microtype.sty}{%
+\usepackage{microtype}
+\UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\usepackage[margin=1in]{geometry}
+\usepackage{hyperref}
+\hypersetup{unicode=true,
+            pdftitle={mtcars},
+            pdfborder={0 0 0},
+            breaklinks=true}
+\urlstyle{same}  % don't use monospace font for urls
+\usepackage{color}
+\usepackage{fancyvrb}
+\newcommand{\VerbBar}{|}
+\newcommand{\VERB}{\Verb[commandchars=\\\{\}]}
+\DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+% Add ',fontsize=\small' for more characters per line
+\usepackage{framed}
+\definecolor{shadecolor}{RGB}{248,248,248}
+\newenvironment{Shaded}{\begin{snugshade}}{\end{snugshade}}
+\newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{#1}}
+\newcommand{\DecValTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\FloatTok}[1]{\textcolor[rgb]{0.00,0.00,0.81}{#1}}
+\newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\CharTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\StringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.31,0.60,0.02}{#1}}
+\newcommand{\ImportTok}[1]{#1}
+\newcommand{\CommentTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\OtherTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{#1}}
+\newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\VariableTok}[1]{\textcolor[rgb]{0.00,0.00,0.00}{#1}}
+\newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.13,0.29,0.53}{\textbf{#1}}}
+\newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.81,0.36,0.00}{\textbf{#1}}}
+\newcommand{\BuiltInTok}[1]{#1}
+\newcommand{\ExtensionTok}[1]{#1}
+\newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textit{#1}}}
+\newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.77,0.63,0.00}{#1}}
+\newcommand{\RegionMarkerTok}[1]{#1}
+\newcommand{\InformationTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\WarningTok}[1]{\textcolor[rgb]{0.56,0.35,0.01}{\textbf{\textit{#1}}}}
+\newcommand{\AlertTok}[1]{\textcolor[rgb]{0.94,0.16,0.16}{#1}}
+\newcommand{\ErrorTok}[1]{\textcolor[rgb]{0.64,0.00,0.00}{\textbf{#1}}}
+\newcommand{\NormalTok}[1]{#1}
+\usepackage{graphicx,grffile}
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=\maxwidth,height=\maxheight,keepaspectratio}
+\IfFileExists{parskip.sty}{%
+\usepackage{parskip}
+}{% else
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+}
+\setlength{\emergencystretch}{3em}  % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\setcounter{secnumdepth}{0}
+% Redefines (sub)paragraphs to behave more like sections
+\ifx\paragraph\undefined\else
+\let\oldparagraph\paragraph
+\renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+\let\oldsubparagraph\subparagraph
+\renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+
+%%% Use protect on footnotes to avoid problems with footnotes in titles
+\let\rmarkdownfootnote\footnote%
+\def\footnote{\protect\rmarkdownfootnote}
+
+%%% Change title format to be more compact
+\usepackage{titling}
+
+% Create subtitle command for use in maketitle
+\newcommand{\subtitle}[1]{
+  \posttitle{
+    \begin{center}\large#1\end{center}
+    }
+}
+
+\setlength{\droptitle}{-2em}
+  \title{mtcars}
+  \pretitle{\vspace{\droptitle}\centering\huge}
+  \posttitle{\par}
+  \author{}
+  \preauthor{}\postauthor{}
+  \date{}
+  \predate{}\postdate{}
+
+
+\begin{document}
+\maketitle
+
+\section{Correspondence Analysis}\label{correspondence-analysis}
+
+\subsection{Normalazing dataset}\label{normalazing-dataset}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{normalize <-}\StringTok{ }\ControlFlowTok{function}\NormalTok{(x)\{}
+  \KeywordTok{return}\NormalTok{((x}\OperatorTok{-}\KeywordTok{min}\NormalTok{(x))}\OperatorTok{/}\NormalTok{(}\KeywordTok{max}\NormalTok{(x)}\OperatorTok{-}\KeywordTok{min}\NormalTok{(x)))    }
+\NormalTok{\}}
+
+\NormalTok{mtcars}\OperatorTok{$}\NormalTok{mpg <-}\StringTok{ }\KeywordTok{normalize}\NormalTok{(mtcars}\OperatorTok{$}\NormalTok{mpg)}
+\NormalTok{mtcars}\OperatorTok{$}\NormalTok{cyl <-}\StringTok{ }\KeywordTok{normalize}\NormalTok{(mtcars}\OperatorTok{$}\NormalTok{cyl)}
+\NormalTok{mtcars}\OperatorTok{$}\NormalTok{disp <-}\StringTok{ }\KeywordTok{normalize}\NormalTok{(mtcars}\OperatorTok{$}\NormalTok{disp)}
+\NormalTok{mtcars}\OperatorTok{$}\NormalTok{hp <-}\StringTok{ }\KeywordTok{normalize}\NormalTok{(mtcars}\OperatorTok{$}\NormalTok{hp)}
+\NormalTok{mtcars}\OperatorTok{$}\NormalTok{drat <-}\StringTok{ }\KeywordTok{normalize}\NormalTok{(mtcars}\OperatorTok{$}\NormalTok{drat)}
+\NormalTok{mtcars}\OperatorTok{$}\NormalTok{wt <-}\StringTok{ }\KeywordTok{normalize}\NormalTok{(mtcars}\OperatorTok{$}\NormalTok{wt)}
+\NormalTok{mtcars}\OperatorTok{$}\NormalTok{qsec <-}\StringTok{ }\KeywordTok{normalize}\NormalTok{(mtcars}\OperatorTok{$}\NormalTok{qsec)}
+\NormalTok{mtcars}\OperatorTok{$}\NormalTok{vs <-}\StringTok{ }\KeywordTok{normalize}\NormalTok{(mtcars}\OperatorTok{$}\NormalTok{vs)}
+\NormalTok{mtcars}\OperatorTok{$}\NormalTok{am <-}\StringTok{ }\KeywordTok{normalize}\NormalTok{(mtcars}\OperatorTok{$}\NormalTok{am)}
+\NormalTok{mtcars}\OperatorTok{$}\NormalTok{gear <-}\StringTok{ }\KeywordTok{normalize}\NormalTok{(mtcars}\OperatorTok{$}\NormalTok{gear)}
+\NormalTok{mtcars}\OperatorTok{$}\NormalTok{carb <-}\StringTok{ }\KeywordTok{normalize}\NormalTok{(mtcars}\OperatorTok{$}\NormalTok{carb)}
+
+\NormalTok{mtcars}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                           mpg cyl       disp         hp       drat
+## Mazda RX4           0.4510638 0.5 0.22175106 0.20494700 0.52534562
+## Mazda RX4 Wag       0.4510638 0.5 0.22175106 0.20494700 0.52534562
+## Datsun 710          0.5276596 0.0 0.09204290 0.14487633 0.50230415
+## Hornet 4 Drive      0.4680851 0.5 0.46620105 0.20494700 0.14746544
+## Hornet Sportabout   0.3531915 1.0 0.72062859 0.43462898 0.17972350
+## Valiant             0.3276596 0.5 0.38388626 0.18727915 0.00000000
+## Duster 360          0.1659574 1.0 0.72062859 0.68197880 0.20737327
+## Merc 240D           0.5957447 0.0 0.18857570 0.03533569 0.42857143
+## Merc 230            0.5276596 0.0 0.17385882 0.15194346 0.53456221
+## Merc 280            0.3744681 0.5 0.24070841 0.25088339 0.53456221
+## Merc 280C           0.3148936 0.5 0.24070841 0.25088339 0.53456221
+## Merc 450SE          0.2553191 1.0 0.51060115 0.45229682 0.14285714
+## Merc 450SL          0.2936170 1.0 0.51060115 0.45229682 0.14285714
+## Merc 450SLC         0.2042553 1.0 0.51060115 0.45229682 0.14285714
+## Cadillac Fleetwood  0.0000000 1.0 1.00000000 0.54063604 0.07834101
+## Lincoln Continental 0.0000000 1.0 0.97006735 0.57597173 0.11059908
+## Chrysler Imperial   0.1829787 1.0 0.92017960 0.62897527 0.21658986
+## Fiat 128            0.9361702 0.0 0.01895735 0.04946996 0.60829493
+## Honda Civic         0.8510638 0.0 0.01147418 0.00000000 1.00000000
+## Toyota Corolla      1.0000000 0.0 0.00000000 0.04593640 0.67281106
+## Toyota Corona       0.4723404 0.0 0.12222499 0.15901060 0.43317972
+## Dodge Challenger    0.2170213 1.0 0.61586431 0.34628975 0.00000000
+## AMC Javelin         0.2042553 1.0 0.58094288 0.34628975 0.17972350
+## Camaro Z28          0.1234043 1.0 0.69568471 0.68197880 0.44700461
+## Pontiac Firebird    0.3744681 1.0 0.82040409 0.43462898 0.14746544
+## Fiat X1-9           0.7191489 0.0 0.01970566 0.04946996 0.60829493
+## Porsche 914-2       0.6638298 0.0 0.12272387 0.13780919 0.76958525
+## Lotus Europa        0.8510638 0.0 0.05986530 0.21554770 0.46543779
+## Ford Pantera L      0.2297872 1.0 0.69817910 0.74911661 0.67281106
+## Ferrari Dino        0.3957447 0.5 0.18433525 0.43462898 0.39631336
+## Maserati Bora       0.1957447 1.0 0.57345972 1.00000000 0.35944700
+## Volvo 142E          0.4680851 0.0 0.12446994 0.20141343 0.62211982
+##                             wt       qsec vs am gear      carb
+## Mazda RX4           0.28304781 0.23333333  0  1  0.5 0.4285714
+## Mazda RX4 Wag       0.34824853 0.30000000  0  1  0.5 0.4285714
+## Datsun 710          0.20634109 0.48928571  1  1  0.5 0.0000000
+## Hornet 4 Drive      0.43518282 0.58809524  1  0  0.0 0.0000000
+## Hornet Sportabout   0.49271286 0.30000000  0  0  0.0 0.1428571
+## Valiant             0.49782664 0.68095238  1  0  0.0 0.0000000
+## Duster 360          0.52595244 0.15952381  0  0  0.0 0.4285714
+## Merc 240D           0.42879059 0.65476190  1  0  0.5 0.1428571
+## Merc 230            0.41856303 1.00000000  1  0  0.5 0.1428571
+## Merc 280            0.49271286 0.45238095  1  0  0.5 0.4285714
+## Merc 280C           0.49271286 0.52380952  1  0  0.5 0.4285714
+## Merc 450SE          0.65379698 0.34523810  0  0  0.0 0.2857143
+## Merc 450SL          0.56686269 0.36904762  0  0  0.0 0.2857143
+## Merc 450SLC         0.57964715 0.41666667  0  0  0.0 0.2857143
+## Cadillac Fleetwood  0.95551010 0.41428571  0  0  0.0 0.4285714
+## Lincoln Continental 1.00000000 0.39523810  0  0  0.0 0.4285714
+## Chrysler Imperial   0.97980056 0.34761905  0  0  0.0 0.4285714
+## Fiat 128            0.17565840 0.59166667  1  1  0.5 0.0000000
+## Honda Civic         0.02608029 0.47857143  1  1  0.5 0.1428571
+## Toyota Corolla      0.08233188 0.64285714  1  1  0.5 0.0000000
+## Toyota Corona       0.24341601 0.65595238  1  0  0.0 0.0000000
+## Dodge Challenger    0.51316799 0.28214286  0  0  0.0 0.1428571
+## AMC Javelin         0.49143442 0.33333333  0  0  0.0 0.1428571
+## Camaro Z28          0.59498849 0.10833333  0  0  0.0 0.4285714
+## Pontiac Firebird    0.59626694 0.30357143  0  0  0.0 0.1428571
+## Fiat X1-9           0.10790079 0.52380952  1  1  0.5 0.0000000
+## Porsche 914-2       0.16031705 0.26190476  0  1  1.0 0.1428571
+## Lotus Europa        0.00000000 0.28571429  1  1  1.0 0.1428571
+## Ford Pantera L      0.42367681 0.00000000  0  1  1.0 0.4285714
+## Ferrari Dino        0.32140118 0.11904762  0  1  1.0 0.7142857
+## Maserati Bora       0.52595244 0.01190476  0  1  1.0 1.0000000
+## Volvo 142E          0.32395807 0.48809524  1  1  0.5 0.1428571
+\end{verbatim}
+
+\subsection{Conversion to table}\label{conversion-to-table}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dt <-}\StringTok{ }\KeywordTok{as.table}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(mtcars))   }
+\end{Highlighting}
+\end{Shaded}
+
+\subsection{Graph of contingency
+table}\label{graph-of-contingency-table}
+
+\paragraph{Size of balloon means numeber of occurences - similar sizes
+of balloons in case of
+mtcars}\label{size-of-balloon-means-numeber-of-occurences---similar-sizes-of-balloons-in-case-of-mtcars}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{balloonplot}\NormalTok{(}\KeywordTok{t}\NormalTok{(dt), }\DataTypeTok{main =} \StringTok{"mtcars"}\NormalTok{, }\DataTypeTok{xlab=}\StringTok{""}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{""}\NormalTok{, }
+            \DataTypeTok{label =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{show.margins =} \OtherTok{FALSE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{CA_files/figure-latex/unnamed-chunk-3-1.pdf}
+
+\subsection{CA results}\label{ca-results}
+
+\paragraph{The row variable has 32 categories; the column variable has
+11
+categories}\label{the-row-variable-has-32-categories-the-column-variable-has-11-categories}
+
+\paragraph{The chi square of independence between the two variables is
+equal to 91.80067 (p-value = 1
+)}\label{the-chi-square-of-independence-between-the-two-variables-is-equal-to-91.80067-p-value-1}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ca_result <-}\StringTok{ }\KeywordTok{CA}\NormalTok{(dt, }\DataTypeTok{graph =}\OtherTok{FALSE}\NormalTok{)}
+\KeywordTok{print}\NormalTok{(ca_result) }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## **Results of the Correspondence Analysis (CA)**
+## The row variable has  32  categories; the column variable has 11 categories
+## The chi square of independence between the two variables is equal to 91.80067 (p-value =  1 ).
+## *The results are available in the following objects:
+## 
+##    name              description                   
+## 1  "$eig"            "eigenvalues"                 
+## 2  "$col"            "results for the columns"     
+## 3  "$col$coord"      "coord. for the columns"      
+## 4  "$col$cos2"       "cos2 for the columns"        
+## 5  "$col$contrib"    "contributions of the columns"
+## 6  "$row"            "results for the rows"        
+## 7  "$row$coord"      "coord. for the rows"         
+## 8  "$row$cos2"       "cos2 for the rows"           
+## 9  "$row$contrib"    "contributions of the rows"   
+## 10 "$call"           "summary called parameters"   
+## 11 "$call$marge.col" "weights of the columns"      
+## 12 "$call$marge.row" "weights of the rows"
+\end{verbatim}
+
+\subsection{Eigenvalue correlation explanation and
+plot}\label{eigenvalue-correlation-explanation-and-plot}
+
+\paragraph{Two first dimensions explain 87\% (cumulative variance
+percent), typical boundary: 80\% cumulative
+variance}\label{two-first-dimensions-explain-87-cumulative-variance-percent-typical-boundary-80-cumulative-variance}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{eig.val <-}\StringTok{ }\KeywordTok{get_eigenvalue}\NormalTok{(ca_result) }
+\NormalTok{eig.val }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          eigenvalue variance.percent cumulative.variance.percent
+## Dim.1  0.4114697224       62.5120411                    62.51204
+## Dim.2  0.1637215789       24.8732033                    87.38524
+## Dim.3  0.0326160711        4.9551573                    92.34040
+## Dim.4  0.0143378852        2.1782659                    94.51867
+## Dim.5  0.0106411934        1.6166505                    96.13532
+## Dim.6  0.0103547585        1.5731342                    97.70845
+## Dim.7  0.0077458872        1.1767846                    98.88524
+## Dim.8  0.0036006029        0.5470173                    99.43225
+## Dim.9  0.0028128443        0.4273380                    99.85959
+## Dim.10 0.0009242003        0.1404080                   100.00000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{fviz_screeplot}\NormalTok{(ca_result, }\DataTypeTok{addlabels =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{ylim =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{50}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{CA_files/figure-latex/unnamed-chunk-5-1.pdf}
+
+\subsection{Contribution to dim1: Honda Civic the highest contribution
+to
+Dim-1}\label{contribution-to-dim1-honda-civic-the-highest-contribution-to-dim-1}
+
+\paragraph{Many cars share similar contribution - the highest influence
+the more left or right goes th
+point}\label{many-cars-share-similar-contribution---the-highest-influence-the-more-left-or-right-goes-th-point}
+
+\subsection{Contribution to dim2: Masarati Bora the highest contributuon
+to
+Dim-2}\label{contribution-to-dim2-masarati-bora-the-highest-contributuon-to-dim-2}
+
+\paragraph{Many cars share similar contributuion - the higher influence
+the more up or down goes the
+point}\label{many-cars-share-similar-contributuion---the-higher-influence-the-more-up-or-down-goes-the-point}
+
+\subsection{Symmetric plot}\label{symmetric-plot}
+
+\paragraph{Points with similar profile are closer on the factor
+map}\label{points-with-similar-profile-are-closer-on-the-factor-map}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{fviz_contrib}\NormalTok{(ca_result, }\DataTypeTok{choice =} \StringTok{"row"}\NormalTok{, }\DataTypeTok{axes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{top =} \DecValTok{10}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{CA_files/figure-latex/unnamed-chunk-6-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{fviz_contrib}\NormalTok{(ca_result, }\DataTypeTok{choice =} \StringTok{"row"}\NormalTok{, }\DataTypeTok{axes =} \DecValTok{2}\NormalTok{, }\DataTypeTok{top =} \DecValTok{10}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{CA_files/figure-latex/unnamed-chunk-6-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{fviz_ca_biplot}\NormalTok{(ca_result, }\DataTypeTok{col.row =} \StringTok{"contrib"}\NormalTok{, }\DataTypeTok{repel =} \OtherTok{TRUE}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{CA_files/figure-latex/unnamed-chunk-6-3.pdf}
+
+\section{Task: Do a correspondence analysis on this dataset, to show CA
+for 3 pairs of
+fields.}\label{task-do-a-correspondence-analysis-on-this-dataset-to-show-ca-for-3-pairs-of-fields.}
+
+\paragraph{Making CA for 32 row categories and 3 column variables (dt1):
+Error: Each group consists of only one observation. Not enough data to
+make biplot for
+CA}\label{making-ca-for-32-row-categories-and-3-column-variables-dt1-error-each-group-consists-of-only-one-observation.-not-enough-data-to-make-biplot-for-ca}
+
+\paragraph{Making CA for 3 row categories and 3 column variables (3
+pairs - dt2): not enough data to draw interesting
+conclusions}\label{making-ca-for-3-row-categories-and-3-column-variables-3-pairs---dt2-not-enough-data-to-draw-interesting-conclusions}
+
+\paragraph{Making CA for 32 row categories and 2 column variable (1 pair
+- dt3): Each group consists of only one observation. Not enough data to
+make biplot for
+CA}\label{making-ca-for-32-row-categories-and-2-column-variable-1-pair---dt3-each-group-consists-of-only-one-observation.-not-enough-data-to-make-biplot-for-ca}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dt1 <-}\StringTok{ }\KeywordTok{as.table}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(mtcars[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{32}\NormalTok{),}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{)])) }
+\NormalTok{dt1}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                            mpg        cyl       disp
+## Mazda RX4           0.45106383 0.50000000 0.22175106
+## Mazda RX4 Wag       0.45106383 0.50000000 0.22175106
+## Datsun 710          0.52765957 0.00000000 0.09204290
+## Hornet 4 Drive      0.46808511 0.50000000 0.46620105
+## Hornet Sportabout   0.35319149 1.00000000 0.72062859
+## Valiant             0.32765957 0.50000000 0.38388626
+## Duster 360          0.16595745 1.00000000 0.72062859
+## Merc 240D           0.59574468 0.00000000 0.18857570
+## Merc 230            0.52765957 0.00000000 0.17385882
+## Merc 280            0.37446809 0.50000000 0.24070841
+## Merc 280C           0.31489362 0.50000000 0.24070841
+## Merc 450SE          0.25531915 1.00000000 0.51060115
+## Merc 450SL          0.29361702 1.00000000 0.51060115
+## Merc 450SLC         0.20425532 1.00000000 0.51060115
+## Cadillac Fleetwood  0.00000000 1.00000000 1.00000000
+## Lincoln Continental 0.00000000 1.00000000 0.97006735
+## Chrysler Imperial   0.18297872 1.00000000 0.92017960
+## Fiat 128            0.93617021 0.00000000 0.01895735
+## Honda Civic         0.85106383 0.00000000 0.01147418
+## Toyota Corolla      1.00000000 0.00000000 0.00000000
+## Toyota Corona       0.47234043 0.00000000 0.12222499
+## Dodge Challenger    0.21702128 1.00000000 0.61586431
+## AMC Javelin         0.20425532 1.00000000 0.58094288
+## Camaro Z28          0.12340426 1.00000000 0.69568471
+## Pontiac Firebird    0.37446809 1.00000000 0.82040409
+## Fiat X1-9           0.71914894 0.00000000 0.01970566
+## Porsche 914-2       0.66382979 0.00000000 0.12272387
+## Lotus Europa        0.85106383 0.00000000 0.05986530
+## Ford Pantera L      0.22978723 1.00000000 0.69817910
+## Ferrari Dino        0.39574468 0.50000000 0.18433525
+## Maserati Bora       0.19574468 1.00000000 0.57345972
+## Volvo 142E          0.46808511 0.00000000 0.12446994
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dt2 <-}\StringTok{ }\KeywordTok{as.table}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(mtcars[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{),}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{3}\NormalTok{)])) }
+\NormalTok{dt2}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                     mpg       cyl      disp
+## Mazda RX4     0.4510638 0.5000000 0.2217511
+## Mazda RX4 Wag 0.4510638 0.5000000 0.2217511
+## Datsun 710    0.5276596 0.0000000 0.0920429
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{dt3 <-}\StringTok{ }\KeywordTok{as.table}\NormalTok{(}\KeywordTok{as.matrix}\NormalTok{(mtcars[}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{32}\NormalTok{),}\KeywordTok{c}\NormalTok{(}\DecValTok{1}\OperatorTok{:}\DecValTok{2}\NormalTok{)])) }
+\NormalTok{dt3}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                           mpg       cyl
+## Mazda RX4           0.4510638 0.5000000
+## Mazda RX4 Wag       0.4510638 0.5000000
+## Datsun 710          0.5276596 0.0000000
+## Hornet 4 Drive      0.4680851 0.5000000
+## Hornet Sportabout   0.3531915 1.0000000
+## Valiant             0.3276596 0.5000000
+## Duster 360          0.1659574 1.0000000
+## Merc 240D           0.5957447 0.0000000
+## Merc 230            0.5276596 0.0000000
+## Merc 280            0.3744681 0.5000000
+## Merc 280C           0.3148936 0.5000000
+## Merc 450SE          0.2553191 1.0000000
+## Merc 450SL          0.2936170 1.0000000
+## Merc 450SLC         0.2042553 1.0000000
+## Cadillac Fleetwood  0.0000000 1.0000000
+## Lincoln Continental 0.0000000 1.0000000
+## Chrysler Imperial   0.1829787 1.0000000
+## Fiat 128            0.9361702 0.0000000
+## Honda Civic         0.8510638 0.0000000
+## Toyota Corolla      1.0000000 0.0000000
+## Toyota Corona       0.4723404 0.0000000
+## Dodge Challenger    0.2170213 1.0000000
+## AMC Javelin         0.2042553 1.0000000
+## Camaro Z28          0.1234043 1.0000000
+## Pontiac Firebird    0.3744681 1.0000000
+## Fiat X1-9           0.7191489 0.0000000
+## Porsche 914-2       0.6638298 0.0000000
+## Lotus Europa        0.8510638 0.0000000
+## Ford Pantera L      0.2297872 1.0000000
+## Ferrari Dino        0.3957447 0.5000000
+## Maserati Bora       0.1957447 1.0000000
+## Volvo 142E          0.4680851 0.0000000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{balloonplot}\NormalTok{(}\KeywordTok{t}\NormalTok{(dt1), }\DataTypeTok{main =} \StringTok{"mtcars"}\NormalTok{, }\DataTypeTok{xlab=}\StringTok{""}\NormalTok{, }\DataTypeTok{ylab=}\StringTok{""}\NormalTok{,  }\DataTypeTok{label =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{show.margins =} \OtherTok{FALSE}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{CA_files/figure-latex/unnamed-chunk-7-1.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{ca_result1 <-}\StringTok{ }\KeywordTok{CA}\NormalTok{(dt1, }\DataTypeTok{graph =}\OtherTok{FALSE}\NormalTok{)}
+\KeywordTok{print}\NormalTok{(ca_result1)    }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## **Results of the Correspondence Analysis (CA)**
+## The row variable has  32  categories; the column variable has 3 categories
+## The chi square of independence between the two variables is equal to 20.66612 (p-value =  0.9999998 ).
+## *The results are available in the following objects:
+## 
+##    name              description                   
+## 1  "$eig"            "eigenvalues"                 
+## 2  "$col"            "results for the columns"     
+## 3  "$col$coord"      "coord. for the columns"      
+## 4  "$col$cos2"       "cos2 for the columns"        
+## 5  "$col$contrib"    "contributions of the columns"
+## 6  "$row"            "results for the rows"        
+## 7  "$row$coord"      "coord. for the rows"         
+## 8  "$row$cos2"       "cos2 for the rows"           
+## 9  "$row$contrib"    "contributions of the rows"   
+## 10 "$call"           "summary called parameters"   
+## 11 "$call$marge.col" "weights of the columns"      
+## 12 "$call$marge.row" "weights of the rows"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{eig.val1 <-}\StringTok{ }\KeywordTok{get_eigenvalue}\NormalTok{(ca_result1) }
+\NormalTok{eig.val1 }
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##       eigenvalue variance.percent cumulative.variance.percent
+## Dim.1 0.45604943        95.854184                    95.85418
+## Dim.2 0.01972472         4.145816                   100.00000
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{fviz_screeplot}\NormalTok{(ca_result1, }\DataTypeTok{addlabels =} \OtherTok{TRUE}\NormalTok{, }\DataTypeTok{ylim =} \KeywordTok{c}\NormalTok{(}\DecValTok{0}\NormalTok{,}\DecValTok{50}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{CA_files/figure-latex/unnamed-chunk-7-2.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{fviz_contrib}\NormalTok{(ca_result1, }\DataTypeTok{choice =} \StringTok{"row"}\NormalTok{, }\DataTypeTok{axes =} \DecValTok{1}\NormalTok{, }\DataTypeTok{top =} \DecValTok{10}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{CA_files/figure-latex/unnamed-chunk-7-3.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{fviz_contrib}\NormalTok{(ca_result1, }\DataTypeTok{choice =} \StringTok{"row"}\NormalTok{, }\DataTypeTok{axes =} \DecValTok{2}\NormalTok{, }\DataTypeTok{top =} \DecValTok{10}\NormalTok{) }
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{CA_files/figure-latex/unnamed-chunk-7-4.pdf}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\KeywordTok{fviz_ca_biplot}\NormalTok{(ca_result1, }\DataTypeTok{col.row =} \StringTok{"contrib"}\NormalTok{, }\DataTypeTok{repel =} \OtherTok{TRUE}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{CA_files/figure-latex/unnamed-chunk-7-5.pdf}
+
+
+\end{document}

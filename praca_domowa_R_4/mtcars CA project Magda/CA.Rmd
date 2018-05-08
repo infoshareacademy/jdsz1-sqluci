@@ -1,0 +1,116 @@
+---
+title: "mtcars"
+output:
+  html_document: default
+---
+
+# Correspondence Analysis
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(e1071)
+library(FactoMineR)
+library(factoextra)
+library(gplots)
+data("mtcars")
+?mtcars
+mtcars
+str(mtcars)
+```
+
+##  Normalazing dataset
+
+```{r}
+normalize <- function(x){
+  return((x-min(x))/(max(x)-min(x)))    
+}
+
+mtcars$mpg <- normalize(mtcars$mpg)
+mtcars$cyl <- normalize(mtcars$cyl)
+mtcars$disp <- normalize(mtcars$disp)
+mtcars$hp <- normalize(mtcars$hp)
+mtcars$drat <- normalize(mtcars$drat)
+mtcars$wt <- normalize(mtcars$wt)
+mtcars$qsec <- normalize(mtcars$qsec)
+mtcars$vs <- normalize(mtcars$vs)
+mtcars$am <- normalize(mtcars$am)
+mtcars$gear <- normalize(mtcars$gear)
+mtcars$carb <- normalize(mtcars$carb)
+
+mtcars
+```
+
+## Conversion to table
+
+```{r}
+dt <- as.table(as.matrix(mtcars))   
+```
+
+
+## Graph of contingency table
+#### Size of balloon means numeber of occurences - similar sizes of balloons in case of mtcars
+
+```{r}
+balloonplot(t(dt), main = "mtcars", xlab="", ylab="", 
+            label = TRUE, show.margins = FALSE)
+```
+
+
+## CA results
+#### The row variable has  32  categories; the column variable has 11 categories
+#### The chi square of independence between the two variables is equal to 91.80067 (p-value =  1 )
+
+```{r}
+ca_result <- CA(dt, graph =FALSE)
+print(ca_result) 
+```
+
+
+
+## Eigenvalue correlation explanation and plot
+#### Two first dimensions explain 87% (cumulative variance percent), typical boundary: 80% cumulative variance
+
+```{r}
+eig.val <- get_eigenvalue(ca_result) 
+eig.val 
+fviz_screeplot(ca_result, addlabels = TRUE, ylim = c(0,50))
+```
+
+
+
+## Contribution to  dim1: Honda Civic the highest contribution to Dim-1
+#### Many cars share similar contribution -  the highest influence the more left or right goes th point
+## Contribution to  dim2: Masarati Bora the highest contributuon to Dim-2
+#### Many cars share similar contributuion - the higher influence the more  up or down goes the point
+## Symmetric plot
+#### Points with similar profile are closer on the factor map
+
+```{r}
+fviz_contrib(ca_result, choice = "row", axes = 1, top = 10)
+fviz_contrib(ca_result, choice = "row", axes = 2, top = 10) 
+fviz_ca_biplot(ca_result, col.row = "contrib", repel = TRUE) 
+```
+
+
+# Task: Do a correspondence analysis on this dataset, to show CA for 3 pairs of fields.
+#### Making CA for 3 row categories and 3 column variables (3 pairs - dt2): Each group consists of only one observation. Not enough data to make biplot for CA
+#### Making CA for 32 row categories and 2 column variable (1 pair - dt3): not enough data to draw interesting conclusions
+
+
+```{r}
+dt2 <- as.table(as.matrix(mtcars[c(1:3),c(1:3)])) 
+dt2
+dt3 <- as.table(as.matrix(mtcars[c(1:32),c(1:2)])) 
+dt3
+
+balloonplot(t(dt2), main = "mtcars", xlab="", ylab="",  label = TRUE, show.margins = FALSE) 
+ca_result1 <- CA(dt2, graph =FALSE)
+print(ca_result1)    
+eig.val1 <- get_eigenvalue(ca_result1) 
+eig.val1 
+fviz_screeplot(ca_result1, addlabels = TRUE, ylim = c(0,50))
+fviz_contrib(ca_result1, choice = "row", axes = 1, top = 10) 
+fviz_contrib(ca_result1, choice = "row", axes = 2, top = 10) 
+fviz_ca_biplot(ca_result1, col.row = "contrib", repel = TRUE)
+```
+
