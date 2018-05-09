@@ -25,7 +25,7 @@ library(ggplot2)
 #### Based on CA of cylinders vs. carburetors
 * Commonly used engines have 4 or 8 cylinders and 4 carburetors - that is a hint for design;
 * Usually 2 or 4 carburetors are used - ask mechanician for explanation why;
-* Only fast and expensive carshave number of cylinders equal to number of carburetors;
+* Only fast and expensive cars have number of cylinders equal to number of carburetors;
 * In general number of carburetors is lower than the number of cylinders - if our company points toward existing market, it should be considered;
 
 #### Based on CA of gears vs. carburetors
@@ -33,6 +33,12 @@ library(ggplot2)
 * Five gears come along with 6 or 8 carburetors in expensive sport cars - hint if we want to aim into exclusive market; 
 * Middle class expensive sports cars, have 5 gears with 2 carburetors - popular sports car;
 * In CA factor map 6 and 8 carburetors are placed in the same point and are the close to 5 gears.
+
+#### Based on CA of cylinders vs. gears
+* Most cars have 8 cylinders and 3 gears, or 4 cylinders with 4 gears - for some reason those are typical constructions;
+* Least significant technical solution is 6 cylinders and 5 gears - untypical / unpopular?;
+*  The strong data variability exists only in PCA1 direction, that may indicate that there is strong dependence of number of gears and cylinders.
+
 
 ### Data science part
 
@@ -50,9 +56,9 @@ To search for possible correlation dependencies PCA was performed on continuous 
 PCA creates a new projection of the features in such way that new features are not correlated.
 Arrows (noted with variables) on the plot show correlations. Arrows pointing along similarly sloped lines are correlated. If the arrow heads are in the same direction, they are correlated positively, otherwise negatively.
 
-Variables (for example car entities) ploted on such plot depict the poistion of that points in the new features space projected onto plane of chosen directions. If points are close they are somewhat similar, if they are far they significantly different.
+Variables (for example car entities) plotted on such plot depict the poistion of that points in the new features space projected onto plane of chosen directions. If points are close they are somewhat similar, if they are far they significantly different.
 
-Scree plot shows the amount of information in each of the new variables.For example here ~60% of the total dataset variability is "compressed" into first PCA.
+Scree plot shows the amount of information in each of the new variables.For example here ~69% of the total dataset variability is "compressed" into first PCA.
 
 Contribution plots show how strong is the influence of each variable to given new feature.
 
@@ -85,7 +91,7 @@ Baloonplot shows that the most commonly used engines have 4 or 8 cylinders and 4
 Only Ferrari Dino and Maserati Bora have number of cylinders equal to number of carburetors.
 Usually number of carburetors is lower than the number of cylinders. 
 
-CA biplot shows that all engine configurations are far one from another except the ones that have 3 or 8 carburetors.
+CA biplot shows that all engine configurations are far one from another except the ones that have 3 or 8 carburetors and 8 cylinders.
 ```{r Cylinders vs. carburetors, echo=FALSE}
 mtcars.tab <- table(mtcars[[2]],mtcars[[11]])
 balloonplot(t(mtcars.tab),main = "cyl vs. carb",xlab = "", ylab = "",label = TRUE,show.margins = FALSE)
@@ -97,6 +103,8 @@ print(ca_result$eig[,c(2,3)]) # show contributions in the new feature space
 fviz_screeplot(ca_result)
 fviz_contrib(ca_result,choice = "row",axes = 1, top = 10)  #dim 1
 fviz_contrib(ca_result,choice = "row",axes = 2, top = 10)  #dim 2
+fviz_contrib(ca_result,choice = "col",axes = 1, top = 10)  #dim 1
+fviz_contrib(ca_result,choice = "col",axes = 2, top = 10)  #dim 2
 ```
 
 ### 2.2. gear vs. carburetors
@@ -116,18 +124,20 @@ print(ca_result$eig[,c(2,3)]) # show contributions in the new feature space
 fviz_screeplot(ca_result)
 fviz_contrib(ca_result,choice = "row",axes = 1, top = 10)  #dim 1
 fviz_contrib(ca_result,choice = "row",axes = 2, top = 10)  #dim 2
+fviz_contrib(ca_result,choice = "col",axes = 1, top = 10)  #dim 1
+fviz_contrib(ca_result,choice = "col",axes = 2, top = 10)  #dim 2
 ```
 
 ### 2.3. Cylinders vs. gear
 
-Balloonplot shows that most cars have 8 cylinders and 3 carburetors, another popular setting is 4 cylinders with 4 carburetors.
+Balloonplot shows that most cars have 8 cylinders and 3 gears, another popular setting is 4 cylinders with 4 gears.
 
-Contribution plots show that the least variability is delivered by 6 cylinders and 8 carburetors. The strong data variability exists only in PCA1 direction. Points denoting 8 carburetors and 3 cylinders are close. Similarly points denoting 4 carburetors and 4 cylinders are close. That shows that these are the typcal constructions.
+Contribution plots show that the least variability is delivered by 6 cylinders and 5 gears. Variability in the second direction is neglectible. The strong data variability exists only in PCA1 direction. Points denoting 8 cylinders and 3 gears are close, which means they are commonly used in common. Similarly points denoting 4 gears and 4 cylinders are close. That shows that these are the typcal constructions.
 
 
 ```{r cylinders vs. gear, echo=FALSE}
 mtcars.tab <- table(mtcars[[2]],mtcars[[10]])
-balloonplot(t(mtcars.tab),main = "cyl vs. carb",xlab = "", ylab = "",label = TRUE,show.margins = FALSE)
+balloonplot(t(mtcars.tab),main = "cyl vs. gear",xlab = "", ylab = "",label = TRUE,show.margins = FALSE)
 
 ca_result <- CA(mtcars.tab,graph = TRUE) # show plot
 fviz_ca_biplot(ca_result,col.row = "contrib") 
@@ -136,4 +146,6 @@ print(ca_result$eig[,c(2,3)]) # show contributions in the new feature space
 fviz_screeplot(ca_result)
 fviz_contrib(ca_result,choice = "row",axes = 1, top = 10)  #dim 1
 fviz_contrib(ca_result,choice = "row",axes = 2, top = 10)  #dim 2
+fviz_contrib(ca_result,choice = "col",axes = 1, top = 10)  #dim 1
+fviz_contrib(ca_result,choice = "col",axes = 2, top = 10)  #dim 2
 ```
