@@ -55,6 +55,10 @@ ggplot() + geom_polygon(data = wrld, aes(x=long, y = lat, group = group)) +
 ```{r importing weather measurement datafile}
 df_weather <-  read.csv("data/Summary of Weather.csv")
 head(df_weather,3)
+
+#checking data for NAs
+any(is.na(df_weather$MinTemp))
+any(is.na(df_weather$MaxTemp))
 ```
 
 #### overview weather measurement dataset plot
@@ -102,3 +106,10 @@ ggplot(df_all,aes(x = MinTemp, y = MaxTemp, col = STATE.COUNTRY.ID)) +
 In some places there is no relationship between min temp and max temp.
 
 
+```{r determining the train and test datasets}
+size = nrow(df_all)
+idx = sample(1:size)
+edge = as.integer(0.2*nrow(df_all))
+train = df_all[idx[1:edge],]
+test = df_all[idx[edge+1:size],]
+```
