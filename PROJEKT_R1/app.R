@@ -254,29 +254,31 @@ ui <- dashboardPage(
 bool_app_init <- TRUE
 
 server <- function(input, output,session) {
+  print("A")
   
-  if (bool_app_init){
+  if (bool_app_init)
+  {
     print("init - loading data")
     
     bool_app_init<-FALSE
-    
     link <- "https://docs.google.com/spreadsheets/d/1P9PG5mcbaIeuO9v_VE5pv6U4T2zyiRiFK_r8jVksTyk/htmlembed?single=true&gid=0&range=a10:o400&widget=false&chrome=false" 
     xData <- getURL(link)  #get link
     dane_z_html <- readHTMLTable(xData, stringsAsFactors = FALSE, skip.rows = c(1,3), encoding = "utf8") #read html
-    df_dane <- as.data.frame(dane_z_html)   #data frame
+     df_dane <- as.data.frame(dane_z_html)   #data frame
     colnames(df_dane) <- df_dane[1,]  #nazwy kolumn
-    df2 <- df_dane[2:nrow(df_dane),]  
+    df2 <- df_dane[2:nrow(df_dane),] 
     rm(df_dane)
     rm(dane_z_html)
     rm(xData)
+    print("A4")
     for (i in 8:16)
       df2[[i]] <- as.numeric(gsub(",",".",df2[[i]]))      # remove commas
-
+    print("A5")
     colnames(df2)[2] <- "Osrodek"  
     colnames(df2)[15] <- "WOLNOSC"
 
     
-    
+
     observe({
       # Can also set the label and select items
       updateRadioButtons(session, "in_rb_partie",
@@ -286,17 +288,16 @@ server <- function(input, output,session) {
       )
       updateSelectInput(session, "in_si_osrodek",choices = unique(df2$Osrodek))
       updateSelectInput(session, "in_si_zamawiajacy",choices = unique(df2$Zleceniodawca))
-      
       updateRadioButtons(session, "in_rb_partie_monika",
                          choices = as.list(colnames(df2)[8:16] ),
                          inline = TRUE,
                          selected = "PO"
       )      
     })  
-    
+    print("B1")
     daty <- c(df2$Publikacja,df2$Publikacja,df2$Publikacja,df2$Publikacja,
               df2$Publikacja,df2$Publikacja,df2$Publikacja,df2$Publikacja)
-    
+    print("B2")
     metoda_badania <- c(df2$`Metoda badania`,df2$`Metoda badania`,df2$`Metoda badania`,df2$`Metoda badania`,
                         df2$`Metoda badania`,df2$`Metoda badania`,df2$`Metoda badania`,df2$`Metoda badania`)
     
@@ -318,10 +319,10 @@ server <- function(input, output,session) {
                 rep("PARTIA RAZEM",length(df2$`PARTIA RAZEM`)),
                 rep("WOLNOSC",length(df2$WOLNOSC))   
                 ) 
-    
+    print("C1")
     df3 <- data.frame(daty,wynik,partia,metoda_badania)  
     most_popular_method <- tail(names(sort(table(df2$`Metoda badania`))),1)
-    
+    print("C2")
     #wordcloud init
     filePath <- "parties_en.txt"
     text <- read_lines(filePath)    
@@ -360,7 +361,8 @@ server <- function(input, output,session) {
     df_emotions <- df_sentiment_final[1:8,]
     df_sentiments <- df_sentiment_final[9:10,]    
   }
-
+  print("B")
+  
      # Wojtek ##################################################################################
      output$plot_partie <- renderPlot({
        ggplot(data = df2) + 
@@ -376,11 +378,11 @@ server <- function(input, output,session) {
          xlab("Poll publication date") + 
          ylab("Percent") + theme(plot.margin = margin(0, 0, 0, 1, "cm"))
      }, bg="transparent")
-     
+  print("C")
      output$dt_extended_table<-renderDataTable({
        df2[df2$Osrodek == input$in_si_osrodek & df2$Zleceniodawca == input$in_si_zamawiajacy,]
          })
-     
+     print("D")
      output$plot_partie_facet <- renderPlot({ 
        ggplot(data = df3[df3$metoda_badania == most_popular_method,]) + 
        geom_point(mapping = aes(
@@ -390,12 +392,12 @@ server <- function(input, output,session) {
          x = as.Date(daty,"%d.%m.%Y"),
          y = wynik)) + xlab("data publikacji")+
        facet_wrap(~ partia, ncol = 2,scales = "free_y") })
-     
+     print("E")
      #wordcloud
      output$wordcloud_wojtek <-  renderPlot({wordcloud(words = d$word, freq = d$freq, min.freq = 1, 
                                                        max.words = 100,random.order = TRUE, rot.per = 0.1, 
                                                        colors = brewer.pal(8,"Dark2"))})
-     
+     print("F")
      #sentiment
      output$sentiment_plot_wojtek <-  renderPlot({ggplot(data = df_emotions, 
             mapping = aes(x = sentiment, 
