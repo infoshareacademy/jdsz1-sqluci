@@ -196,7 +196,7 @@ ui <- dashboardPage(
               fluidRow(
                 textInput(inputId = "twitterinput",
                           label = "Text:",
-                          value = "#smolensk")
+                          value = "#pis")
               ),
               fluidRow(
                 dataTableOutput("twitter1")
@@ -275,7 +275,7 @@ server <- function(input, output,session) {
       df2[[i]] <- as.numeric(gsub(",",".",df2[[i]]))      # remove commas
     print("A5")
     colnames(df2)[2] <- "Osrodek"  
-    colnames(df2)[15] <- "WOLNOSC"
+    colnames(df2)[14] <- "WOLNOSC"
 
     
 
@@ -307,7 +307,7 @@ server <- function(input, output,session) {
                df2$SLD,
                df2$.N,
                df2$PSL,
-               df2$`PARTIA RAZEM`,
+               df2$RAZEM,
                df2$WOLNOSC)
     
     partia <- c(rep("PiS",length(df2$PiS)),
@@ -316,11 +316,11 @@ server <- function(input, output,session) {
                 rep("SLD",length(df2$SLD)),
                 rep(".N",length(df2$.N)),
                 rep("PSL",length(df2$PSL)),
-                rep("PARTIA RAZEM",length(df2$`PARTIA RAZEM`)),
+                rep("PARTIA RAZEM",length(df2$RAZEM)),
                 rep("WOLNOSC",length(df2$WOLNOSC))   
                 ) 
-    print("C1")
-    df3 <- data.frame(daty,wynik,partia,metoda_badania)  
+
+    df3 <- data.frame(daty = daty,wynik = wynik,partia = partia,metoda_badania = metoda_badania)
     most_popular_method <- tail(names(sort(table(df2$`Metoda badania`))),1)
     print("C2")
     #wordcloud init
