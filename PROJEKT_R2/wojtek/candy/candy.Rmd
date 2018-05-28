@@ -1,0 +1,126 @@
+---
+title: "Candy"
+author: "Wojciech Artichowicz"
+date: "28 maja 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Required libs
+```{r libs_loading}
+library(ROCR)
+library(ggplot2)
+library(ggcorrplot)
+library(factoextra)
+library(FactoMineR)
+```
+
+### Load and check data
+```{r Load and check data}
+cdf <- read.csv("candy-data.csv")
+head(cdf)
+```
+
+```{r check if data has any NAs}
+mapply(anyNA, cdf) 
+```
+nope! go further
+
+### Brief look at the statistics
+```{r Brief look at the statistics}
+summary(cdf)
+```
+
+### Checking visually if continuous variables are correlated
+```{r continuous variables check}
+ggplot(cdf) + geom_point(aes(x = sugarpercent,y=pricepercent)) # no dependence
+ggplot(cdf) + geom_point(aes(x = sugarpercent,y= winpercent)) # no dependence
+ggplot(cdf) + geom_point(aes(x = pricepercent,y= winpercent)) # no dependence
+```
+
+### Trying to reduce continuous features
+```{r continuous variables pca}
+pca_real = FactoMineR::PCA(cdf[c("sugarpercent","pricepercent","winpercent")],graph = FALSE) #cannot be linearly separated
+print(pca_real$eig)
+fviz_screeplot(pca_real) #no reason to leave aneglect any of those
+```
+Real variables cannot be reduced using linear PCA
+
+### Trying to reduce all features
+```{r all variables pca}
+pca_all = FactoMineR::PCA(cdf[c("fruity", "caramel", "peanutyalmondy", "nougat", "crispedricewafer", "hard", "bar", "pluribus", "sugarpercent", "pricepercent", "winpercent")],graph = FALSE) #cannot be linearly separated
+print(pca_all$eig)
+fviz_screeplot(pca_all) 
+```
+maybe two last PCA can be neglected
+
+
+### checking for correlations of the dychotomic variables
+```{r dychotomic variables correlations}
+cn <- colnames(cdf)
+for (i in 2:8)
+{
+  j=i+1;
+  while (j<=8)
+  {
+    print(paste(cn[i],cn[j],sep=" vs. "))
+    print(table(cdf[[i]],cdf[[j]]))
+    j=j+1
+  }
+}
+```
+Strong negative correlation between chocolate and fruity
+
+### first approach for creating a model
+```{r first approach for creating a model}
+N = nrow(cdf) #data frame size
+scrambled_index <- sample(1:N) 
+
+edge <- round(0.8 *N)
+train <- scrambled_index[1:edge]
+test <- scrambled_index[(edge+1):N]
+feat <- c("fruity", "caramel", "peanutyalmondy", "nougat", "crispedricewafer", "hard", "bar", "pluribus", "sugarpercent", "pricepercent", "winpercent")
+target <- "chocolate"
+
+train.df <- cdf[train,c(feat,target)]
+log.reg.model <- glm(chocolate ~.,family=binomial(link='logit'),data=train.df)
+
+summary(log.reg.model)
+anova(log.reg.model, test="Chisq")
+```
+
+### test the performance of the model
+```{r test the performance of the model}
+test.df <- cdf[test,c(feat,target)]
+pred_choco <- ifelse(predict(log.reg.model,newdata=test.df,type='response') > 0.5,1,0)
+
+check <- data.frame(predicted = pred_choco,observed = test.df$chocolate)
+
+confusion.matrix <- table(check$predicted,check$observed)
+
+predicted <- factor(c(0, 0, 1, 1))
+observed <- factor(c(0, 1, 0, 1))
+Y      <- as.vector( confusion.matrix)
+confusion.matrix.df <- data.frame(predicted, observed, Y)
+
+ggplot(data =  confusion.matrix.df, mapping = aes(x = observed, y = predicted)) +
+  geom_tile(aes(fill = Y), colour = "white") +
+  geom_text(aes(label = sprintf("%1.0f",Y)), vjust = 1) +
+  scale_fill_gradient(low = "white", high = "steelblue")
+```
+
+### test the threshold
+```{r test the threshold}
+ROCRpred <- prediction(pred_choco, test.df$chocolate)
+ROCRperf <- performance(ROCRpred, 'tpr','fpr')
+plot(ROCRperf, colorize = TRUE)
+```
+
+### try PCA
+```{r try pca}
+eig <- pca_all$eig[,1]
+pt <- as.vector(cdf[1,feat])
+```
