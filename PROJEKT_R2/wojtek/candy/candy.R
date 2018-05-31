@@ -85,8 +85,48 @@ ROCRperf <- performance(ROCRpred, 'tpr','fpr')
 plot(ROCRperf, colorize = TRUE)
 
 
-pca_train <- FactoMineR::PCA(train.df)
-eigv <- pca_all$ind$coord
-pt <- as.numeric(cdf[1,feat])
-matrix(pt,11,1)%*%eigv
 
+
+
+dychotomic <- c("fruity","caramel","peanutyalmondy", "nougat", "crispedricewafer",
+                "hard", "bar","pluribus")
+continuous <- c("sugarpercent", "pricepercent", "winpercent")
+for (i in dychotomic)
+{
+  cdf[i] = as.factor(cdf[i])
+  
+}
+cdf$fruity = as.factor(cdf$fruity)
+cdf$caramel = as.factor(cdf$caramel)
+cdf$peanutyalmondy = as.factor(cdf$peanutyalmondy)
+cdf$nougat = as.factor(cdf$nougat)
+cdf$crispedricewafer = as.factor(cdf$crispedricewafer)
+cdf$hard = as.factor(cdf$hard)
+cdf$bar = as.factor(cdf$bar)
+cdf$pluribus = as.factor(cdf$pluribus)
+
+
+pca_all
+train.df <- pca_all$var$coord[train,]
+model <- glm(chocolate ~.,family=binomial(link='logit'),data=train.df)
+
+summary(model)
+anova(model, test="Chisq")
+
+
+train.df <- pca_all$var$coord[test,]
+pred_choco <- ifelse(predict(model,newdata=test.df,type='response') > 0.5,1,0)
+
+check <- data.frame(predicted = pred_choco,observed = test.df$chocolate)
+
+confusion.matrix <- table(check$predicted,check$observed)
+
+predicted <- factor(c(0, 0, 1, 1))
+observed <- factor(c(0, 1, 0, 1))
+Y      <- as.vector( confusion.matrix)
+confusion.matrix.df <- data.frame(predicted, observed, Y)
+
+ggplot(data =  confusion.matrix.df, mapping = aes(x = observed, y = predicted)) +
+  geom_tile(aes(fill = Y), colour = "white") +
+  geom_text(aes(label = sprintf("%1.0f",Y)), vjust = 1) +
+  scale_fill_gradient(low = "white", high = "steelblue")

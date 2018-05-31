@@ -6,9 +6,9 @@ library(ggcorrplot)
 
 #Can you predict if a candy is chocolate or not based on its other features?
 
-#wojtekPath = "C:\\Users\\miser\\Documents\\Projects\\GIT\\DATA_SCIENCE\\jdsz1-sqluci\\PROJEKT_R2\\monika\\candy-data.csv"
-#mydata<-read.csv(wojtekPath)
-mydata<-read.csv("C:/Users/BUNT/Documents/JDS/R/Projekt candy/candy-data.csv")
+wojtekPath = "C:\\Users\\miser\\Documents\\Projects\\GIT\\DATA_SCIENCE\\jdsz1-sqluci\\PROJEKT_R2\\monika\\candy-data.csv"
+mydata<-read.csv(wojtekPath)
+#mydata<-read.csv("C:/Users/BUNT/Documents/JDS/R/Projekt candy/candy-data.csv")
 
 summary(mydata)
 str(mydata)
