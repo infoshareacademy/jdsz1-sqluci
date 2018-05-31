@@ -13,7 +13,7 @@ df_stations[df_stations$NAME == "BASTIA/CORSICA" | df_stations$NAME == "SAN JOSE
 wrld <- map_data("world")
 ggplot() + geom_polygon(data = wrld, aes(x=long, y = lat, group = group)) +
   geom_point(data = df_stations, aes(x = Longitude, y = Latitude, col = STATE.COUNTRY.ID)) +  
-  geom_text(data = df_stations, aes(x = Longitude, y = Latitude, col = STATE.COUNTRY.ID,label=STATE.COUNTRY.ID),hjust=0, vjust=0) + 
+  #geom_text(data = df_stations, aes(x = Longitude, y = Latitude, col = STATE.COUNTRY.ID,label=STATE.COUNTRY.ID),hjust=0, vjust=0) + 
   scale_fill_discrete(guide=FALSE) + scale_color_discrete(guide = FALSE)
 
 df_weather <-  read.csv("data/Summary of Weather.csv")
@@ -36,7 +36,7 @@ ggplot(df_all,aes(x = MinTemp, y = MaxTemp, col = STATE.COUNTRY.ID)) +
 df_all <- df_all[df_all$MinTemp < df_all$MaxTemp & !(df_all$MaxTemp > 11 & df_all$MinTemp > -20 & df_all$MinTemp < -10),]
 
 ggplot(df_all,aes(x = MinTemp, y = MaxTemp, col = STATE.COUNTRY.ID)) + 
-  geom_point() #+ geom_text(aes(col = STATE.COUNTRY.ID,label=STATE.COUNTRY.ID),hjust=0, vjust=0)
+  geom_point() + scale_colour_discrete(guide = FALSE) #+ geom_text(aes(col = STATE.COUNTRY.ID,label=STATE.COUNTRY.ID),hjust=0, vjust=0)
 
 
 ggplot(df_all,aes(x = MinTemp, y = MaxTemp, col = STATE.COUNTRY.ID)) +
@@ -60,6 +60,10 @@ for (id in u_state_ID)
   meanMaxTemp[i] = mean(mmT$MaxTemp)
 }
 
+ggplot() + 
+  geom_point(data = data.frame(meanMinTemp,meanMaxTemp,u_state_ID),aes(x =meanMinTemp, y = meanMaxTemp,col = u_state_ID)) +
+  scale_colour_discrete(guide = FALSE)
+
 cor(df_all[,c("MinTemp","MaxTemp")]) # global correlation coefficient seems fine
 lin_model_global <- lm(MaxTemp ~ MinTemp,data = df_all)
 
@@ -69,18 +73,22 @@ ggplot(df_all,aes(x = MinTemp, y = MaxTemp, col = STATE.COUNTRY.ID)) +
 ggplot(df_all,aes(x = MinTemp, y = MaxTemp)) + 
   geom_point() + geom_smooth(method='lm',formula=y~x)
 
+
+ggplot(data.frame(meanMinTemp, meanMaxTemp),aes(, x = meanMinTemp, y = meanMaxTemp, col = STATE.COUNTRY.ID)) + 
+  geom_point() + geom_smooth(method='lm',formula=y~x)
+
 #choosing low correlated subsets and pltting them
 
 corr_ceof
 
 
-cor(meanMinTemp,meanMaxTemp)
+cor(meanMinTemp,meanMaxTemp,)
 ggplot(data.frame(meanMinTemp,meanMaxTemp),aes(x =meanMinTemp, y = meanMaxTemp)) + 
   geom_point() 
 
-ggplot() + 
-  geom_point(data = df_all,aes(x = MinTemp, y = MaxTemp, col = 'blue')) +
-  geom_point(data = data.frame(meanMinTemp,meanMaxTemp),aes(x =meanMinTemp, y = meanMaxTemp))
+minTa = 15
+minTb = 20
 
+maxTa = 20
+maxTb = 30
 
-//podzielić względem max różnicy w ciągu doby

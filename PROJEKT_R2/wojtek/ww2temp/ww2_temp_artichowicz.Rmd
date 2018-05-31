@@ -180,3 +180,17 @@ lsdf = lsdf[(lsdf$meanMinTemp >= minTa & lsdf$meanMinTemp <= minTb) & (lsdf$mean
 print(lsdf)
 
 ```
+
+
+```{r quick look at specified locations}
+cond <- df_all$STATE.COUNTRY.ID == "CS" | 
+  df_all$STATE.COUNTRY.ID == "GU" | 
+  df_all$STATE.COUNTRY.ID == "BE" | 
+  df_all$STATE.COUNTRY.ID == "HI" | 
+  df_all$STATE.COUNTRY.ID == "PR" | 
+  df_all$STATE.COUNTRY.ID == "TO" | 
+  df_all$STATE.COUNTRY.ID == "AU" 
+
+ggplot(df_all[cond,],aes(x = MinTemp, y = MaxTemp)) + 
+  geom_point() + geom_smooth(method='lm',formula=y~x) + facet_wrap(~STATE.COUNTRY.ID,scales="free")
+```
