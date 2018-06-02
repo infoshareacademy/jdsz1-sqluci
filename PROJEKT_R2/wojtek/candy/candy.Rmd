@@ -181,8 +181,35 @@ plot(ROCRperf, colorize = TRUE)
 performance(ROCRpred, measure = "auc")@y.values[[1]]
 ```
 
-### try PCA
-```{r try pca}
-nrow(pca_all$var$coord)
+### second approach for creating a model
+```{r second approach for creating a model}
+feat <- c("fruity",  "peanutyalmondy",  "bar", "winpercent")
+target <- "chocolate"
 
+train.df <- cdf[train,c(feat,target)]
+log.reg.model <- glm(chocolate ~.,family=binomial(link='logit'),data=train.df)
+
+summary(log.reg.model)
+
+test.df <- cdf[test,c(feat,target)]
+pred_choco <- ifelse(predict(log.reg.model,newdata=test.df,type='response') > 0.5,1,0)
+
+check <- data.frame(predicted = pred_choco,observed = test.df$chocolate)
+
+confusion.matrix <- table(check$predicted,check$observed)
+
+predicted <- factor(c(0, 0, 1, 1))
+observed <- factor(c(0, 1, 0, 1))
+Y      <- as.vector( confusion.matrix)
+confusion.matrix.df <- data.frame(predicted, observed, Y)
+
+ggplot(data =  confusion.matrix.df, mapping = aes(x = observed, y = predicted)) +
+  geom_tile(aes(fill = Y), colour = "white") +
+  geom_text(aes(label = sprintf("%1.0f",Y)), vjust = 1) +
+  scale_fill_gradient(low = "white", high = "steelblue")
+
+ROCRpred <- prediction(pred_choco, test.df$chocolate)
+ROCRperf <- performance(ROCRpred, 'tpr','fpr')
+plot(ROCRperf, colorize = TRUE)
+performance(ROCRpred, measure = "auc")@y.values[[1]]
 ```
