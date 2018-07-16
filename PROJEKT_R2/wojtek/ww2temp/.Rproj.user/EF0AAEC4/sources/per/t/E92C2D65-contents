@@ -1,0 +1,196 @@
+---
+title: "WW2 dataset Initial analysis description"
+author: "Wojciech Artichowicz"
+date: "22 kwietnia 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+#install.packages("tidyverse","ggplot2","ggmap","maps","mapdata")
+
+library(tidyverse)
+library(ggmap)
+library(maps)
+library(mapdata)
+```
+
+## Initial analysis of the dataset files
+
+#### Analysis pipeline
+ - importing data
+ - data cleaning
+    * checking for duplicates
+    * checking integrity of the data
+
+### Importing weather stations datafile
+```{r importing weater stations}
+df_stations <- read.csv("data/Weather Station Locations.csv")
+head(df_stations,3)
+```
+
+#### Dataset size:
+```{r weater stations dataset size (num of records)}
+nrow(df_stations)
+```
+
+
+#### Some weather stations are repeated, checking that
+```{r weater stations dataset checking}
+nt <- table(df_stations$NAME)
+nt[nt>1]
+df_stations[df_stations$NAME == "BASTIA/CORSICA" | df_stations$NAME == "SAN JOSE",]
+```
+ok it is not an error - stations do not duplicate, names are the same, coords are different
+
+
+```{r plotting filtered data on the worldmap}
+wrld <- map_data("world")
+ggplot() + geom_polygon(data = wrld, aes(x=long, y = lat, group = group)) +
+  geom_point(data = df_stations, aes(x = Longitude, y = Latitude, col = STATE.COUNTRY.ID)) +   geom_text(data = df_stations, aes(x = Longitude, y = Latitude, col = STATE.COUNTRY.ID,label=STATE.COUNTRY.ID),hjust=0, vjust=0) + scale_fill_discrete(guide=FALSE) + scale_color_discrete(guide = FALSE)
+```
+
+### Importing weather measurement datafile
+```{r importing weather measurement datafile}
+df_weather <-  read.csv("data/Summary of Weather.csv")
+head(df_weather,3)
+
+#checking data for NAs
+any(is.na(df_weather$MinTemp))
+any(is.na(df_weather$MaxTemp))
+```
+
+#### overview weather measurement dataset plot
+
+```{r setting STA as factor}
+df_weather$STA <- as.factor(df_weather$STA) #Set weather station as factor
+```
+
+Plotting all the data for min and max temperatures
+```{r plotting weather measurement datafile}
+ggplot(df_weather,aes(x = MinTemp, y = MaxTemp, col = STA)) + 
+  geom_point() + scale_colour_discrete(guide = FALSE)
+```
+
+Join (==merge) data stations data and weather data
+```{r dataset merging}
+df_all <- merge(x = df_weather, y = df_stations, by.x = "STA", by.y = "WBAN")
+```
+
+#### Temperature variability in different regions is significantly different
+```{r plotting weather measurement datafile with coutries}
+ggplot(df_all,aes(x = MinTemp, y = MaxTemp, col = STATE.COUNTRY.ID)) + 
+  geom_point() 
+```
+
+Some data is obviously improper. Removing rows for which MinTemp > MaxTemp. This indicates the measuring device malfunction.
+```{r removing rows for which MinTemp > MaxTemp}
+ #df_all <- df_all[df_all$MinTemp < df_all$MaxTemp,]
+df_all <- df_all[df_all$MinTemp < df_all$MaxTemp & !(df_all$MaxTemp > 11 & df_all$MinTemp > -20 & df_all$MinTemp < -10),]
+```
+
+
+```{r plotting filtered data}
+ ggplot(df_all,aes(x = MinTemp, y = MaxTemp, col = STATE.COUNTRY.ID)) + 
+  geom_point() #+ geom_text(aes(col = STATE.COUNTRY.ID,label=STATE.COUNTRY.ID),hjust=0, vjust=0)
+  
+```
+
+####Facet wrap of the max ~ min temperature 
+```{r plotting filtered data on facet grid free scales}
+ggplot(df_all,aes(x = MinTemp, y = MaxTemp, col = STATE.COUNTRY.ID)) +
+  geom_point(show.legend = FALSE) + facet_wrap(~STATE.COUNTRY.ID,scales="free")
+```
+
+In some places there is no relationship between min temp and max temp.
+
+
+```{r determining the train and test datasets}
+N = nrow(df_all)
+scrambled_index <- sample(1:N)
+
+edge <- round(0.8 *N)
+train <- scrambled_index[1:edge]
+test <- scrambled_index[(edge+1):N]
+var <- c("MinTemp","MaxTemp")
+
+```
+
+```{r creating and checking model}
+train.df <- df_all[var]
+model <- lm(MaxTemp ~ MinTemp,data=train.df)
+
+summary(model)
+anova(model, test="Chisq")
+
+
+test.df <- df_all[test,var]
+maxTpred <- predict(model,newdata=test.df,type='response')
+
+outdf = data_frame(pred = predict(model,newdata=test.df,type='response'), obs = test.df$MaxTemp, MinTemp = test.df$MinTemp)
+
+ggplot(data = outdf) + 
+  geom_point(aes(x = MinTemp, y = obs)) +
+  geom_abline(aes(intercept=model$coefficients[[1]], slope=model$coefficients[[2]],col = "red"))
+```
+
+```{r determinig errors}
+MSE = mean((outdf$pred-outdf$obs)^2)
+MSE
+MRSE = sqrt(MSE)
+MRSE
+```
+
+```{r plotting the mean min vs. mean max temperatures at given stations}
+u_state_ID <-  unique(df_all$STATE.COUNTRY.ID)
+cor_coef <- rep(NA,length(u_state_ID))
+
+meanMinTemp <- rep(NA,length(u_state_ID))
+meanMaxTemp <- rep(NA,length(u_state_ID))
+
+i <- 0 
+for (id in u_state_ID)
+{
+  i<-i+1
+  mmT <- df_all[df_all$STATE.COUNTRY.ID == id,c("MinTemp","MaxTemp")]
+  cor_coef[i] <- cor(mmT$MinTemp,mmT$MaxTemp)
+  
+  meanMinTemp[i] = mean(mmT$MinTemp)
+  meanMaxTemp[i] = mean(mmT$MaxTemp)
+}
+
+ggplot() + 
+  geom_point(data = data.frame(meanMinTemp,meanMaxTemp,u_state_ID),aes(x =meanMinTemp, y = meanMaxTemp,col = u_state_ID)) +
+  scale_colour_discrete(guide = FALSE)
+```
+
+#### search for stations meeting the temperature criteria
+```{r search for stations meeting the temperature criteria}
+#ograniczenia ze względu na temp min
+minTa = 15
+minTb = 20
+#ograniczenia ze względu na temp max
+maxTa = 20
+maxTb = 30
+
+lsdf = data.frame(meanMinTemp,meanMaxTemp,u_state_ID);
+lsdf = lsdf[(lsdf$meanMinTemp >= minTa & lsdf$meanMinTemp <= minTb) & (lsdf$meanMaxTemp >= maxTa & lsdf$meanMaxTemp <= maxTb),]
+
+print(lsdf)
+
+```
+
+
+```{r quick look at specified locations}
+cond <- df_all$STATE.COUNTRY.ID == "CS" | 
+  df_all$STATE.COUNTRY.ID == "GU" | 
+  df_all$STATE.COUNTRY.ID == "BE" | 
+  df_all$STATE.COUNTRY.ID == "HI" | 
+  df_all$STATE.COUNTRY.ID == "PR" | 
+  df_all$STATE.COUNTRY.ID == "TO" | 
+  df_all$STATE.COUNTRY.ID == "AU" 
+
+ggplot(df_all[cond,],aes(x = MinTemp, y = MaxTemp)) + 
+  geom_point() + geom_smooth(method='lm',formula=y~x) + facet_wrap(~STATE.COUNTRY.ID,scales="free")
+```

@@ -1,0 +1,8 @@
+"0","ggplot(data =  confusion.matrix.df, mapping = aes(x = observed, y = predicted)) +
+  geom_tile(aes(fill = Y), colour = ""white"") +
+  geom_text(aes(label = sprintf(""%1.0f"",Y)), vjust = 1) +
+  scale_fill_gradient(low = ""white"", high = ""steelblue"")
+"
+"2","Error in ggplot(data = confusion.matrix.df, mapping = aes(x = observed,  : 
+  could not find function ""ggplot""
+"

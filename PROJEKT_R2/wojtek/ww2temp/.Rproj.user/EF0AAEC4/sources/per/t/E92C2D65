@@ -1,0 +1,24 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1524387359088.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1311450953",
+    "id" : "E92C2D65",
+    "lastKnownWriteTime" : 1527787509,
+    "last_content_update" : 1527787509220,
+    "path" : "~/Projects/GIT/DATA_SCIENCE/jdsz1-sqluci/PROJEKT_R2/wojtek/ww2temp/ww2_temp_artichowicz.Rmd",
+    "project_path" : "ww2_temp_artichowicz.Rmd",
+    "properties" : {
+        "cursorPosition" : "195,3",
+        "last_setup_crc32" : "6B0A8858219503b9",
+        "scrollLine" : "177",
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1526208793981.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3863402247",
+    "id" : "B9CA973F",
+    "lastKnownWriteTime" : 1527783739,
+    "last_content_update" : 1527783739,
+    "path" : "~/Projects/GIT/DATA_SCIENCE/jdsz1-sqluci/PROJEKT_R2/wojtek/ww2temp/scratchpad.R",
+    "project_path" : "scratchpad.R",
+    "properties" : {
+        "cursorPosition" : "94,0",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 7,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

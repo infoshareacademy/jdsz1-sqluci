@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1527442474516.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2692277107",
+    "id" : "25DD9F4A",
+    "lastKnownWriteTime" : 1527935887,
+    "last_content_update" : 1527935887,
+    "path" : "~/Projects/GIT/DATA_SCIENCE/jdsz1-sqluci/PROJEKT_R2/monika/candy2.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "192,10",
+        "scrollLine" : "0"
+    },
+    "relative_order" : 3,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,22 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1527933891676.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2469203433",
+    "id" : "73030393",
+    "lastKnownWriteTime" : 1527935887,
+    "last_content_update" : 1527935887,
+    "path" : "~/Projects/GIT/DATA_SCIENCE/jdsz1-sqluci/PROJEKT_R1/app.R",
+    "project_path" : null,
+    "properties" : {
+        "cursorPosition" : "291,17",
+        "scrollLine" : "276"
+    },
+    "relative_order" : 4,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

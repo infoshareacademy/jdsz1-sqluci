@@ -1,0 +1,1 @@
+"0","df_all <- merge(x = df_weather, y = df_stations, by.x = ""STA"", by.y = ""WBAN"")"
