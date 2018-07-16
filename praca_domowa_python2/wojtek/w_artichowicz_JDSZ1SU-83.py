@@ -27,10 +27,7 @@ for a,b,k in l:
 print("stan cukierków w słoikach to:")
 print(jars)
 
-avg = 0
-for c in jars.values():
-    avg += c
-avg = int(avg/n)
+avg = int(sum(jars.values())/n)
 print("średnia licba cukierków to ",avg)
 
 print("- - - - - - - - - - zad. 2 - - - - - - - - - -")
