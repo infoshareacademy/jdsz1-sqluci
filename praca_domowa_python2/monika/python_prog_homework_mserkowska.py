@@ -34,11 +34,14 @@ with open("out.txt", "w") as text_file:
 #instrukcje - zadania 1,2,3
 #zad 1
 
-#n = 5
-#l = [(1, 2, 100), (2, 5, 100), (3, 4, 100)]
+n = 5
+l = [(1, 2, 100), (2, 5, 100), (3, 4, 100)]
+suma=0
 
+for a,b,k in l:
+    suma+=(b-a+1)*k
 
-
+print(suma/n)
 
 
 #zad 2
