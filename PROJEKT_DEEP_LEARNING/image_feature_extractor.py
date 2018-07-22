@@ -9,19 +9,25 @@ absolute_path = "C:\\Users\\miser\\Documents\\Projects\\GIT\\DATA_SCIENCE\\jdsz1
 FILE = absolute_path + "dresses\\train\\labels.txt"
 VALIDATION_FILE = absolute_path +"dresses\\val\\labels.txt"
 
+#większość sieci działa na kwadratowych obrazach
+
+#skoro istotny jest kolor, to może dzielić obrazy na kwadratowy core i resztkowe oparte na histogramie (?)
+#analiza histogramu barw
 
 def main():
 
     n = read_number_of_lines(FILE);
     print(n)
 
-    lines = read_data(FILE,"*")
-   # lines = read_data(FILE,100)
+    n=10
+    #lines = read_data(FILE,"*")
+    lines = read_data(FILE,n)
 
     dirname = os.path.dirname(FILE)
     images, labels = create_images_labels(lines,dirname)
 
-    cv2.imshow('image', images[0])
+    img = images[3]
+    cv2.imshow('image', img)
     cv2.waitKey(0)
 
     W = np.zeros((n,1))
@@ -30,18 +36,23 @@ def main():
     for i,img in enumerate(images):
         H[i], W[i] = img.shape[:2]
 
-    plt.hist(W)
-    plt.show()
+   # plt.hist(W)
+   # plt.show()
 
-    plt.hist(H)
-    plt.show()
+   # plt.hist(H)
+   # plt.show()
 
-    plt.hist(H/W)
-    plt.show()
+   # plt.hist(H/W)
+   # plt.show()
 
+
+    plt.hist(img.ravel(), bins=256, range=(0.0, 1.0), fc='k', ec='k')
+    #cv2.calcHist(images, channels, mask, histSize, ranges[, hist[, accumulate]])
+    plt.show()
     images = list(map(lambda img: rescale_image(img,(128,128)),images))
 
-    cv2.imshow('image', images[0])
+    img = images[3]
+    cv2.imshow('image', img)
     cv2.waitKey(0)
 
     print(color_names)
