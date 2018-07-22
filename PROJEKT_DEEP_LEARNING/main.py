@@ -8,9 +8,9 @@ from keras.utils import np_utils
 import numpy as np
 
 
-
-FILE = "datasets/dresses/train/labels.txt"
-VALIDATION_FILE = "datasets/dresses/val/labels.txt"
+absolute_path = "C:\\Users\\miser\\Documents\\Projects\\GIT\\DATA_SCIENCE\\jdsz1-sqluci\\PROJEKT_DEEP_LEARNING\\"
+FILE = absolute_path + "dresses\\train\\labels.txt"
+VALIDATION_FILE = absolute_path +"dresses\\val\\labels.txt"
 
 def read_data(filename, number):
     with open(filename) as f:
