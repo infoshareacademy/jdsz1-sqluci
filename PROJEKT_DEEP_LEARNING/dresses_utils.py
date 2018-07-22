@@ -1,10 +1,24 @@
 import cv2
 import os
+from keras import Sequential
+from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Activation, BatchNormalization, regularizers
+from keras.callbacks import ModelCheckpoint, EarlyStopping, TensorBoard
+from keras.utils import np_utils
+import numpy as np
 
+color_names = ("beige","black","blue","brown","gray","green","multicolor","orange","pink","red","violet","white","yellow","transparent")
+
+def read_number_of_lines(filename):
+    with open(filename) as f:
+        return len(f.read().splitlines())
 
 def read_data(filename, number):
-    with open(filename) as f:
-        lines = f.read().splitlines()[:number]
+    if number == "*" :
+        with open(filename) as f:
+            lines = f.read().splitlines()
+    else:
+        with open(filename) as f:
+            lines = f.read().splitlines()[:number]
     return lines
 
 def create_images_labels(lines,directory):
@@ -17,12 +31,13 @@ def create_images_labels(lines,directory):
         label = tuple(map(int,tmp[1:]))
         path = os.path.join(directory, path)
         img = cv2.imread(path)
-        img = cv2.resize(img,(128,128),interpolation=cv2.INTER_AREA)
         images.append(img)
         labels.append(label)
 
     return images, labels
 
+def rescale_image(img,size_tuple):
+    return  cv2.resize(img,size_tuple,interpolation=cv2.INTER_AREA)
 
 def create_model():
     model = Sequential()
