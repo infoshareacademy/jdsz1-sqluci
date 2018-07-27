@@ -1,48 +1,65 @@
 import os
 
 import cv2
-import utils
-import numpy as np
-import matplotlib.pyplot as plt
+#import utils
 
 import numpy as np
 import keras
 from keras.models import Sequential
+from keras.layers import Conv2D, MaxPooling2D, Dense, Flatten, Activation, BatchNormalization, regularizers
 
+def create_model():
+    model = Sequential()
+    model.add(Conv2D(16,(3,3),input_shape = (128,128,3))) #warstwa wejściowa więc jest zdjęcie 128 128 x RGB (==3)
+    model.add(BatchNormalization()) #normalizacja wyników w celu lepszego trenowania
+    model.add(Activation("relu"))
+    model.add(Conv2D(16,(3,3)))
+    model.add(BatchNormalization())
+    model.add(Activation("relu"))
+    model.add(MaxPooling2D((2,2)))
+    model.add(Conv2D(32, (3, 3)))
+    model.add(BatchNormalization())
+    model.add(Activation("relu"))
+    model.add(Conv2D(32, (3, 3)))
+    model.add(BatchNormalization())
+    model.add(Activation("relu"))
+    model.add(MaxPooling2D((2, 2)))
+    model.add(Flatten())
+    model.add(Dense(128,kernel_regularizer=regularizers.l2(0.01)))
+    model.add(Activation("relu"))
+    model.add(Dense(52,activation = "softmax"))
+    return model
 
 class DataGenerator(keras.utils.Sequence):
     'Generates data for Keras'
-    def __init__(self, training_file_name, batch_size=10, n_classes=52, shuffle=True):
+    def __init__(self, training_file_name, batch_size=32, n_classes=52, shuffle=True):
         'Initialization'
         self.shuffle = shuffle
-        #self.train_labels_file_name = "faces/faces_is/train/labels.txt"
         self.train_labels_file_name = training_file_name
-        self.sample_size = utils.read_number_of_lines(self.train_labels_file_name)
-        self.train_labels_indexes = None #if shuffle is not required, then indexes are redundant and donot have to occupy the memory
+        self.sample_size = self.read_number_of_lines(self.train_labels_file_name)
         self.batch_size = batch_size
         self.n_classes = n_classes
+        self.lines = self.read_all_lines(self.train_labels_file_name)
 
         if self.shuffle == True:
-            self.train_labels_indexes = np.arange(self.sample_size)
-            np.random.shuffle(self.train_labels_indexes)
+            np.random.shuffle(self.lines)
 
         self.batch_bounds = [(i,i+self.batch_size) for i in range(0,self.sample_size,self.batch_size)]
 
-        self.on_epoch_end()
+    def read_all_lines(self, filename):
+         with open(filename) as f:
+             lines = []  # scope is proper, if file is not opened function will return None
+             for i, line in enumerate(f):
+                  lines.append(line)
 
-    def read_batch_from_file(self,filename, number0, numberN):
-        # https://stackoverflow.com/questions/2081836/reading-specific-lines-only-python
+             return lines
+
+    def read_number_of_lines(self,filename):
+        # https: // stackoverflow.com / questions / 845058 / how - to - get - line - count - cheaply - in -python
         with open(filename) as f:
-            lines = []  # scope is proper, if file is not opened function will return None
-            if self.shuffle:
-                for i, line in enumerate(f):
-                    if i in sorted(self.train_labels_indexes[number0:numberN]):  # YES! It is supposed to be that way in case the file is large, I am aware it is not a Python paradigm way, trust me Cage, it's the only way
-                        lines.append(line)
-            else:
-                for i, line in enumerate(f):
-                    if i >= number0 and i < numberN:  # YES! It is supposed to be that way in case the file is large, I am aware it is not a Python paradigm way, trust me Cage, it's the only way
-                        lines.append(line)
-            return lines
+            for i, l in enumerate(f):
+                pass
+            return i + 1
 
     def __len__(self):
         'Denotes the number of batches per epoch'
@@ -60,9 +77,6 @@ class DataGenerator(keras.utils.Sequence):
         # Generate data
         X, y = self.__data_generation(number0,numberN)
         return X, y
-
-    def __del__(self):
-        print("garbage collector, yeah!")
 
     def on_epoch_end(self):
         print("I am doing nothing")
@@ -86,9 +100,8 @@ class DataGenerator(keras.utils.Sequence):
 
     def __data_generation(self, number0,numberN):
         print("__data_generation")
-        lines = self.read_batch_from_file(self.train_labels_file_name, number0,numberN)
         dirname = os.path.dirname(self.train_labels_file_name)
-        return self.create_images_labels(lines, dirname)
+        return self.create_images_labels(self.lines[number0:numberN], dirname)
 
 
 def main():
@@ -112,13 +125,13 @@ def main():
    print(y)
 
 
-   model = utils.create_model()
+   model = create_model()
    model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["categorical_accuracy"])
 
    model.fit_generator(generator=dataGeneratorInstanceTrain,
                     validation_data=dataGeneratorInstanceTrain,
-                    use_multiprocessing=False,
-                    workers=1)
+                    use_multiprocessing=True,
+                    workers=4)
 
 if __name__ == "__main__":
     main()
