@@ -38,18 +38,17 @@ for c in txt:
 for c,n in sorted(d.items()): #since charaters occur only once in dict, whole items can be sorted
     print("character: \'{}\' occurred {} times'".format(c,n))
 
-print("- - - - - - - - - - zad. 3 - - - - - - - - - -")
+print("- - - - - - - - - - zad. 3 - - - - - - - - - - (EDITED)")
 from itertools import filterfalse
 R = range(2000,3200+1) #assuming integers only
 
-#it should be compressed to one-liner, but then it would be hard to analyze - sorry for Mathematica like indentation
-line = str( #create a string line from tuple and strip the first "(" and last ")" element
-            tuple(  #create tuple from iterator
+line =   ','.join(tuple(  #create tuple from iterator
                 filterfalse(lambda y: not y, #extract the values that are not equal to zero
-                            map(lambda x: x if not (x % 7) and (x % 5) else 0  ,R)  #make a mapping returning value if condition is true and zero if false
+                            map(lambda x: str(x) if not (x % 7) and (x % 5) else 0  ,R)  #make a mapping returning value if condition is true and zero if false
                             ) #filterfalse(
                  ) #tuple
-       ).replace(" ","")[1:-1] #str(
+          )   #'.'.join()
+
 print(line)
 
 print("- - - - - - - - - - KONSTRUKCJE SKŁADANE - - - - - - - - - -")
