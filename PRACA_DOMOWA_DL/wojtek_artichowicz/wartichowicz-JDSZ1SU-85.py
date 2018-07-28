@@ -129,9 +129,9 @@ def main():
    model.compile(optimizer="adam", loss="categorical_crossentropy", metrics=["categorical_accuracy"])
 
    model.fit_generator(generator=dataGeneratorInstanceTrain,
-                    validation_data=dataGeneratorInstanceTrain,
-                    use_multiprocessing=True,
-                    workers=4)
+                       validation_data=dataGeneratorInstanceTrain,
+                       use_multiprocessing=True,
+                       workers=1)
 
 if __name__ == "__main__":
     main()
